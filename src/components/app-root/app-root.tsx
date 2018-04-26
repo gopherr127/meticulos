@@ -74,7 +74,9 @@ export class AppRoot {
         
         <ion-route url="/itemtypes" component="itemtypes-list"></ion-route>
         <ion-route url="/workflows" component="workflows-list"></ion-route>
-        
+        <ion-route url="/workflows/:workflowId" component="workflow-detail"></ion-route>
+        <ion-route url="/workflows/create" component="workflow-create"></ion-route>
+
         <ion-route url="/screens" component="screens-list"></ion-route>
         <ion-route url="/screens/:screenId" component="screen-detail"></ion-route>
         <ion-route url="/screens/create" component="screen-create"></ion-route>

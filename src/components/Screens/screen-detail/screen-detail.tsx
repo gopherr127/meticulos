@@ -44,6 +44,7 @@ export class ScreenDetail {
 
     if (response.ok) {
       this.screen = await response.json();
+      this.subtitle = 'Screen: ' + this.screen.name;
       this.selectedFields = this.screen.fields;
     }
   }
@@ -100,7 +101,7 @@ export class ScreenDetail {
   }
   
   @Listen('ionChange')
-  handleItemTypeChanged(event: any) {
+  handleFieldChanged(event: any) {
 
     if (event.target.id === "screenName") {
 
