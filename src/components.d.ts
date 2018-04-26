@@ -30,6 +30,216 @@ import '@ionic/core';
 declare global {
 
   namespace StencilComponents {
+    interface FieldDetail {
+      'fieldId': string;
+      'returnUrl': string;
+    }
+  }
+
+  interface HTMLFieldDetailElement extends StencilComponents.FieldDetail, HTMLStencilElement {}
+
+  var HTMLFieldDetailElement: {
+    prototype: HTMLFieldDetailElement;
+    new (): HTMLFieldDetailElement;
+  };
+  interface HTMLElementTagNameMap {
+    'field-detail': HTMLFieldDetailElement;
+  }
+  interface ElementTagNameMap {
+    'field-detail': HTMLFieldDetailElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'field-detail': JSXElements.FieldDetailAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface FieldDetailAttributes extends HTMLAttributes {
+      'fieldId'?: string;
+      'returnUrl'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface FieldsList {
+      'returnUrl': string;
+      'subtitle': string;
+    }
+  }
+
+  interface HTMLFieldsListElement extends StencilComponents.FieldsList, HTMLStencilElement {}
+
+  var HTMLFieldsListElement: {
+    prototype: HTMLFieldsListElement;
+    new (): HTMLFieldsListElement;
+  };
+  interface HTMLElementTagNameMap {
+    'fields-list': HTMLFieldsListElement;
+  }
+  interface ElementTagNameMap {
+    'fields-list': HTMLFieldsListElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'fields-list': JSXElements.FieldsListAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface FieldsListAttributes extends HTMLAttributes {
+      'returnUrl'?: string;
+      'subtitle'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface ItemtypesList {
+      'returnUrl': string;
+      'subtitle': string;
+    }
+  }
+
+  interface HTMLItemtypesListElement extends StencilComponents.ItemtypesList, HTMLStencilElement {}
+
+  var HTMLItemtypesListElement: {
+    prototype: HTMLItemtypesListElement;
+    new (): HTMLItemtypesListElement;
+  };
+  interface HTMLElementTagNameMap {
+    'itemtypes-list': HTMLItemtypesListElement;
+  }
+  interface ElementTagNameMap {
+    'itemtypes-list': HTMLItemtypesListElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'itemtypes-list': JSXElements.ItemtypesListAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemtypesListAttributes extends HTMLAttributes {
+      'returnUrl'?: string;
+      'subtitle'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface ItemsList {
+      'returnUrl': string;
+      'subtitle': string;
+    }
+  }
+
+  interface HTMLItemsListElement extends StencilComponents.ItemsList, HTMLStencilElement {}
+
+  var HTMLItemsListElement: {
+    prototype: HTMLItemsListElement;
+    new (): HTMLItemsListElement;
+  };
+  interface HTMLElementTagNameMap {
+    'items-list': HTMLItemsListElement;
+  }
+  interface ElementTagNameMap {
+    'items-list': HTMLItemsListElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'items-list': JSXElements.ItemsListAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemsListAttributes extends HTMLAttributes {
+      'returnUrl'?: string;
+      'subtitle'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface ScreensList {
+      'returnUrl': string;
+      'subtitle': string;
+    }
+  }
+
+  interface HTMLScreensListElement extends StencilComponents.ScreensList, HTMLStencilElement {}
+
+  var HTMLScreensListElement: {
+    prototype: HTMLScreensListElement;
+    new (): HTMLScreensListElement;
+  };
+  interface HTMLElementTagNameMap {
+    'screens-list': HTMLScreensListElement;
+  }
+  interface ElementTagNameMap {
+    'screens-list': HTMLScreensListElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'screens-list': JSXElements.ScreensListAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ScreensListAttributes extends HTMLAttributes {
+      'returnUrl'?: string;
+      'subtitle'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface WorkflowsList {
+      'returnUrl': string;
+      'subtitle': string;
+    }
+  }
+
+  interface HTMLWorkflowsListElement extends StencilComponents.WorkflowsList, HTMLStencilElement {}
+
+  var HTMLWorkflowsListElement: {
+    prototype: HTMLWorkflowsListElement;
+    new (): HTMLWorkflowsListElement;
+  };
+  interface HTMLElementTagNameMap {
+    'workflows-list': HTMLWorkflowsListElement;
+  }
+  interface ElementTagNameMap {
+    'workflows-list': HTMLWorkflowsListElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'workflows-list': JSXElements.WorkflowsListAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface WorkflowsListAttributes extends HTMLAttributes {
+      'returnUrl'?: string;
+      'subtitle'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface AppRoot {
 
     }

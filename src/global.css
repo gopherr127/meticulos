@@ -12,13 +12,13 @@
  *
  * To declare rules for a specific mode, create a child rule for the .md, or .ios
  * mode classes. The mode class is automatically applied to the <body>
- * element in the app.
+ * element in the app. 
  */
 
 :root {
-  --ion-color-primary:                 #3880ff;
-  --ion-color-secondary:               #0cd1e8;
-  --ion-color-tertiary:                #7044ff;
+  --ion-color-primary:                 #173164;
+  --ion-color-secondary:               #7788AB;
+  --ion-color-tertiary:                #C0C6D3;
   --ion-color-success:                 #10dc60;
   --ion-color-warning:                 #ffce00;
   --ion-color-danger:                  #f04141;

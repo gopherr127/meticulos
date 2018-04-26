@@ -18,25 +18,19 @@ export class AppRoot {
 
   @Prop({context: 'isServer'}) isServer: boolean;
 
-
   appPages = [
-    {
-      title: 'Schedule',
-      url: '/schedule',
-      icon: 'calendar'
-    }, {
-      title: 'Speakers',
-      url: '/speakers',
-      icon: 'contacts'
-    }, {
-      title: 'Map',
-      url: '/map',
-      icon: 'map'
-    }, {
-      title: 'About',
-      url: '/about',
-      icon: 'information-circle'
-    }
+    { title: 'Items',    url: '/items',    icon: 'list' },
+    { title: 'Schedule', url: '/schedule', icon: 'calendar' },
+    { title: 'Speakers', url: '/speakers', icon: 'contacts' },
+    { title: 'Map',      url: '/map',      icon: 'map' },
+    { title: 'About',    url: '/about',    icon: 'information-circle' }
+  ];
+  
+  adminPages = [
+    { title: 'Item Types', url: '/itemtypes', icon: 'albums' },
+    { title: 'Workflows',  url: '/workflows', icon: 'git-merge' },
+    { title: 'Screens',    url: '/screens',   icon: 'desktop' },
+    { title: 'Fields',     url: '/fields',    icon: 'switch' }
   ];
 
   async componentWillLoad() {
@@ -73,7 +67,16 @@ export class AppRoot {
   renderRouter() {
     return (
       <ion-router useHash={false}>
+
         <ion-route-redirect from="/" to={this.hasSeenTutorial ? '/schedule' : '/tutorial'} />
+
+        <ion-route url="/items" component="items-list"></ion-route>
+        
+        <ion-route url="/itemtypes" component="itemtypes-list"></ion-route>
+        <ion-route url="/workflows" component="workflows-list"></ion-route>
+        <ion-route url="/screens" component="screens-list"></ion-route>
+        <ion-route url="/fields" component="fields-list"></ion-route>
+        <ion-route url="/fields/:fieldId" component="field-detail"></ion-route>
 
         <ion-route component="page-tabs">
           <ion-route url="/schedule" component="tab-schedule">
@@ -92,16 +95,10 @@ export class AppRoot {
           <ion-route url="/about" component="page-about"></ion-route>
         </ion-route>
 
-        <ion-route url="/tutorial" component="page-tutorial"></ion-route>
-        <ion-route url="/login" component="page-login"></ion-route>
-        <ion-route url="/account" component="page-account"></ion-route>
-        <ion-route url="/signup" component="page-signup"></ion-route>
-        <ion-route url="/support" component="page-support"></ion-route>
       </ion-router>
     );
   }
 
-  // TODO ion-menu should be split out
   render() {
     return (
       <ion-app>
@@ -119,80 +116,35 @@ export class AppRoot {
                   Navigate
                 </ion-list-header>
 
-                {this.appPages.map((p) =>
+                {this.appPages.map((page) =>
                   <ion-menu-toggle autoHide={false}>
-                    <ion-item href={p.url}>
-                      <ion-icon slot="start" name={p.icon}></ion-icon>
+                    <ion-item href={page.url}>
+                      <ion-icon slot="start" name={page.icon}></ion-icon>
                       <ion-label>
-                        {p.title}
+                        {page.title}
+                      </ion-label>
+                    </ion-item>
+                  </ion-menu-toggle>
+                )}
+              </ion-list>
+              <p></p>
+              <ion-list>
+                <ion-list-header>
+                  Administration
+                </ion-list-header>
+
+                {this.adminPages.map((page) =>
+                  <ion-menu-toggle autoHide={false}>
+                    <ion-item href={page.url}>
+                      <ion-icon slot="start" name={page.icon}></ion-icon>
+                      <ion-label>
+                        {page.title}
                       </ion-label>
                     </ion-item>
                   </ion-menu-toggle>
                 )}
               </ion-list>
 
-              <ion-list>
-                <ion-list-header>
-                  Account
-                  </ion-list-header>
-
-                <ion-menu-toggle autoHide={false}>
-                  {this.loggedIn
-                    ? <ion-item href="account">
-                      <ion-icon slot="start" name="person"></ion-icon>
-                      <ion-label>
-                        Account
-                          </ion-label>
-                    </ion-item>
-
-                    : <ion-item href="login">
-                      <ion-icon slot="start" name="log-in"></ion-icon>
-                      <ion-label>
-                        Login
-                          </ion-label>
-                    </ion-item>
-                  }
-                </ion-menu-toggle>
-
-                <ion-menu-toggle autoHide={false}>
-                  <ion-item href="support" button>
-                    <ion-icon slot="start" name="help"></ion-icon>
-                    <ion-label>
-                      Support
-                      </ion-label>
-                  </ion-item>
-                </ion-menu-toggle>
-
-                <ion-menu-toggle autoHide={false}>
-                  {this.loggedIn
-                    ? <ion-item onClick={() => this.logout()} button>
-                      <ion-icon slot="start" name="log-out"></ion-icon>
-                      <ion-label>
-                        Logout
-                          </ion-label>
-                    </ion-item>
-
-                    : <ion-item href="signup" button>
-                      <ion-icon slot="start" name="person-add"></ion-icon>
-                      <ion-label>
-                        Signup
-                          </ion-label>
-                    </ion-item>
-                  }
-                </ion-menu-toggle>
-              </ion-list>
-
-              <ion-list>
-                <ion-list-header>
-                  Tutorial
-                </ion-list-header>
-                <ion-menu-toggle autoHide={false}>
-                  <ion-item href="tutorial">
-                    <ion-icon slot="start" name="hammer"></ion-icon>
-                    <ion-label>Show Tutorial</ion-label>
-                  </ion-item>
-                </ion-menu-toggle>
-              </ion-list>
             </ion-content>
           </ion-menu>
 
