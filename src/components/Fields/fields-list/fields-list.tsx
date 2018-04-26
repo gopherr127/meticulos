@@ -12,7 +12,6 @@ export class FieldsList {
   fieldsList: HTMLIonListElement;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop() subtitle = 'Fields';
-  @Prop() returnUrl = '/';
   @State() queryText = '';
   @State() fields: Array<Field> = [];
 
@@ -54,7 +53,7 @@ export class FieldsList {
     await modal.present();
   }
 
-  async handleFieldDelete(field: Field) {
+  async handleDeleteClick(field: Field) {
 
     let response = await fetch(
       this.apiBaseUrl + "/fields/" + field.id, {
@@ -68,12 +67,6 @@ export class FieldsList {
     }
   }
 
-  @Listen('ionInput')
-  searchbarChanged(event: any) {
-    this.queryText = event.target.value;
-    this.loadFields(); //TODO: Add search filter, e.g. this.loadFields(queryText);
-  }
-
   render() {
     return[
       <ion-header>
@@ -81,7 +74,6 @@ export class FieldsList {
         <ion-toolbar>
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
-            <ion-back-button defaultHref={this.returnUrl}></ion-back-button>
           </ion-buttons>
           <ion-title>Meticulos</ion-title>
         </ion-toolbar>
@@ -112,7 +104,7 @@ export class FieldsList {
               </ion-item>
               <ion-item-options>
                 <ion-item-option color="danger" onClick={ () =>
-                    this.handleFieldDelete(field) }>
+                    this.handleDeleteClick(field) }>
                   Delete
                 </ion-item-option>
               </ion-item-options>

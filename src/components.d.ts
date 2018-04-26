@@ -99,7 +99,6 @@ declare global {
 
   namespace StencilComponents {
     interface FieldsList {
-      'returnUrl': string;
       'subtitle': string;
     }
   }
@@ -123,7 +122,6 @@ declare global {
   }
   namespace JSXElements {
     export interface FieldsListAttributes extends HTMLAttributes {
-      'returnUrl'?: string;
       'subtitle'?: string;
     }
   }
@@ -204,7 +202,6 @@ declare global {
 
   namespace StencilComponents {
     interface ScreensList {
-      'returnUrl': string;
       'subtitle': string;
     }
   }
@@ -228,7 +225,6 @@ declare global {
   }
   namespace JSXElements {
     export interface ScreensListAttributes extends HTMLAttributes {
-      'returnUrl'?: string;
       'subtitle'?: string;
     }
   }

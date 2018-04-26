@@ -1,18 +1,70 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { Screen } from '../../../interfaces/interfaces';
+import { ENV } from '../../../environments/environment';
 
 @Component({
   tag: 'screens-list'
 })
 export class ScreensList {
 
-  @Prop() subtitle = 'Items';
-  @Prop() returnUrl = '/';
+  public apiBaseUrl: string = new ENV().apiBaseUrl();
+  @Element() el: any;
+  screensList: HTMLIonListElement;
+  @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
+  @Prop() subtitle = 'Screens';
   @State() queryText = '';
-  @State() items: Array<Screen> = [];
+  @State() screens: Array<Screen> = [];
 
-  handleAddFabClick() {
+  async componentWillLoad() {
 
+    await this.loadScreens();
+  }
+
+  @Listen('body:ionModalDidDismiss')
+  async loadScreens() {
+
+    let response = await fetch(
+      this.apiBaseUrl + "/screens", { 
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+    });
+
+    if (response.ok) {
+      this.screens = await response.json();
+    }
+    else {
+      console.log(response);
+    }
+  } 
+
+  componentDidLoad() {
+
+    this.screensList = this.el.querySelector('#screensList');
+  }
+
+  async handleAddFabClick() {
+
+    const modal = await this.modalCtrl.create({
+      component: 'screen-create'
+    });
+    
+    await modal.present();
+  }
+
+  async handleDeleteClick(screen: Screen) {
+
+    let response = await fetch(
+      this.apiBaseUrl + "/screens/" + screen.id, {
+        method: "DELETE"
+    });
+
+    if (response.ok) {
+      await this.loadScreens();
+
+      this.screensList.closeSlidingItems();
+    }
   }
 
   render() {
@@ -22,7 +74,6 @@ export class ScreensList {
         <ion-toolbar>
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
-            <ion-back-button defaultHref={this.returnUrl}></ion-back-button>
           </ion-buttons>
           <ion-title>Meticulos</ion-title>
         </ion-toolbar>
@@ -39,19 +90,26 @@ export class ScreensList {
         <ion-toolbar color="tertiary">
           <ion-searchbar value={this.queryText} placeholder="Search">
           </ion-searchbar>
-          <ion-buttons slot="end">
-            <ion-button>
-              <ion-icon slot="icon-only" name="barcode"></ion-icon>
-            </ion-button>
-          </ion-buttons>
         </ion-toolbar>
 
       </ion-header>,
 
       <ion-content>
 
-        <ion-list>
-
+        <ion-list id="screensList">
+          {this.screens.map(screen => 
+            <ion-item-sliding>
+              <ion-item href={`/screen/${screen.id}`}>
+                <h2>{ screen.name }</h2>
+              </ion-item>
+              <ion-item-options>
+                <ion-item-option color="danger" onClick={ () =>
+                    this.handleDeleteClick(screen) }>
+                  Delete
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          )}
           <ion-item disabled></ion-item>
           <ion-item disabled></ion-item>
         </ion-list>
