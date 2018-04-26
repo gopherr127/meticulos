@@ -204,7 +204,7 @@ export class FieldDetail {
       <ion-footer>
         <ion-buttons slot="end">
           <ion-button color="primary" fill="solid" onClick={ () => this.handleSaveClick() }>Save</ion-button>
-          <ion-button color="primary" href={ `/fields` }>Cancel</ion-button>
+          <ion-button color="primary" onClick={ () => this.navigate('/fields')}>Cancel</ion-button>
         </ion-buttons>
       </ion-footer>
     ];
