@@ -145,8 +145,6 @@ export class WorkflowDetail {
 
     if (response.ok) {
       
-      let workflow = await response.json();
-      this.workflowId = workflow.id;
       this.navigate("/workflows");
     }
   }
