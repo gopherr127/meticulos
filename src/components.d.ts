@@ -303,7 +303,6 @@ declare global {
 
   namespace StencilComponents {
     interface WorkflowsList {
-      'returnUrl': string;
       'subtitle': string;
     }
   }
@@ -327,7 +326,6 @@ declare global {
   }
   namespace JSXElements {
     export interface WorkflowsListAttributes extends HTMLAttributes {
-      'returnUrl'?: string;
       'subtitle'?: string;
     }
   }

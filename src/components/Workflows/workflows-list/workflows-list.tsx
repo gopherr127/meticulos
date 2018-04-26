@@ -1,18 +1,65 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { Workflow } from '../../../interfaces/interfaces';
+import { ENV } from '../../../environments/environment';
 
 @Component({
   tag: 'workflows-list'
 })
 export class WorkflowsList {
 
-  @Prop() subtitle = 'Items';
-  @Prop() returnUrl = '/';
+  public apiBaseUrl: string = new ENV().apiBaseUrl();
+  @Element() el: any;
+  workflowsList: HTMLIonListElement;
+  @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
+  @Prop() subtitle = 'Workflows';
   @State() queryText = '';
-  @State() items: Array<Workflow> = [];
+  @State() workflows: Array<Workflow> = [];
 
-  handleAddFabClick() {
+  async componentWillLoad() {
+    
+    await this.loadWorkflows();
+  }
 
+  componentDidLoad() {
+
+    this.workflowsList = this.el.querySelector('#screensList');
+  }
+
+  @Listen('body:ionModalDidDismiss')
+  async loadWorkflows() {
+
+    let response = await fetch(
+      this.apiBaseUrl + "/workflows", { 
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+    });
+
+    this.workflows = await response.json();
+  } 
+
+  async handleAddFabClick() {
+
+    const modal = await this.modalCtrl.create({
+      component: 'workflow-create'
+    });
+    
+    await modal.present();
+  }
+
+  async handleDeleteClick(workflow: Workflow) {
+
+    let response = await fetch(
+      this.apiBaseUrl + "/workflows/" + workflow.id, {
+        method: "DELETE"
+    });
+
+    if (response.ok) {
+      await this.loadWorkflows();
+
+      this.workflowsList.closeSlidingItems();
+    }
   }
 
   render() {
@@ -22,7 +69,6 @@ export class WorkflowsList {
         <ion-toolbar>
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
-            <ion-back-button defaultHref={this.returnUrl}></ion-back-button>
           </ion-buttons>
           <ion-title>Meticulos</ion-title>
         </ion-toolbar>
@@ -39,19 +85,26 @@ export class WorkflowsList {
         <ion-toolbar color="tertiary">
           <ion-searchbar value={this.queryText} placeholder="Search">
           </ion-searchbar>
-          <ion-buttons slot="end">
-            <ion-button>
-              <ion-icon slot="icon-only" name="barcode"></ion-icon>
-            </ion-button>
-          </ion-buttons>
         </ion-toolbar>
 
       </ion-header>,
 
       <ion-content>
 
-        <ion-list>
-
+        <ion-list id="workflowsList">
+          {this.workflows.map(workflow => 
+            <ion-item-sliding>
+              <ion-item href={`/workflows/${workflow.id}`}>
+                <h2>{ workflow.name }</h2>
+              </ion-item>
+              <ion-item-options>
+                <ion-item-option color="danger" onClick={ () =>
+                    this.handleDeleteClick(workflow) }>
+                  Delete
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          )}
           <ion-item disabled></ion-item>
           <ion-item disabled></ion-item>
         </ion-list>
