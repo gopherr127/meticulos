@@ -22,7 +22,7 @@ export class WorkflowsList {
 
   componentDidLoad() {
 
-    this.workflowsList = this.el.querySelector('#screensList');
+    this.workflowsList = this.el.querySelector('#workflowsList');
   }
 
   @Listen('body:ionModalDidDismiss')
@@ -56,8 +56,8 @@ export class WorkflowsList {
     });
 
     if (response.ok) {
+      
       await this.loadWorkflows();
-
       this.workflowsList.closeSlidingItems();
     }
   }

@@ -1,4 +1,4 @@
-import { Component, Element, Prop, State, Listen } from '@stencil/core';
+import { Component, Element, State, Listen } from '@stencil/core';
 import { ENV } from '../../../environments/environment';
 import { FieldMetadata, FieldTypes } from '../../../interfaces/interfaces';
 
@@ -10,7 +10,6 @@ export class ScreenCreate {
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
   fieldsList: HTMLIonListElement;
-  @Prop({ connect: 'ion-router' }) nav;
   @State() name: string;
   @State() fields: Array<FieldMetadata> = [];
   @State() selectedFields: Array<FieldMetadata> = [];
@@ -23,12 +22,6 @@ export class ScreenCreate {
   componentDidLoad() {
 
     this.fieldsList = this.el.querySelector('#fieldsList');
-  }
-
-  async navigate(url: string) {
-
-    const navCtrl: HTMLIonRouterElement = await (this.nav as any).componentOnReady();
-    navCtrl.push(url);
   }
 
   dismiss(data?: any) {
@@ -131,59 +124,59 @@ export class ScreenCreate {
       <ion-content>
 
         <ion-item></ion-item>
-          <ion-item>
-            <ion-label position='fixed'>Name</ion-label>
-            <ion-input id="screenName" required debounce={ 200 } value={ this.name }></ion-input>
-          </ion-item>
+        <ion-item>
+          <ion-label position='fixed'>Name</ion-label>
+          <ion-input id="screenName" required debounce={ 200 } value={ this.name }></ion-input>
+        </ion-item>
 
-          <ion-card>
-            <ion-card-header no-padding>
-              <ion-item>
-                <ion-label>Selected Fields</ion-label>
-              </ion-item>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-list id="fieldsList">
-                { this.selectedFields.map(field => 
-                <ion-item-sliding>
-                  <ion-item>
-                    <h2>{ field.name }</h2>
-                      <ion-icon style={{ display: field.isRequired ? 'block' : 'none' }} name="star" slot="end"></ion-icon>
-                  </ion-item>
-                  <ion-item-options>
-                      { field.isRequired
-                        ? <ion-item-option color="primary" onClick={ () =>
-                            this.handleFieldRequireClick(field)
-                          }>
-                          Optional
-                        </ion-item-option>
-                          : <ion-item-option color="primary" onClick={ () =>
-                            this.handleFieldRequireClick(field)
-                          }>
-                          Required
-                        </ion-item-option>
-                      }
-                      <ion-item-option color="danger" onClick={ () =>
-                          this.handleFieldDeleteClick(field)
+        <ion-card>
+          <ion-card-header no-padding>
+            <ion-item>
+              <ion-label>Selected Fields</ion-label>
+            </ion-item>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list id="fieldsList">
+              { this.selectedFields.map(field => 
+              <ion-item-sliding>
+                <ion-item>
+                  <h2>{ field.name }</h2>
+                    <ion-icon style={{ display: field.isRequired ? 'block' : 'none' }} name="star" slot="end"></ion-icon>
+                </ion-item>
+                <ion-item-options>
+                    { field.isRequired
+                      ? <ion-item-option color="primary" onClick={ () =>
+                          this.handleFieldRequireClick(field)
                         }>
-                        Delete
+                        Optional
                       </ion-item-option>
-                    </ion-item-options>
-                </ion-item-sliding>
-                )}
-              </ion-list>
+                        : <ion-item-option color="primary" onClick={ () =>
+                          this.handleFieldRequireClick(field)
+                        }>
+                        Required
+                      </ion-item-option>
+                    }
+                    <ion-item-option color="danger" onClick={ () =>
+                        this.handleFieldDeleteClick(field)
+                      }>
+                      Delete
+                    </ion-item-option>
+                  </ion-item-options>
+              </ion-item-sliding>
+              )}
+            </ion-list>
 
-              <ion-item>
-                <ion-select id="fieldSelect">
-                  { this.fields.map(field => 
-                    <ion-select-option value={ field.id }>
-                      { field.name }
-                    </ion-select-option>)
-                  }
-                </ion-select>
-              </ion-item>
-            </ion-card-content>
-          </ion-card>
+            <ion-item>
+              <ion-select id="fieldSelect">
+                { this.fields.map(field => 
+                  <ion-select-option value={ field.id }>
+                    { field.name }
+                  </ion-select-option>)
+                }
+              </ion-select>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
 
       </ion-content>,
 
