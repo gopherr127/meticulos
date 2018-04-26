@@ -201,6 +201,41 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ScreenDetail {
+      'returnUrl': string;
+      'screenId': string;
+    }
+  }
+
+  interface HTMLScreenDetailElement extends StencilComponents.ScreenDetail, HTMLStencilElement {}
+
+  var HTMLScreenDetailElement: {
+    prototype: HTMLScreenDetailElement;
+    new (): HTMLScreenDetailElement;
+  };
+  interface HTMLElementTagNameMap {
+    'screen-detail': HTMLScreenDetailElement;
+  }
+  interface ElementTagNameMap {
+    'screen-detail': HTMLScreenDetailElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'screen-detail': JSXElements.ScreenDetailAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ScreenDetailAttributes extends HTMLAttributes {
+      'returnUrl'?: string;
+      'screenId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ScreensList {
       'subtitle': string;
     }

@@ -8,7 +8,7 @@ import { Field, FieldTypes } from '../../../interfaces/interfaces';
 export class FieldDetail {
 
   public apiBaseUrl: string = new ENV().apiBaseUrl();
-  @Prop({connect: 'ion-router'}) nav;
+  @Prop({ connect: 'ion-router' }) nav;
   @Prop() fieldId: string;
   @Prop() returnUrl = '/fields';
   @State() subtitle: string = 'Field: ';

@@ -20,6 +20,11 @@ export class ScreensList {
     await this.loadScreens();
   }
 
+  componentDidLoad() {
+
+    this.screensList = this.el.querySelector('#screensList');
+  }
+
   @Listen('body:ionModalDidDismiss')
   async loadScreens() {
 
@@ -38,11 +43,6 @@ export class ScreensList {
       console.log(response);
     }
   } 
-
-  componentDidLoad() {
-
-    this.screensList = this.el.querySelector('#screensList');
-  }
 
   async handleAddFabClick() {
 
@@ -99,7 +99,7 @@ export class ScreensList {
         <ion-list id="screensList">
           {this.screens.map(screen => 
             <ion-item-sliding>
-              <ion-item href={`/screen/${screen.id}`}>
+              <ion-item href={`/screens/${screen.id}`}>
                 <h2>{ screen.name }</h2>
               </ion-item>
               <ion-item-options>
