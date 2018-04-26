@@ -471,6 +471,76 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface WorkflowTransitionFunctionCreate {
+      'functionTypeId': number;
+      'transitionId': string;
+    }
+  }
+
+  interface HTMLWorkflowTransitionFunctionCreateElement extends StencilComponents.WorkflowTransitionFunctionCreate, HTMLStencilElement {}
+
+  var HTMLWorkflowTransitionFunctionCreateElement: {
+    prototype: HTMLWorkflowTransitionFunctionCreateElement;
+    new (): HTMLWorkflowTransitionFunctionCreateElement;
+  };
+  interface HTMLElementTagNameMap {
+    'workflow-transition-function-create': HTMLWorkflowTransitionFunctionCreateElement;
+  }
+  interface ElementTagNameMap {
+    'workflow-transition-function-create': HTMLWorkflowTransitionFunctionCreateElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'workflow-transition-function-create': JSXElements.WorkflowTransitionFunctionCreateAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface WorkflowTransitionFunctionCreateAttributes extends HTMLAttributes {
+      'functionTypeId'?: number;
+      'transitionId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface WorkflowTransitionFunctionDetail {
+      'returnUrl': string;
+      'workflowTransitionFunctionId': string;
+    }
+  }
+
+  interface HTMLWorkflowTransitionFunctionDetailElement extends StencilComponents.WorkflowTransitionFunctionDetail, HTMLStencilElement {}
+
+  var HTMLWorkflowTransitionFunctionDetailElement: {
+    prototype: HTMLWorkflowTransitionFunctionDetailElement;
+    new (): HTMLWorkflowTransitionFunctionDetailElement;
+  };
+  interface HTMLElementTagNameMap {
+    'workflow-transition-function-detail': HTMLWorkflowTransitionFunctionDetailElement;
+  }
+  interface ElementTagNameMap {
+    'workflow-transition-function-detail': HTMLWorkflowTransitionFunctionDetailElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'workflow-transition-function-detail': JSXElements.WorkflowTransitionFunctionDetailAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface WorkflowTransitionFunctionDetailAttributes extends HTMLAttributes {
+      'returnUrl'?: string;
+      'workflowTransitionFunctionId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface WorkflowTransitionCreate {
       'workflowId': string;
     }

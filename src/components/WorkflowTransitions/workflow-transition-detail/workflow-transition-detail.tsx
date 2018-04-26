@@ -77,6 +77,18 @@ export class WorkflowTransitionDetail {
     await modal.present();
   }
 
+  async handleFunctionClick(functionId: string) {
+
+    const modal = await this.modalCtrl.create({
+      component: 'workflow-transition-function-detail',
+      componentProps: {
+        workflowTransitionFunctionId: functionId
+      }
+    });
+    
+    await modal.present();
+  }
+
   async handleNewScreenClick() {
 
     const modal = await this.modalCtrl.create({
@@ -191,7 +203,7 @@ export class WorkflowTransitionDetail {
               <ion-list id="preConditionsList">
                 {this.preConditions.map(preCondition => 
                   <ion-item-sliding>
-                    <ion-item href={`/workflow-transition-functions/${preCondition.id}`}>
+                    <ion-item onClick={ () => this.handleFunctionClick(preCondition.id) }>
                       <h2>{ preCondition.function.name }</h2>
                     </ion-item>
                     <ion-item-options>
@@ -247,7 +259,7 @@ export class WorkflowTransitionDetail {
               <ion-list id="validationsList">
                 {this.validations.map(validation => 
                   <ion-item-sliding>
-                    <ion-item href={`/workflow-transition-functions/${validation.id}`}>
+                    <ion-item onClick={ () => this.handleFunctionClick(validation.id) }>
                       <h2>{ validation.function.name }</h2>
                     </ion-item>
                     <ion-item-options>
@@ -275,7 +287,7 @@ export class WorkflowTransitionDetail {
               <ion-list id="postFunctionsList">
                 {this.postFunctions.map(postFunction => 
                   <ion-item-sliding>
-                    <ion-item href={`/workflow-transition-functions/${postFunction.id}`}>
+                    <ion-item onClick={ () => this.handleFunctionClick(postFunction.id) }>
                       <h2>{ postFunction.function.name }</h2>
                     </ion-item>
                     <ion-item-options>
