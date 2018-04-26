@@ -27,7 +27,7 @@ export class AppRoot {
   ];
   
   adminPages = [
-    { title: 'Item Types', url: '/itemtypes', icon: 'albums' },
+    { title: 'Item Types', url: '/item-types', icon: 'albums' },
     { title: 'Workflows',  url: '/workflows', icon: 'git-merge' },
     { title: 'Screens',    url: '/screens',   icon: 'desktop' },
     { title: 'Fields',     url: '/fields',    icon: 'switch' }

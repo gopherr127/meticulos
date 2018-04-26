@@ -131,6 +131,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ItemTypeCreate {
+
+    }
+  }
+
+  interface HTMLItemTypeCreateElement extends StencilComponents.ItemTypeCreate, HTMLStencilElement {}
+
+  var HTMLItemTypeCreateElement: {
+    prototype: HTMLItemTypeCreateElement;
+    new (): HTMLItemTypeCreateElement;
+  };
+  interface HTMLElementTagNameMap {
+    'item-type-create': HTMLItemTypeCreateElement;
+  }
+  interface ElementTagNameMap {
+    'item-type-create': HTMLItemTypeCreateElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'item-type-create': JSXElements.ItemTypeCreateAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemTypeCreateAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ItemTypesList {
       'subtitle': string;
     }

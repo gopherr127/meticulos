@@ -126,7 +126,7 @@ export class ScreenCreate {
         <ion-item></ion-item>
         <ion-item>
           <ion-label position='fixed'>Name</ion-label>
-          <ion-input id="screenName" required debounce={ 200 } value={ this.name }></ion-input>
+          <ion-input id="screenName" debounce={ 200 } value={ this.name }></ion-input>
         </ion-item>
 
         <ion-card>
