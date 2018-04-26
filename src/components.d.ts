@@ -302,6 +302,142 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface FunctionFieldRequired {
+      'functionArgs': any;
+      'getFunctionArgs': () => string;
+    }
+  }
+
+  interface HTMLFunctionFieldRequiredElement extends StencilComponents.FunctionFieldRequired, HTMLStencilElement {}
+
+  var HTMLFunctionFieldRequiredElement: {
+    prototype: HTMLFunctionFieldRequiredElement;
+    new (): HTMLFunctionFieldRequiredElement;
+  };
+  interface HTMLElementTagNameMap {
+    'function-field-required': HTMLFunctionFieldRequiredElement;
+  }
+  interface ElementTagNameMap {
+    'function-field-required': HTMLFunctionFieldRequiredElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'function-field-required': JSXElements.FunctionFieldRequiredAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface FunctionFieldRequiredAttributes extends HTMLAttributes {
+      'functionArgs'?: any;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface FunctionMakeApiCall {
+      'functionArgs': any;
+      'getFunctionArgs': () => string;
+    }
+  }
+
+  interface HTMLFunctionMakeApiCallElement extends StencilComponents.FunctionMakeApiCall, HTMLStencilElement {}
+
+  var HTMLFunctionMakeApiCallElement: {
+    prototype: HTMLFunctionMakeApiCallElement;
+    new (): HTMLFunctionMakeApiCallElement;
+  };
+  interface HTMLElementTagNameMap {
+    'function-make-api-call': HTMLFunctionMakeApiCallElement;
+  }
+  interface ElementTagNameMap {
+    'function-make-api-call': HTMLFunctionMakeApiCallElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'function-make-api-call': JSXElements.FunctionMakeApiCallAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface FunctionMakeApiCallAttributes extends HTMLAttributes {
+      'functionArgs'?: any;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface FunctionUserInGroup {
+      'functionArgs': any;
+      'getFunctionArgs': () => string;
+    }
+  }
+
+  interface HTMLFunctionUserInGroupElement extends StencilComponents.FunctionUserInGroup, HTMLStencilElement {}
+
+  var HTMLFunctionUserInGroupElement: {
+    prototype: HTMLFunctionUserInGroupElement;
+    new (): HTMLFunctionUserInGroupElement;
+  };
+  interface HTMLElementTagNameMap {
+    'function-user-in-group': HTMLFunctionUserInGroupElement;
+  }
+  interface ElementTagNameMap {
+    'function-user-in-group': HTMLFunctionUserInGroupElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'function-user-in-group': JSXElements.FunctionUserInGroupAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface FunctionUserInGroupAttributes extends HTMLAttributes {
+      'functionArgs'?: any;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface FunctionUserInRole {
+      'functionArgs': any;
+      'getFunctionArgs': () => string;
+    }
+  }
+
+  interface HTMLFunctionUserInRoleElement extends StencilComponents.FunctionUserInRole, HTMLStencilElement {}
+
+  var HTMLFunctionUserInRoleElement: {
+    prototype: HTMLFunctionUserInRoleElement;
+    new (): HTMLFunctionUserInRoleElement;
+  };
+  interface HTMLElementTagNameMap {
+    'function-user-in-role': HTMLFunctionUserInRoleElement;
+  }
+  interface ElementTagNameMap {
+    'function-user-in-role': HTMLFunctionUserInRoleElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'function-user-in-role': JSXElements.FunctionUserInRoleAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface FunctionUserInRoleAttributes extends HTMLAttributes {
+      'functionArgs'?: any;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface WorkflowNodeCreate {
       'workflowId': string;
     }
