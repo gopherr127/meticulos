@@ -26,6 +26,10 @@ declare global {
 import 'ionicons';
 import '@ionic/core';
 
+import {
+  Item,
+  WorkflowTransition,
+} from './interfaces/interfaces';
 
 declare global {
 
@@ -327,6 +331,41 @@ declare global {
     export interface ScreenDetailAttributes extends HTMLAttributes {
       'returnUrl'?: string;
       'screenId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface ScreenDisplay {
+      'item': Item;
+      'transition': WorkflowTransition;
+    }
+  }
+
+  interface HTMLScreenDisplayElement extends StencilComponents.ScreenDisplay, HTMLStencilElement {}
+
+  var HTMLScreenDisplayElement: {
+    prototype: HTMLScreenDisplayElement;
+    new (): HTMLScreenDisplayElement;
+  };
+  interface HTMLElementTagNameMap {
+    'screen-display': HTMLScreenDisplayElement;
+  }
+  interface ElementTagNameMap {
+    'screen-display': HTMLScreenDisplayElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'screen-display': JSXElements.ScreenDisplayAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ScreenDisplayAttributes extends HTMLAttributes {
+      'item'?: Item;
+      'transition'?: WorkflowTransition;
     }
   }
 }
