@@ -1,4 +1,4 @@
-import { Component, Listen, Prop, State } from '@stencil/core';
+import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { Field } from '../../../interfaces/interfaces';
 import { ENV } from '../../../environments/environment';
 
@@ -7,17 +7,26 @@ import { ENV } from '../../../environments/environment';
 })
 export class FieldsList {
 
+  public apiBaseUrl: string = new ENV().apiBaseUrl();
+  @Element() el: any;
+  fieldsList: HTMLIonListElement;
+  @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop() subtitle = 'Fields';
   @Prop() returnUrl = '/';
   @State() queryText = '';
   @State() fields: Array<Field> = [];
-  public apiBaseUrl: string = new ENV().apiBaseUrl();
 
   async componentWillLoad() {
 
     await this.loadFields();
   }
-  
+
+  componentDidLoad() {
+
+    this.fieldsList = this.el.querySelector('#fieldsList');
+  }
+
+  @Listen('body:ionModalDidDismiss')
   async loadFields() {
 
     let response = await fetch(
@@ -36,8 +45,13 @@ export class FieldsList {
     }
   } 
 
-  handleAddFabClick() {
+  async handleAddFabClick() {
 
+    const modal = await this.modalCtrl.create({
+      component: 'field-create'
+    });
+    
+    await modal.present();
   }
 
   async handleFieldDelete(field: Field) {
@@ -49,12 +63,11 @@ export class FieldsList {
 
     if (response.ok) {
       await this.loadFields();
-    }
 
-    let listElement = document.querySelector('ion-list') as HTMLIonListElement;
-    listElement.closeSlidingItems();
+      this.fieldsList.closeSlidingItems();
+    }
   }
-  
+
   @Listen('ionInput')
   searchbarChanged(event: any) {
     this.queryText = event.target.value;
@@ -91,7 +104,7 @@ export class FieldsList {
 
       <ion-content>
 
-        <ion-list>
+        <ion-list id="fieldsList">
           {this.fields.map(field => 
             <ion-item-sliding>
               <ion-item href={`/fields/${field.id}`}>

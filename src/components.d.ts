@@ -30,6 +30,39 @@ import '@ionic/core';
 declare global {
 
   namespace StencilComponents {
+    interface FieldCreate {
+
+    }
+  }
+
+  interface HTMLFieldCreateElement extends StencilComponents.FieldCreate, HTMLStencilElement {}
+
+  var HTMLFieldCreateElement: {
+    prototype: HTMLFieldCreateElement;
+    new (): HTMLFieldCreateElement;
+  };
+  interface HTMLElementTagNameMap {
+    'field-create': HTMLFieldCreateElement;
+  }
+  interface ElementTagNameMap {
+    'field-create': HTMLFieldCreateElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'field-create': JSXElements.FieldCreateAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface FieldCreateAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface FieldDetail {
       'fieldId': string;
       'returnUrl': string;

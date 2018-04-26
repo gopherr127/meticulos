@@ -32,7 +32,7 @@ export interface FieldOption {
 }
 
 export interface FieldTypeMetadata {
-  id: number,
+  id: string,
   name: string,
   supportsValueOptions: boolean
 }

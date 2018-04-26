@@ -1,6 +1,6 @@
 import { ActionSheetController, Config } from '@ionic/core';
 import { Component, Prop } from '@stencil/core';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
+//import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { ConferenceData } from '../../providers/conference-data';
 
@@ -22,7 +22,7 @@ export class PageSpeakerList {
   goToSpeakerTwitter(speaker: any) {
     console.log('goToSpeakerTwitter', speaker);
 
-    InAppBrowser.create(`https://twitter.com/${speaker.twitter}`, '_blank');
+    //InAppBrowser.create(`https://twitter.com/${speaker.twitter}`, '_blank');
   }
 
   async openSpeakerShare(speaker: any) {

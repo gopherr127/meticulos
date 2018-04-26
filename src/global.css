@@ -56,7 +56,11 @@ ion-item-option {
   width: 80px;
 }
 
+ion-footer {
+  background-color: white;
+}
+
 ion-footer ion-buttons ion-button button {
-  width: 100px !important;
+  width: 100px;
   height: 40px !important;
 }
