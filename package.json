@@ -20,7 +20,8 @@
     "@capacitor/ios": "latest",
     "@ionic-native/core": "latest",
     "@ionic-native/in-app-browser": "latest",
-    "rxjs": "latest"
+    "rxjs": "latest",
+    "@zxing/library": "^0.3.2"
   },
   "devDependencies": {
     "@capacitor/cli": "latest",

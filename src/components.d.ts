@@ -1039,6 +1039,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ImageCapturer {
+
+    }
+  }
+
+  interface HTMLImageCapturerElement extends StencilComponents.ImageCapturer, HTMLStencilElement {}
+
+  var HTMLImageCapturerElement: {
+    prototype: HTMLImageCapturerElement;
+    new (): HTMLImageCapturerElement;
+  };
+  interface HTMLElementTagNameMap {
+    'image-capturer': HTMLImageCapturerElement;
+  }
+  interface ElementTagNameMap {
+    'image-capturer': HTMLImageCapturerElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'image-capturer': JSXElements.ImageCapturerAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ImageCapturerAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface PageAboutPopover {
 
     }
@@ -1495,6 +1528,41 @@ declare global {
   namespace JSXElements {
     export interface PageTutorialAttributes extends HTMLAttributes {
 
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface QrCameraScanner {
+      'instructionText': string;
+      'resetReader': () => void;
+    }
+  }
+
+  interface HTMLQrCameraScannerElement extends StencilComponents.QrCameraScanner, HTMLStencilElement {}
+
+  var HTMLQrCameraScannerElement: {
+    prototype: HTMLQrCameraScannerElement;
+    new (): HTMLQrCameraScannerElement;
+  };
+  interface HTMLElementTagNameMap {
+    'qr-camera-scanner': HTMLQrCameraScannerElement;
+  }
+  interface ElementTagNameMap {
+    'qr-camera-scanner': HTMLQrCameraScannerElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'qr-camera-scanner': JSXElements.QrCameraScannerAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface QrCameraScannerAttributes extends HTMLAttributes {
+      'instructionText'?: string;
+      'onQrCodeScanned'?: (event: CustomEvent) => void;
     }
   }
 }
