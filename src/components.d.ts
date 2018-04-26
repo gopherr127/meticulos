@@ -164,6 +164,41 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ItemTypeDetail {
+      'itemTypeId': string;
+      'returnUrl': string;
+    }
+  }
+
+  interface HTMLItemTypeDetailElement extends StencilComponents.ItemTypeDetail, HTMLStencilElement {}
+
+  var HTMLItemTypeDetailElement: {
+    prototype: HTMLItemTypeDetailElement;
+    new (): HTMLItemTypeDetailElement;
+  };
+  interface HTMLElementTagNameMap {
+    'item-type-detail': HTMLItemTypeDetailElement;
+  }
+  interface ElementTagNameMap {
+    'item-type-detail': HTMLItemTypeDetailElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'item-type-detail': JSXElements.ItemTypeDetailAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemTypeDetailAttributes extends HTMLAttributes {
+      'itemTypeId'?: string;
+      'returnUrl'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ItemTypesList {
       'subtitle': string;
     }

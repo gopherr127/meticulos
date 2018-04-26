@@ -120,11 +120,11 @@ export class ItemTypeCreate {
             </ion-select>
           </ion-item>
           <ion-item>
-            <ion-label position='fixed'>Applies to Plan Items</ion-label>
+            <ion-label position='fixed'>Is For Physical Items</ion-label>
             <ion-checkbox id="isForPhysicalItems" slot="end" checked={ this.isForPhysicalItems }></ion-checkbox>
           </ion-item>
           <ion-item>
-            <ion-label position='fixed'>Applies to Assets</ion-label>
+            <ion-label position='fixed'>Allow Nested Items</ion-label>
             <ion-checkbox id="allowNestedItems" slot="end" checked={ this.allowNestedItems }></ion-checkbox>
           </ion-item>
           <ion-item>

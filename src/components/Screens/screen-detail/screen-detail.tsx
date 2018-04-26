@@ -75,7 +75,8 @@ export class ScreenDetail {
         })
     });
 
-    if (response.status === 200) {
+    if (response.ok) {
+      
       this.navigate("/screens");
     }
   }

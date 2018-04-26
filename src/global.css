@@ -47,6 +47,10 @@
   --ion-toolbar-md-text-color:         #fff;
 }
 
+ion-label {
+  overflow: unset;
+}
+
 ion-item-sliding {
   border-right: 2px solid darkgray;
 }

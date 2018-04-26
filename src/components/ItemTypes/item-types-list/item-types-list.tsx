@@ -11,7 +11,7 @@ export class ItemTypesList {
   @Element() el: any;
   itemTypesList: HTMLIonListElement;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
-  @Prop() subtitle = 'Items';
+  @Prop() subtitle = 'Item Types';
   @State() queryText = '';
   @State() itemTypes: Array<ItemType> = [];
 
