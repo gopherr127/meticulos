@@ -88,6 +88,7 @@ export interface ItemLocation {
 export interface ItemType {
   id: string,
   name: string,
+  pluralName: string,
   workflowId: string,
   iconUrl: string,
   isForPlanItems: boolean,

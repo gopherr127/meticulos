@@ -188,13 +188,20 @@ export class ItemTypeDetail {
 
       this.iconOptions = await response.json();
     }
+    else if (event.target.id === "pluralItemTypeName") {
+
+      this.itemType.pluralName = event.detail.value;
+    }
     else if (event.target.id === "workflowSelect") {
+
       this.itemType.workflowId = event.detail.value;
     }
     else if (event.target.id === "isForPlanItems") {
+
       this.itemType.isForPlanItems = event.detail.checked;
     }
     else if (event.target.id === "isForAssets") {
+
       this.itemType.isForAssets = event.detail.checked;
     }
   }
@@ -228,6 +235,10 @@ export class ItemTypeDetail {
           <ion-item>
             <ion-label position='fixed'>Name</ion-label>
             <ion-input slot="end" id="itemTypeName" debounce={200} value={ this.itemType.name }></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position='fixed'>Plural Name</ion-label>
+            <ion-input slot="end" id="pluralItemTypeName" debounce={200} value={ this.itemType.pluralName }></ion-input>
           </ion-item>
           <ion-item>
             <ion-label position='fixed'>Workflow</ion-label>

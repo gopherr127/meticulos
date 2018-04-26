@@ -10,6 +10,7 @@ export class ItemTypeCreate {
   @Element() el: any;
   fieldsList: HTMLIonListElement;
   @State() name: string;
+  @State() pluralName: string;
   @State() isForPhysicalItems: boolean;
   @State() allowNestedItems: boolean;
   @State() iconUrl: string;
@@ -52,6 +53,7 @@ export class ItemTypeCreate {
         },
         body: JSON.stringify({
           name: this.name,
+          pluralName: this.pluralName,
           workflowId: this.selectedWorkflowId,
           isForPhysicalItems: this.isForPhysicalItems,
           allowNestedItems: this.allowNestedItems,
@@ -82,13 +84,20 @@ export class ItemTypeCreate {
 
       this.iconOptions = await response.json();
     }
+    else if (event.target.id === "pluralItemTypeName") {
+
+      this.pluralName = event.detail.value;
+    }
     else if (event.target.id === "workflowSelect") {
+
       this.selectedWorkflowId = event.detail.value;
     }
     else if (event.target.id === "isForPhysicalItems") {
+
       this.isForPhysicalItems = event.detail.checked;
     }
     else if (event.target.id === "allowNestedItems") {
+
       this.allowNestedItems = event.detail.checked;
     }
   }
@@ -109,6 +118,10 @@ export class ItemTypeCreate {
           <ion-item>
             <ion-label position='fixed'>Name</ion-label>
             <ion-input slot="end" id="itemTypeName" debounce={ 200 } value={ this.name }></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position='fixed'>Plural Name</ion-label>
+            <ion-input slot="end" id="pluralItemTypeName" debounce={ 200 } value={ this.pluralName }></ion-input>
           </ion-item>
           <ion-item>
             <ion-label position='fixed'>Workflow</ion-label>
