@@ -1,6 +1,6 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
-import { Screen } from '../../../interfaces/interfaces';
 import { ENV } from '../../../environments/environment';
+import { Screen } from '../../../interfaces/interfaces';
 
 @Component({
   tag: 'screens-list'

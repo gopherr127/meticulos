@@ -108,7 +108,7 @@ export class ItemTypeCreate {
           <ion-item></ion-item>
           <ion-item>
             <ion-label position='fixed'>Name</ion-label>
-            <ion-input id="itemTypeName" slot="end" debounce={ 200 } value={ this.name }></ion-input>
+            <ion-input slot="end" id="itemTypeName" debounce={ 200 } value={ this.name }></ion-input>
           </ion-item>
           <ion-item>
             <ion-label position='fixed'>Workflow</ion-label>

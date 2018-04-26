@@ -335,6 +335,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ScreenSearch {
+      'itemTypeFilterId': string;
+    }
+  }
+
+  interface HTMLScreenSearchElement extends StencilComponents.ScreenSearch, HTMLStencilElement {}
+
+  var HTMLScreenSearchElement: {
+    prototype: HTMLScreenSearchElement;
+    new (): HTMLScreenSearchElement;
+  };
+  interface HTMLElementTagNameMap {
+    'screen-search': HTMLScreenSearchElement;
+  }
+  interface ElementTagNameMap {
+    'screen-search': HTMLScreenSearchElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'screen-search': JSXElements.ScreenSearchAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ScreenSearchAttributes extends HTMLAttributes {
+      'itemTypeFilterId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ScreensList {
       'subtitle': string;
     }

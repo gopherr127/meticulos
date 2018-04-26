@@ -46,7 +46,11 @@ export class ItemTypeDetail {
         }
     });
 
-    this.itemType = await response.json();
+    if (response.ok) {
+
+      this.itemType = await response.json();
+      this.subtitle = 'Item Type: ' + this.itemType.name;
+    }
   }
 
   async loadWorkflowOptions() {
@@ -223,7 +227,7 @@ export class ItemTypeDetail {
           <ion-item></ion-item>
           <ion-item>
             <ion-label position='fixed'>Name</ion-label>
-            <ion-input id="itemTypeName" slot="end" debounce={200} value={ this.itemType.name }></ion-input>
+            <ion-input slot="end" id="itemTypeName" debounce={200} value={ this.itemType.name }></ion-input>
           </ion-item>
           <ion-item>
             <ion-label position='fixed'>Workflow</ion-label>
@@ -236,17 +240,17 @@ export class ItemTypeDetail {
           </ion-item>
           <ion-item button onClick={ () => this.presentScreenSearch("createScreen") }>
             <ion-label position='fixed'>Create Screen</ion-label>
-            <ion-input disabled value={ this.selectedCreateScreen ? this.selectedCreateScreen.name : "" }></ion-input>
+            <ion-input slot="end" disabled value={ this.selectedCreateScreen ? this.selectedCreateScreen.name : "" }></ion-input>
             <ion-icon slot="end" name="more" color="tertiary"></ion-icon>
           </ion-item>
           <ion-item button onClick={ () => this.presentScreenSearch("editScreen") }>
             <ion-label position='fixed'>Edit Screen</ion-label>
-            <ion-input disabled value={ this.selectedEditScreen ? this.selectedEditScreen.name : "" }></ion-input>
+            <ion-input slot="end" disabled value={ this.selectedEditScreen ? this.selectedEditScreen.name : "" }></ion-input>
             <ion-icon slot="end" name="more" color="tertiary"></ion-icon>
           </ion-item>
           <ion-item button onClick={ () => this.presentScreenSearch("viewScreen") }>
             <ion-label position='fixed'>View Screen</ion-label>
-            <ion-input disabled value={ this.selectedViewScreen ? this.selectedViewScreen.name : "" }></ion-input>
+            <ion-input slot="end" disabled value={ this.selectedViewScreen ? this.selectedViewScreen.name : "" }></ion-input>
             <ion-icon slot="end" name="more" color="tertiary"></ion-icon>
           </ion-item>
           <ion-item>
