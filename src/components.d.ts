@@ -368,6 +368,41 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface WorkflowTransitionDetail {
+      'returnUrl': string;
+      'workflowTransitionId': string;
+    }
+  }
+
+  interface HTMLWorkflowTransitionDetailElement extends StencilComponents.WorkflowTransitionDetail, HTMLStencilElement {}
+
+  var HTMLWorkflowTransitionDetailElement: {
+    prototype: HTMLWorkflowTransitionDetailElement;
+    new (): HTMLWorkflowTransitionDetailElement;
+  };
+  interface HTMLElementTagNameMap {
+    'workflow-transition-detail': HTMLWorkflowTransitionDetailElement;
+  }
+  interface ElementTagNameMap {
+    'workflow-transition-detail': HTMLWorkflowTransitionDetailElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'workflow-transition-detail': JSXElements.WorkflowTransitionDetailAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface WorkflowTransitionDetailAttributes extends HTMLAttributes {
+      'returnUrl'?: string;
+      'workflowTransitionId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface WorkflowCreate {
 
     }
