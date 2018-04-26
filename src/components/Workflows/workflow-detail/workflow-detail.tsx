@@ -13,6 +13,7 @@ export class WorkflowDetail {
   workflowNodesList: HTMLIonListElement;
   workflowTransitionsList: HTMLIonListElement;
   @Prop({ connect: 'ion-router' }) nav;
+  @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop() workflowId: string;
   @Prop() returnUrl = '/workflows';
   @State() subtitle: string = 'Workflow: ';
@@ -38,6 +39,7 @@ export class WorkflowDetail {
     navCtrl.push(url);
   }
 
+  @Listen('body:ionModalDidDismiss')
   async loadWorkflow() {
     
     let response = await fetch(
@@ -81,9 +83,14 @@ export class WorkflowDetail {
 
   async handleNodeAddClick() {
     
-    // this.history.push("/workflow-node-create", {
-    //   workflowId: this.workflowId
-    // });
+    const modal = await this.modalCtrl.create({
+      component: 'workflow-node-create',
+      componentProps: {
+        workflowId: this.workflowId
+      }
+    });
+    
+    await modal.present();
   }
 
   async handleNodeDeleteClick(node: WorkflowNode) {
@@ -102,9 +109,14 @@ export class WorkflowDetail {
 
   async handleTransitionAddClick() {
     
-    // this.history.push("/workflow-transition-create", {
-    //   workflowId: this.id
-    // });
+    const modal = await this.modalCtrl.create({
+      component: 'workflow-transition-create',
+      componentProps: {
+        workflowId: this.workflowId
+      }
+    });
+    
+    await modal.present();
   }
 
   async handleTransitionDeleteClick(transition: WorkflowTransition) {

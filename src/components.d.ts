@@ -302,6 +302,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface WorkflowNodeCreate {
+      'workflowId': string;
+    }
+  }
+
+  interface HTMLWorkflowNodeCreateElement extends StencilComponents.WorkflowNodeCreate, HTMLStencilElement {}
+
+  var HTMLWorkflowNodeCreateElement: {
+    prototype: HTMLWorkflowNodeCreateElement;
+    new (): HTMLWorkflowNodeCreateElement;
+  };
+  interface HTMLElementTagNameMap {
+    'workflow-node-create': HTMLWorkflowNodeCreateElement;
+  }
+  interface ElementTagNameMap {
+    'workflow-node-create': HTMLWorkflowNodeCreateElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'workflow-node-create': JSXElements.WorkflowNodeCreateAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface WorkflowNodeCreateAttributes extends HTMLAttributes {
+      'workflowId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface WorkflowCreate {
 
     }

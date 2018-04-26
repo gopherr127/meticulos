@@ -1,13 +1,14 @@
-import { Component, Element, State, Listen } from '@stencil/core';
+import { Component, Element, Prop, State, Listen } from '@stencil/core';
 import { ENV } from '../../../environments/environment';
 
 @Component({
-  tag: 'workflow-create'
+  tag: 'workflow-node-create'
 })
-export class WorkflowCreate {
-
+export class WorkflowNodeCreate {
+  
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
+  @Prop() workflowId: string;
   @State() name: string;
   
   dismiss(data?: any) {
@@ -18,13 +19,14 @@ export class WorkflowCreate {
   async handleSaveClick() {
 
     let response = await fetch(
-      this.apiBaseUrl + "/workflows", {
+      this.apiBaseUrl + "/workflownodes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          "name": this.name
+          workflowId: this.workflowId,
+          name: this.name
         })
     });
 
@@ -45,7 +47,7 @@ export class WorkflowCreate {
       <ion-header> 
 
         <ion-toolbar color="secondary">
-          <ion-title>Create Workflow</ion-title>
+          <ion-title>Create Workflow Node</ion-title>
         </ion-toolbar>
 
       </ion-header>,
@@ -55,7 +57,7 @@ export class WorkflowCreate {
         <ion-item></ion-item>
         <ion-item>
           <ion-label position='fixed'>Name</ion-label>
-          <ion-input id="workflowName" debounce={ 200 } value={ this.name }></ion-input>
+          <ion-input id="nodeName" debounce={ 200 } value={ this.name }></ion-input>
         </ion-item>
 
       </ion-content>,
