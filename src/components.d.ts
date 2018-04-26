@@ -135,6 +135,164 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ImagecaptureField {
+
+    }
+  }
+
+  interface HTMLImagecaptureFieldElement extends StencilComponents.ImagecaptureField, HTMLStencilElement {}
+
+  var HTMLImagecaptureFieldElement: {
+    prototype: HTMLImagecaptureFieldElement;
+    new (): HTMLImagecaptureFieldElement;
+  };
+  interface HTMLElementTagNameMap {
+    'imagecapture-field': HTMLImagecaptureFieldElement;
+  }
+  interface ElementTagNameMap {
+    'imagecapture-field': HTMLImagecaptureFieldElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'imagecapture-field': JSXElements.ImagecaptureFieldAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ImagecaptureFieldAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface SelectlistField {
+      'fieldId': string;
+      'fieldName': string;
+      'fieldOptions': string;
+      'fieldValue': string;
+      'isMultiple': boolean;
+      'isRequired': boolean;
+    }
+  }
+
+  interface HTMLSelectlistFieldElement extends StencilComponents.SelectlistField, HTMLStencilElement {}
+
+  var HTMLSelectlistFieldElement: {
+    prototype: HTMLSelectlistFieldElement;
+    new (): HTMLSelectlistFieldElement;
+  };
+  interface HTMLElementTagNameMap {
+    'selectlist-field': HTMLSelectlistFieldElement;
+  }
+  interface ElementTagNameMap {
+    'selectlist-field': HTMLSelectlistFieldElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'selectlist-field': JSXElements.SelectlistFieldAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface SelectlistFieldAttributes extends HTMLAttributes {
+      'fieldId'?: string;
+      'fieldName'?: string;
+      'fieldOptions'?: string;
+      'fieldValue'?: string;
+      'isMultiple'?: boolean;
+      'isRequired'?: boolean;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface TextareaField {
+      'fieldId': string;
+      'fieldName': string;
+      'fieldValue': string;
+      'isDisabled': boolean;
+      'isRequired': boolean;
+    }
+  }
+
+  interface HTMLTextareaFieldElement extends StencilComponents.TextareaField, HTMLStencilElement {}
+
+  var HTMLTextareaFieldElement: {
+    prototype: HTMLTextareaFieldElement;
+    new (): HTMLTextareaFieldElement;
+  };
+  interface HTMLElementTagNameMap {
+    'textarea-field': HTMLTextareaFieldElement;
+  }
+  interface ElementTagNameMap {
+    'textarea-field': HTMLTextareaFieldElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'textarea-field': JSXElements.TextareaFieldAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface TextareaFieldAttributes extends HTMLAttributes {
+      'fieldId'?: string;
+      'fieldName'?: string;
+      'fieldValue'?: string;
+      'isDisabled'?: boolean;
+      'isRequired'?: boolean;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface TextboxField {
+      'fieldId': string;
+      'fieldName': string;
+      'fieldValue': string;
+      'isDisabled': boolean;
+      'isRequired': boolean;
+    }
+  }
+
+  interface HTMLTextboxFieldElement extends StencilComponents.TextboxField, HTMLStencilElement {}
+
+  var HTMLTextboxFieldElement: {
+    prototype: HTMLTextboxFieldElement;
+    new (): HTMLTextboxFieldElement;
+  };
+  interface HTMLElementTagNameMap {
+    'textbox-field': HTMLTextboxFieldElement;
+  }
+  interface ElementTagNameMap {
+    'textbox-field': HTMLTextboxFieldElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'textbox-field': JSXElements.TextboxFieldAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface TextboxFieldAttributes extends HTMLAttributes {
+      'fieldId'?: string;
+      'fieldName'?: string;
+      'fieldValue'?: string;
+      'isDisabled'?: boolean;
+      'isRequired'?: boolean;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ItemTypeCreate {
 
     }
