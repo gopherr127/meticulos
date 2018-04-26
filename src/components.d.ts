@@ -201,6 +201,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ScreenCreate {
+
+    }
+  }
+
+  interface HTMLScreenCreateElement extends StencilComponents.ScreenCreate, HTMLStencilElement {}
+
+  var HTMLScreenCreateElement: {
+    prototype: HTMLScreenCreateElement;
+    new (): HTMLScreenCreateElement;
+  };
+  interface HTMLElementTagNameMap {
+    'screen-create': HTMLScreenCreateElement;
+  }
+  interface ElementTagNameMap {
+    'screen-create': HTMLScreenCreateElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'screen-create': JSXElements.ScreenCreateAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ScreenCreateAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ScreenDetail {
       'returnUrl': string;
       'screenId': string;

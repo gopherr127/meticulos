@@ -2,7 +2,6 @@ import { Component, Element, Prop, State, Listen } from '@stencil/core';
 import { ENV } from '../../../environments/environment';
 import { FieldTypes, FieldTypeMetadata } from '../../../interfaces/interfaces';
 
-
 @Component({
   tag: 'field-create'
 })
@@ -10,7 +9,7 @@ export class FieldCreate {
   
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
-  @Prop({connect: 'ion-router'}) nav;
+  @Prop({ connect: 'ion-router' }) nav;
   @State() name: string;
   @State() showFieldOptions: boolean;
   @State() valueOptions: Array<any> = [];
@@ -63,7 +62,7 @@ export class FieldCreate {
         body: stringifiedJson
     });
 
-    if (response.status === 200) {
+    if (response.ok) {
 
       this.dismiss();
     }
