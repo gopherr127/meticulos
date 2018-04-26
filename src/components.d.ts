@@ -131,32 +131,30 @@ declare global {
 declare global {
 
   namespace StencilComponents {
-    interface ItemtypesList {
-      'returnUrl': string;
+    interface ItemTypesList {
       'subtitle': string;
     }
   }
 
-  interface HTMLItemtypesListElement extends StencilComponents.ItemtypesList, HTMLStencilElement {}
+  interface HTMLItemTypesListElement extends StencilComponents.ItemTypesList, HTMLStencilElement {}
 
-  var HTMLItemtypesListElement: {
-    prototype: HTMLItemtypesListElement;
-    new (): HTMLItemtypesListElement;
+  var HTMLItemTypesListElement: {
+    prototype: HTMLItemTypesListElement;
+    new (): HTMLItemTypesListElement;
   };
   interface HTMLElementTagNameMap {
-    'itemtypes-list': HTMLItemtypesListElement;
+    'item-types-list': HTMLItemTypesListElement;
   }
   interface ElementTagNameMap {
-    'itemtypes-list': HTMLItemtypesListElement;
+    'item-types-list': HTMLItemTypesListElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      'itemtypes-list': JSXElements.ItemtypesListAttributes;
+      'item-types-list': JSXElements.ItemTypesListAttributes;
     }
   }
   namespace JSXElements {
-    export interface ItemtypesListAttributes extends HTMLAttributes {
-      'returnUrl'?: string;
+    export interface ItemTypesListAttributes extends HTMLAttributes {
       'subtitle'?: string;
     }
   }
