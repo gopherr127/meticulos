@@ -335,6 +335,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface WorkflowTransitionCreate {
+      'workflowId': string;
+    }
+  }
+
+  interface HTMLWorkflowTransitionCreateElement extends StencilComponents.WorkflowTransitionCreate, HTMLStencilElement {}
+
+  var HTMLWorkflowTransitionCreateElement: {
+    prototype: HTMLWorkflowTransitionCreateElement;
+    new (): HTMLWorkflowTransitionCreateElement;
+  };
+  interface HTMLElementTagNameMap {
+    'workflow-transition-create': HTMLWorkflowTransitionCreateElement;
+  }
+  interface ElementTagNameMap {
+    'workflow-transition-create': HTMLWorkflowTransitionCreateElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'workflow-transition-create': JSXElements.WorkflowTransitionCreateAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface WorkflowTransitionCreateAttributes extends HTMLAttributes {
+      'workflowId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface WorkflowCreate {
 
     }
