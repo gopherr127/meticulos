@@ -6,6 +6,7 @@ import { Item } from '../../../interfaces/interfaces';
 })
 export class ItemsList {
 
+  @Prop() itemTypeId: string;
   @Prop() subtitle = 'Items';
   @Prop() returnUrl = '/';
   @State() queryText = '';

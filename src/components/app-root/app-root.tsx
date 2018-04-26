@@ -3,6 +3,8 @@ import '@ionic/core';
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { UserData } from '../../providers/user-data';
 import { Plugins } from '@capacitor/core';
+import { ENV } from '../../environments/environment';
+import { ItemType } from '../../interfaces/interfaces';
 
 const { SplashScreen } = Plugins;
 
@@ -11,15 +13,15 @@ const { SplashScreen } = Plugins;
   styleUrl: 'app-root.css'
 })
 export class AppRoot {
+  
+  public apiBaseUrl: string = new ENV().apiBaseUrl();
+  @Element() el: HTMLElement;
+  @Prop({context: 'isServer'}) isServer: boolean;
   @State() loggedIn = false;
+  @State() itemTypes: Array<ItemType> = [];
   hasSeenTutorial = false;
 
-  @Element() el: HTMLElement;
-
-  @Prop({context: 'isServer'}) isServer: boolean;
-
   appPages = [
-    { title: 'Items',    url: '/items',    icon: 'list' },
     { title: 'Schedule', url: '/schedule', icon: 'calendar' },
     { title: 'Speakers', url: '/speakers', icon: 'contacts' },
     { title: 'Map',      url: '/map',      icon: 'map' },
@@ -34,9 +36,12 @@ export class AppRoot {
   ];
 
   async componentWillLoad() {
+
     this.hasSeenTutorial = this.isServer
       ? true
       : await UserData.checkHasSeenTutorial();
+
+    this.loadItemTypes();
   }
 
   async componentDidLoad() {
@@ -47,6 +52,19 @@ export class AppRoot {
       return;
     }
   }
+
+  async loadItemTypes() {
+
+    let response = await fetch(
+      this.apiBaseUrl + "/itemtypes", { 
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+    });
+
+    this.itemTypes = await response.json();
+  } 
 
   async checkLoginStatus() {
     const loggedIn = this.loggedIn = await UserData.isLoggedIn();
@@ -70,7 +88,7 @@ export class AppRoot {
 
         <ion-route-redirect from="/" to={this.hasSeenTutorial ? '/schedule' : '/tutorial'} />
 
-        <ion-route url="/items" component="items-list"></ion-route>
+        <ion-route url="/items/:itemTypeId" component="items-list"></ion-route>
         
         <ion-route url="/item-types" component="item-types-list"></ion-route>
         <ion-route url="/item-types/:itemTypeId" component="item-type-detail"></ion-route>
@@ -127,7 +145,27 @@ export class AppRoot {
                   Navigate
                 </ion-list-header>
 
-                {this.appPages.map((page) =>
+                {this.itemTypes.map((itemType) =>
+                  <ion-menu-toggle autoHide={false}>
+                    <ion-item href={ `/items/` + itemType.id }>
+                      <ion-avatar slot="start">
+                        <img src={itemType.iconUrl}/>
+                      </ion-avatar>
+                      <ion-label>
+                        {itemType.pluralName}
+                      </ion-label>
+                    </ion-item>
+                  </ion-menu-toggle>
+                )}
+              </ion-list>
+
+              <p></p>
+
+              <ion-list>
+                <ion-list-header>
+                  Administration
+                </ion-list-header>
+                {this.adminPages.map((page) =>
                   <ion-menu-toggle autoHide={false}>
                     <ion-item href={page.url}>
                       <ion-icon slot="start" name={page.icon}></ion-icon>
@@ -138,13 +176,14 @@ export class AppRoot {
                   </ion-menu-toggle>
                 )}
               </ion-list>
+
               <p></p>
+
               <ion-list>
                 <ion-list-header>
-                  Administration
+                  Demo Pages
                 </ion-list-header>
-
-                {this.adminPages.map((page) =>
+                {this.appPages.map((page) =>
                   <ion-menu-toggle autoHide={false}>
                     <ion-item href={page.url}>
                       <ion-icon slot="start" name={page.icon}></ion-icon>

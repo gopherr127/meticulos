@@ -395,6 +395,7 @@ declare global {
 
   namespace StencilComponents {
     interface ItemsList {
+      'itemTypeId': string;
       'returnUrl': string;
       'subtitle': string;
     }
@@ -419,6 +420,7 @@ declare global {
   }
   namespace JSXElements {
     export interface ItemsListAttributes extends HTMLAttributes {
+      'itemTypeId'?: string;
       'returnUrl'?: string;
       'subtitle'?: string;
     }

@@ -196,13 +196,13 @@ export class ItemTypeDetail {
 
       this.itemType.workflowId = event.detail.value;
     }
-    else if (event.target.id === "isForPlanItems") {
+    else if (event.target.id === "isForPhysicalItems") {
 
-      this.itemType.isForPlanItems = event.detail.checked;
+      this.itemType.isForPhysicalItems = event.detail.checked;
     }
-    else if (event.target.id === "isForAssets") {
+    else if (event.target.id === "allowNestedItems") {
 
-      this.itemType.isForAssets = event.detail.checked;
+      this.itemType.allowNestedItems = event.detail.checked;
     }
   }
 
@@ -266,11 +266,11 @@ export class ItemTypeDetail {
           </ion-item>
           <ion-item>
             <ion-label position='fixed'>Is For Physical Items</ion-label>
-            <ion-checkbox id="isForPlanItems" slot="end" checked={ this.itemType.isForPlanItems }></ion-checkbox>
+            <ion-checkbox id="isForPhysicalItems" slot="end" checked={ this.itemType.isForPhysicalItems }></ion-checkbox>
           </ion-item>
           <ion-item>
             <ion-label position='fixed'>Allow Nested Items</ion-label>
-            <ion-checkbox id="isForAssets" slot="end" checked={ this.itemType.isForAssets }></ion-checkbox>
+            <ion-checkbox id="allowNestedItems" slot="end" checked={ this.itemType.allowNestedItems }></ion-checkbox>
           </ion-item>
           <ion-item>
             <ion-label position='fixed'>Avatar</ion-label>

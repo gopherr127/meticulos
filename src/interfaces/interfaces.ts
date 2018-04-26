@@ -91,8 +91,8 @@ export interface ItemType {
   pluralName: string,
   workflowId: string,
   iconUrl: string,
-  isForPlanItems: boolean,
-  isForAssets: boolean,
+  isForPhysicalItems: boolean,
+  allowNestedItems: boolean,
   createScreenId: string,
   editScreenId: string,
   viewScreenId: string
