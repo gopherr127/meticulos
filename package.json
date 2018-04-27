@@ -1,8 +1,8 @@
 {
-  "name": "ionic-stencil-conference-app",
+  "name": "meticulos",
   "private": true,
   "version": "0.0.1",
-  "description": "Stencil App Starter",
+  "description": "Meticulos is a highly-configurable web app that allows tracking of both plan items and physical items.",
   "files": [
     "dist/"
   ],
@@ -36,14 +36,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ionic-team/stencil-app-starter.git"
+    "url": "git+https://github.com/gopherr127/meticulos.git"
   },
-  "author": "Ionic Team",
+  "author": "Geoffrey Rodgers",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ionic-team/stencil"
+    "url": "https://github.com/gopherr127/meticulos"
   },
-  "homepage": "https://github.com/ionic-team/stencil",
+  "homepage": "https://github.com/gopherr127/meticulos",
   "jest": {
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"

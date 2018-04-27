@@ -25,10 +25,7 @@ export class ItemTypesList {
 
     let response = await fetch(
       this.apiBaseUrl + "/itemtypes", { 
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
+        method: "GET"
     });
 
     this.itemTypes = await response.json();

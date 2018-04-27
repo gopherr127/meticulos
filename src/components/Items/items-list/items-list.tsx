@@ -1,19 +1,86 @@
-import { Component, Prop, State } from '@stencil/core';
-import { Item } from '../../../interfaces/interfaces';
+import { Component, Element, Prop, State } from '@stencil/core';
+import { ENV } from '../../../environments/environment';
+import { Item, ItemType } from '../../../interfaces/interfaces';
 
 @Component({
   tag: 'items-list'
 })
 export class ItemsList {
 
+  public apiBaseUrl: string = new ENV().apiBaseUrl();
+  @Element() el: any;
+  itemsList: HTMLIonListElement;
+  @Prop({ connect: 'ion-router' }) nav;
   @Prop() itemTypeId: string;
-  @Prop() subtitle = 'Items';
-  @Prop() returnUrl = '/';
+  @State() subtitle = 'Items';
   @State() queryText = '';
+  @State() itemType: ItemType;
   @State() items: Array<Item> = [];
 
-  handleAddFabClick() {
+  async componentWillLoad() {
 
+    await this.loadItemType();
+    await this.loadItems();
+  }
+
+  componentDidLoad() {
+
+    this.itemsList = this.el.querySelector('#itemsList');
+  }
+
+  async loadItemType() {
+
+    let response = await fetch(
+      this.apiBaseUrl + "/itemtypes/" + this.itemTypeId, { 
+        method: "GET"
+    });
+
+    if (response.ok) {
+
+      this.itemType = await response.json();
+      this.subtitle = this.itemType.pluralName;
+    }
+    else {
+      console.log(response);
+      console.log(await response.text());
+    }
+  }
+
+  async loadItems() {
+
+    let response = await fetch(
+      this.apiBaseUrl + `/items/search?typeId=${this.itemTypeId}`, {
+        method: "GET"
+    });
+
+    if (response.ok) {
+
+      this.items = await response.json();
+    }
+  }
+
+  async navigate(url: string) {
+
+    const navCtrl: HTMLIonRouterElement = await (this.nav as any).componentOnReady();
+    navCtrl.push(url);
+  }
+
+  async handleAddFabClick() {
+
+    this.navigate(`/items/create/${ this.itemTypeId }`);
+  }
+
+  async handleDeleteClick(item: Item) {
+
+    let response = await fetch(
+      this.apiBaseUrl + `/items/${item.id}`, {
+        method: "DELETE"
+    });
+
+    if (response.ok) {
+
+      this.itemsList.closeSlidingItems();
+    }
   }
 
   render() {
@@ -23,7 +90,6 @@ export class ItemsList {
         <ion-toolbar>
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
-            <ion-back-button defaultHref={this.returnUrl}></ion-back-button>
           </ion-buttons>
           <ion-title>Meticulos</ion-title>
         </ion-toolbar>
@@ -51,8 +117,24 @@ export class ItemsList {
 
       <ion-content>
 
-        <ion-list>
-
+        <ion-list id="itemsList">
+          {this.items.map(item => 
+            <ion-item-sliding>
+              <ion-item href={`/item-types/${item.id}`}>
+                <ion-avatar slot="start">
+                  <img src={this.itemType.iconUrl}/>
+                </ion-avatar>
+                <h2>{item.name}</h2><p></p>
+              </ion-item>
+              <ion-item-options>
+                <ion-item-option color="danger" onClick={ () =>
+                    this.handleDeleteClick(item)
+                  }>
+                  Delete
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          )}
           <ion-item disabled></ion-item>
           <ion-item disabled></ion-item>
         </ion-list>

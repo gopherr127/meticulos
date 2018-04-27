@@ -1,6 +1,6 @@
 import '@ionic/core';
 
-import { Component, Element, Listen, Prop, State } from '@stencil/core';
+import { Component, Listen, Prop, State } from '@stencil/core';
 import { UserData } from '../../providers/user-data';
 import { Plugins } from '@capacitor/core';
 import { ENV } from '../../environments/environment';
@@ -15,8 +15,7 @@ const { SplashScreen } = Plugins;
 export class AppRoot {
   
   public apiBaseUrl: string = new ENV().apiBaseUrl();
-  @Element() el: HTMLElement;
-  @Prop({context: 'isServer'}) isServer: boolean;
+  @Prop({ context: 'isServer' }) isServer: boolean;
   @State() loggedIn = false;
   @State() itemTypes: Array<ItemType> = [];
   hasSeenTutorial = false;
@@ -40,7 +39,7 @@ export class AppRoot {
     this.hasSeenTutorial = this.isServer
       ? true
       : await UserData.checkHasSeenTutorial();
-
+    
     this.loadItemTypes();
   }
 
@@ -52,7 +51,7 @@ export class AppRoot {
       return;
     }
   }
-
+  
   async loadItemTypes() {
 
     let response = await fetch(
@@ -88,7 +87,9 @@ export class AppRoot {
 
         <ion-route-redirect from="/" to={this.hasSeenTutorial ? '/schedule' : '/tutorial'} />
 
-        <ion-route url="/items/:itemTypeId" component="items-list"></ion-route>
+        <ion-route url="/items/type/:itemTypeId" component="items-list"></ion-route>
+        <ion-route url="/items/create/:itemTypeId" component="item-create"></ion-route>
+        <ion-route url="/items/:itemId" component="item-detail"></ion-route>
         
         <ion-route url="/item-types" component="item-types-list"></ion-route>
         <ion-route url="/item-types/:itemTypeId" component="item-type-detail"></ion-route>
@@ -140,14 +141,14 @@ export class AppRoot {
               </ion-toolbar>
             </ion-header>
             <ion-content forceOverscroll={false}>
+
               <ion-list>
                 <ion-list-header>
                   Navigate
                 </ion-list-header>
-
-                {this.itemTypes.map((itemType) =>
+                { this.itemTypes.map((itemType) =>
                   <ion-menu-toggle autoHide={false}>
-                    <ion-item href={ `/items/` + itemType.id }>
+                    <ion-item href={`/items/type/${itemType.id}`}>
                       <ion-avatar slot="start">
                         <img src={itemType.iconUrl}/>
                       </ion-avatar>
