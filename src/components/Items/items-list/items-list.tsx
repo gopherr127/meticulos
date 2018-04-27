@@ -10,7 +10,7 @@ export class ItemsList {
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
   itemsList: HTMLIonListElement;
-  @Prop({ connect: 'ion-router' }) nav;
+  @Prop({ connect: 'ion-router' }) router;
   @Prop() itemTypeId: string;
   @State() subtitle = 'Items';
   @State() queryText = '';
@@ -61,8 +61,8 @@ export class ItemsList {
 
   async navigate(url: string) {
 
-    const navCtrl: HTMLIonRouterElement = await (this.nav as any).componentOnReady();
-    navCtrl.push(url);
+    const routerCtrl: HTMLIonRouterElement = await (this.router as any).componentOnReady();
+    routerCtrl.push(url);
   }
 
   async handleAddFabClick() {

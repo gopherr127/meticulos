@@ -189,12 +189,6 @@ export class ItemCreate {
     
     if (validationResult.result) {
 
-      console.log(JSON.stringify({
-        name: this.name,
-        typeId: this.itemTypeId,
-        fieldValues: this.fieldValues
-      }));
-
       let response = await fetch(
         this.apiBaseUrl + "/items", {
           method: "POST",
@@ -241,16 +235,12 @@ export class ItemCreate {
   @Listen('ionInput')
   handleFieldInput(event: any) {
 
-    // console.log("Field input");
-    // console.log(event);
     if (event.detail.target) {
 
       if (event.target.id === "itemName") {
 
         // Update Name field
         this.name = event.detail.target.value;
-        // console.log("Name updated to:");
-        // console.log(this.name);
       }
       else {
         
@@ -265,7 +255,6 @@ export class ItemCreate {
 
           // Update the existing field value
           fv.value = fvValue;
-          // console.log(`Field ${fv.fieldName} updated to: ${fvValue} via input event`);
         }
         else {
 
@@ -280,7 +269,6 @@ export class ItemCreate {
           };
 
           this.fieldValues.push(newFV);
-          // console.log(`Field ${fMeta.name} added with: ${fvValue} via input event`);
         }
       }
     }
@@ -289,8 +277,6 @@ export class ItemCreate {
   @Listen('ionChange')
   handleFieldChange(event: any) {
 
-    // console.log("Field change");
-    // console.log(event);
     if (event.detail) {
 
       if (event.target.id != "itemName") {
@@ -308,7 +294,6 @@ export class ItemCreate {
 
           // Update the existing field value
           fv.value = fvValue;
-          // console.log(`Field ${fv.fieldName} updated to: ${fvValue} via change event`);
         }
         else {
 
@@ -326,7 +311,6 @@ export class ItemCreate {
             };
 
             this.fieldValues.push(newFV);
-            // console.log(`Field ${fMeta.name} added with: ${fvValue} via change event`);
           }
           else {
 
