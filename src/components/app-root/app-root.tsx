@@ -51,6 +51,12 @@ export class AppRoot {
       return;
     }
   }
+
+  async pushComponent(componentName: string, componentProps?: any) {
+
+    const navCtrl = document.querySelector('ion-nav');
+    navCtrl.push(componentName, componentProps);
+  }
   
   async loadItemTypes() {
 
@@ -90,7 +96,7 @@ export class AppRoot {
         <ion-route url="/items/type/:itemTypeId" component="items-list"></ion-route>
         <ion-route url="/items/create/:itemTypeId" component="item-create"></ion-route>
         <ion-route url="/items/:itemId" component="item-detail"></ion-route>
-        
+
         <ion-route url="/item-types" component="item-types-list"></ion-route>
         <ion-route url="/item-types/:itemTypeId" component="item-type-detail"></ion-route>
         <ion-route url="/item-types/create" component="item-type-create"></ion-route>
@@ -148,7 +154,7 @@ export class AppRoot {
                 </ion-list-header>
                 { this.itemTypes.map((itemType) =>
                   <ion-menu-toggle autoHide={false}>
-                    <ion-item href={`/items/type/${itemType.id}`}>
+                    <ion-item onClick={ () => this.pushComponent('items-list', { itemTypeId: itemType.id })}>
                       <ion-avatar slot="start">
                         <img src={itemType.iconUrl}/>
                       </ion-avatar>
@@ -199,8 +205,9 @@ export class AppRoot {
             </ion-content>
           </ion-menu>
 
-          <ion-router-outlet animated={false} main></ion-router-outlet>
+          <ion-nav main animated={false}></ion-nav>
         </ion-split-pane>
+        
       </ion-app>
     );
   }

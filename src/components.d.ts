@@ -396,7 +396,6 @@ declare global {
   namespace StencilComponents {
     interface ItemCreate {
       'itemTypeId': string;
-      'returnUrl': string;
     }
   }
 
@@ -420,6 +419,40 @@ declare global {
   namespace JSXElements {
     export interface ItemCreateAttributes extends HTMLAttributes {
       'itemTypeId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface ItemDetail {
+      'itemId': string;
+      'returnUrl': string;
+    }
+  }
+
+  interface HTMLItemDetailElement extends StencilComponents.ItemDetail, HTMLStencilElement {}
+
+  var HTMLItemDetailElement: {
+    prototype: HTMLItemDetailElement;
+    new (): HTMLItemDetailElement;
+  };
+  interface HTMLElementTagNameMap {
+    'item-detail': HTMLItemDetailElement;
+  }
+  interface ElementTagNameMap {
+    'item-detail': HTMLItemDetailElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'item-detail': JSXElements.ItemDetailAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemDetailAttributes extends HTMLAttributes {
+      'itemId'?: string;
       'returnUrl'?: string;
     }
   }

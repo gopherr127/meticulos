@@ -5,61 +5,71 @@ import * as FormValidator from '../../../services/form-validation-service';
 import { Item, ItemType, Screen, FieldMetadata, FieldTypes, FieldValue } from '../../../interfaces/interfaces';
 
 @Component({
-  tag: 'item-create'
+  tag: 'item-detail'
 })
-export class ItemCreate {
+export class ItemDetail {
 
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
-  @Prop({ connect: 'ion-router' }) nav;
+  @Prop({ connect: 'ion-router' }) router;
   @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
-  @Prop() itemTypeId: string;
+  @Prop() itemId: string;
+  @Prop() returnUrl = '/items';
   @State() subtitle: string = 'Create Item';
   @State() item: Item;
   @State() itemType: ItemType;
-  @State() createScreen: Screen;
-  @State() name: string;
+  @State() editScreen: Screen;
   @State() fieldMetadata: Array<FieldMetadata> = [];
-  @State() fieldValues: Array<FieldValue> = []
   
   async componentWillLoad() {
 
-    await this.loadItemType();
+    await this.loadItem();
   }
 
   async componentDidLoad() {
 
-    // Possible race condition in trying to load fields
-    // when the screen and metadata has not yet completed.
-    await this.loadCreateScreen();
+    await this.loadEditScreen();
     await this.addFieldsFromMetadata();
   }
 
-  async loadItemType() {
+  async navigate(url: string) {
+
+    const routerCtrl: HTMLIonRouterElement = await (this.router as any).componentOnReady();
+    routerCtrl.push(url);
+  }
+
+  popComponent() {
+
+    const navCtrl = document.querySelector('ion-nav');
+    navCtrl.pop();
+  }
+
+  async loadItem() {
 
     let response = await fetch(
-      this.apiBaseUrl + "/itemtypes/" + this.itemTypeId, { 
+      this.apiBaseUrl + "/items/" + this.itemId, { 
         method: "GET"
     });
 
     if (response.ok) {
 
-      this.itemType = await response.json();
-      this.subtitle = `Create ${this.itemType.name}`;
+      this.item = await response.json();
+      this.itemType = this.item.type;
+      this.subtitle = `${this.itemType.name} - ${this.item.name}`;
     }
   }
 
-  async loadCreateScreen() {
+  async loadEditScreen() {
 
     let response = await fetch(
-      this.apiBaseUrl + `/screens/${ this.itemType.createScreenId }`, {
+      this.apiBaseUrl + `/screens/${ this.itemType.editScreenId }`, {
         method: "GET"
     });
 
     if (response.ok) {
 
-      this.createScreen = await response.json();
-      this.fieldMetadata = this.createScreen.fields;
+      this.editScreen = await response.json();
+      this.fieldMetadata = this.editScreen.fields;
     }
   }
 
@@ -70,16 +80,10 @@ export class ItemCreate {
     
     for (let fieldMeta of this.fieldMetadata) {
 
-      if (fieldMeta.defaultValue) {
-        // Store default field values to be saved
-        let newFV: FieldValue = {
-          fieldId: fieldMeta.id,
-          fieldName: fieldMeta.name,
-          value: fieldMeta.defaultValue
-        };
-
-        this.fieldValues.push(newFV);
-      }
+      var fieldValue = this.item.fieldValues.find((item) => {
+        return item.fieldId === fieldMeta.id;
+      });
+      
       
       switch (fieldMeta.type) {
         case FieldTypes.Textbox:
@@ -87,40 +91,39 @@ export class ItemCreate {
           txtNode.setAttribute("field-id", fieldMeta.id);
           txtNode.setAttribute("field-name", fieldMeta.name);
           txtNode.setAttribute("debounce", '200');
+          if (fieldValue) {
+            txtNode.setAttribute("field-value", fieldValue.value);
+          }
           if (fieldMeta.isRequired) {
             txtNode.setAttribute("is-required", 'true');
           }
-          if (fieldMeta.defaultValue) {
-            txtNode.setAttribute("field-value", fieldMeta.defaultValue);
-          }
           fieldsListEl.appendChild(txtNode);
           break;
-
+        
         case FieldTypes.TextArea:
           var txtAreaNode = document.createElement("textarea-field");
           txtAreaNode.setAttribute("field-id", fieldMeta.id);
           txtAreaNode.setAttribute("field-name", fieldMeta.name);
           txtAreaNode.setAttribute("debounce", '200');
+          if (fieldValue) {
+            txtAreaNode.setAttribute("field-value", fieldValue.value);
+          }
           if (fieldMeta.isRequired) {
             txtAreaNode.setAttribute("is-required", 'true');
-          }
-          if (fieldMeta.defaultValue) {
-            txtAreaNode.setAttribute("field-value", fieldMeta.defaultValue);
           }
           fieldsListEl.appendChild(txtAreaNode);
           break;
 
         case FieldTypes.Number:
           var numNode = document.createElement("textbox-field");
-          numNode.setAttribute("type", 'number');
           numNode.setAttribute("field-id", fieldMeta.id);
           numNode.setAttribute("field-name", fieldMeta.name);
           numNode.setAttribute("debounce", '200');
+          if (fieldValue) {
+            numNode.setAttribute("field-value", fieldValue.value);
+          }
           if (fieldMeta.isRequired) {
             numNode.setAttribute("is-required", 'true');
-          }
-          if (fieldMeta.defaultValue) {
-            numNode.setAttribute("field-value", fieldMeta.defaultValue);
           }
           fieldsListEl.appendChild(numNode);
           break;
@@ -130,11 +133,11 @@ export class ItemCreate {
           sslNode.setAttribute("field-id", fieldMeta.id);
           sslNode.setAttribute("field-name", fieldMeta.name);
           sslNode.setAttribute("field-options", JSON.stringify(fieldMeta.valueOptions));
+          if (fieldValue) {
+            sslNode.setAttribute("field-value", fieldValue.value);
+          }
           if (fieldMeta.isRequired) {
             sslNode.setAttribute("is-required", 'true');
-          }
-          if (fieldMeta.defaultValue) {
-            sslNode.setAttribute("field-value", fieldMeta.defaultValue);
           }
           fieldsListEl.appendChild(sslNode);
           break;
@@ -144,66 +147,45 @@ export class ItemCreate {
           mslNode.setAttribute("field-id", fieldMeta.id);
           mslNode.setAttribute("field-name", fieldMeta.name);
           mslNode.setAttribute("field-options", JSON.stringify(fieldMeta.valueOptions));
-          mslNode.setAttribute("is-multiple", 'true');
+          mslNode.setAttribute("is-multiple", '');
+          if (fieldValue) {
+            mslNode.setAttribute("field-value", JSON.stringify(fieldValue.value));
+          }
           if (fieldMeta.isRequired) {
             mslNode.setAttribute("is-required", 'true');
           }
-          if (fieldMeta.defaultValue) {
-            mslNode.setAttribute("field-value", JSON.stringify(fieldMeta.defaultValue));
-          }
           fieldsListEl.appendChild(mslNode);
           break;
-         
+
         case FieldTypes.DateSelect:
         case FieldTypes.DateTimeSelect:
         case FieldTypes.CheckboxList:
         case FieldTypes.RadioList:        
         default:
           break;
-      }      
+      }   
     }
-  }
-
-  dismiss(data?: any) {
-    
-    (this.el.closest('ion-modal') as any).dismiss(data);
-  }
-
-  async showToastMessage(messageToDisplay: string) {
-
-    const toast = await this.toastCtrl.create({ 
-      position: 'top',
-      message: messageToDisplay, 
-      showCloseButton: true,
-      closeButtonText: 'OK'
-    });
-
-    await toast.present();
   }
 
   async handleSaveClick() {
 
     let validationResult = await FormValidator.validateForm(
-      this.fieldMetadata, this.fieldValues);
+      this.fieldMetadata, this.item.fieldValues);
     
     if (validationResult.result) {
 
       let response = await fetch(
-        this.apiBaseUrl + "/items", {
-          method: "POST",
+        this.apiBaseUrl + "/items/" + this.item.id, {
+          method: "PUT",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({
-            name: this.name,
-            typeId: this.itemTypeId,
-            fieldValues: this.fieldValues
-          })
+          body: JSON.stringify(this.item)
       });
   
       if (response.ok) {
   
-        this.dismiss();
+        this.navigate(this.returnUrl);
       }
       else
       {
@@ -239,12 +221,12 @@ export class ItemCreate {
       if (event.target.id === "itemName") {
 
         // Update Name field
-        this.name = event.detail.target.value;
+        this.item.name = event.detail.target.value;
       }
       else {
         
         // See if we've already stored a value for the field
-        var fv = this.fieldValues.find((item) => {
+        var fv = this.item.fieldValues.find((item) => {
           return item.fieldId === event.target.id;
         });
 
@@ -267,7 +249,7 @@ export class ItemCreate {
             value: fvValue
           };
 
-          this.fieldValues.push(newFV);
+          this.item.fieldValues.push(newFV);
         }
       }
     }
@@ -281,7 +263,7 @@ export class ItemCreate {
       if (event.target.id != "itemName") {
 
         // See if we've already stored a value for the field
-        var fv = this.fieldValues.find((item) => {
+        var fv = this.item.fieldValues.find((item) => {
           return item.fieldId === event.target.id;
         });
 
@@ -309,7 +291,7 @@ export class ItemCreate {
               value: fvValue
             };
 
-            this.fieldValues.push(newFV);
+            this.item.fieldValues.push(newFV);
           }
           else {
 
@@ -324,6 +306,14 @@ export class ItemCreate {
     return[
       <ion-header>
 
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+            <ion-back-button defaultHref={ this.returnUrl }></ion-back-button>
+          </ion-buttons>
+          <ion-title>Meticulos</ion-title>
+        </ion-toolbar>
+
         <ion-toolbar color="secondary">
           <ion-title>{ this.subtitle }</ion-title>
           <ion-buttons slot="end">
@@ -336,11 +326,11 @@ export class ItemCreate {
       </ion-header>,
 
       <ion-content>
-
+          
         <ion-item></ion-item>
         <ion-item>
           <ion-label position='fixed'>Name</ion-label>
-          <ion-input id="itemName" debounce={200} value={ this.name }></ion-input>
+          <ion-input id="itemName" debounce={200} value={ this.item.name }></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position='fixed'>Item Type</ion-label>
@@ -361,7 +351,7 @@ export class ItemCreate {
       <ion-footer>
         <ion-buttons slot="end">
           <ion-button color="primary" fill="solid" onClick={ () => this.handleSaveClick() }>Save</ion-button>
-          <ion-button color="primary" onClick={ () => this.dismiss()}>Cancel</ion-button>
+          <ion-button color="primary" onClick={ () => this.popComponent() }>Cancel</ion-button>
         </ion-buttons>
       </ion-footer>
     ];

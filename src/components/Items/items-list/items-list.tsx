@@ -1,4 +1,4 @@
-import { Component, Element, Prop, State } from '@stencil/core';
+import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { ENV } from '../../../environments/environment';
 import { Item, ItemType } from '../../../interfaces/interfaces';
 
@@ -10,7 +10,7 @@ export class ItemsList {
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
   itemsList: HTMLIonListElement;
-  @Prop({ connect: 'ion-router' }) router;
+  @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop() itemTypeId: string;
   @State() subtitle = 'Items';
   @State() queryText = '';
@@ -28,6 +28,12 @@ export class ItemsList {
     this.itemsList = this.el.querySelector('#itemsList');
   }
 
+  async pushComponent(componentName: string, componentProps?: any) {
+
+    const navCtrl = document.querySelector('ion-nav');
+    navCtrl.push(componentName, componentProps);
+  }
+  
   async loadItemType() {
 
     let response = await fetch(
@@ -46,6 +52,7 @@ export class ItemsList {
     }
   }
 
+  @Listen('body:ionModalDidDismiss')
   async loadItems() {
 
     let response = await fetch(
@@ -59,15 +66,24 @@ export class ItemsList {
     }
   }
 
-  async navigate(url: string) {
-
-    const routerCtrl: HTMLIonRouterElement = await (this.router as any).componentOnReady();
-    routerCtrl.push(url);
-  }
-
   async handleAddFabClick() {
 
-    this.navigate(`/items/create/${ this.itemTypeId }`);
+    const modal = await this.modalCtrl.create({
+      component: 'item-create',
+      componentProps: {
+        itemTypeId: this.itemTypeId
+      }
+    });
+    
+    await modal.present();
+  }
+
+  async handleItemClick(item: Item) {
+
+    this.pushComponent('item-detail', {
+      itemId: item.id,
+      returnUrl: `/items/type/${this.itemTypeId}`
+    })
   }
 
   async handleDeleteClick(item: Item) {
@@ -79,6 +95,7 @@ export class ItemsList {
 
     if (response.ok) {
 
+      await this.loadItems();
       this.itemsList.closeSlidingItems();
     }
   }
@@ -120,7 +137,7 @@ export class ItemsList {
         <ion-list id="itemsList">
           {this.items.map(item => 
             <ion-item-sliding>
-              <ion-item href={`/item-types/${item.id}`}>
+              <ion-item onClick={ () => this.handleItemClick(item) }>
                 <ion-avatar slot="start">
                   <img src={this.itemType.iconUrl}/>
                 </ion-avatar>
