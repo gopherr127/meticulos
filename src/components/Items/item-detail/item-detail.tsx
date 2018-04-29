@@ -2,7 +2,8 @@ import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { ToastController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
-import { Item, ItemType, Screen, FieldMetadata, FieldTypes, FieldValue } from '../../../interfaces/interfaces';
+import { Item, ItemType, Screen, FieldMetadata, 
+         FieldTypes, FieldValue, WorkflowTransition } from '../../../interfaces/interfaces';
 
 @Component({
   tag: 'item-detail'
@@ -13,17 +14,21 @@ export class ItemDetail {
   @Element() el: any;
   @Prop({ connect: 'ion-router' }) router;
   @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
+  @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop() itemId: string;
   @Prop() returnUrl = '/items';
   @State() subtitle: string = 'Create Item';
   @State() item: Item;
   @State() itemType: ItemType;
+  @State() transitionOptions: Array<WorkflowTransition> = [];
+  @State() transitionInProgress: WorkflowTransition;
   @State() editScreen: Screen;
   @State() fieldMetadata: Array<FieldMetadata> = [];
   
   async componentWillLoad() {
 
     await this.loadItem();
+    await this.loadTransitionOptions();
   }
 
   async componentDidLoad() {
@@ -44,6 +49,17 @@ export class ItemDetail {
     navCtrl.pop();
   }
 
+  async showErrorToast(messageToDisplay: string) {
+    
+    const toast = await this.toastCtrl.create({ 
+      position: 'top',
+      message: messageToDisplay, 
+      showCloseButton: true,
+      closeButtonText: 'OK'
+    });
+    await toast.present();
+  }
+
   async loadItem() {
 
     let response = await fetch(
@@ -57,6 +73,15 @@ export class ItemDetail {
       this.itemType = this.item.type;
       this.subtitle = `${this.itemType.name} - ${this.item.name}`;
     }
+  }
+
+  async loadTransitionOptions() {
+    let transitionsResponse = await fetch(
+      this.apiBaseUrl + "/workflowtransitions/search?fromNodeId=" + this.item.workflowNode.id, {
+        method: "GET"
+    });
+
+    this.transitionOptions = await transitionsResponse.json();
   }
 
   async loadEditScreen() {
@@ -167,6 +192,60 @@ export class ItemDetail {
     }
   }
 
+  async handleTransitionClick(transition: WorkflowTransition) {
+
+    if (transition.screenIds && transition.screenIds.length > 0) {
+      
+      await this.presentScreensDisplay(transition);
+    }
+    else {
+
+      await this.completeTransition(transition);
+    }
+  }
+
+  async presentScreensDisplay(transition: WorkflowTransition) {
+
+    this.transitionInProgress = transition;
+
+    const modal = await this.modalCtrl.create({
+      component: 'screens-display',
+      componentProps: {
+        item: this.item,
+        transition: transition
+      }
+    });
+    await modal.present();
+  }
+
+  async completeTransition(transition: WorkflowTransition) {
+
+    let execResponse = await fetch(
+      this.apiBaseUrl + "/workflowtransitions/executions/" + transition.id, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        itemId: this.itemId,
+        itemCategory: 0,
+        itemData: this.item
+      })
+    });
+
+    let transitionResult = await execResponse.json();
+    
+    if (transitionResult.errorMessages && transitionResult.errorMessages.length > 0) {
+
+      await this.showErrorToast(transitionResult.errorMessages.join('\n'));
+    }
+    else {
+      
+      await this.loadItem();
+      await this.loadTransitionOptions();
+    }
+  }
+
   async handleSaveClick() {
 
     let validationResult = await FormValidator.validateForm(
@@ -190,26 +269,12 @@ export class ItemDetail {
       else
       {
         
-        const toast = await this.toastCtrl.create({ 
-          position: 'top',
-          message: await response.text(), 
-          showCloseButton: true,
-          closeButtonText: 'OK'
-        });
-
-        await toast.present();
+        this.showErrorToast(await response.text());
       }
     }
     else {
 
-      const toast = await this.toastCtrl.create({ 
-        position: 'top',
-        message: validationResult.displayMessage, 
-        showCloseButton: true,
-        closeButtonText: 'OK'
-      });
-
-      await toast.present();
+      this.showErrorToast(validationResult.displayMessage);
     }
   }
   
@@ -336,6 +401,25 @@ export class ItemDetail {
           <ion-label position='fixed'>Item Type</ion-label>
           <ion-input disabled value={ this.itemType.name }></ion-input>
         </ion-item>
+          <ion-item>
+            <ion-label position='fixed'>Status</ion-label>
+            <ion-input disabled value={ this.item.workflowNode.name }></ion-input>
+          </ion-item>
+
+          <ion-card>
+            <ion-card-header>
+              Available Transitions
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                {this.transitionOptions.map(transition => 
+                  <ion-item button onClick={ () => this.handleTransitionClick(transition) }>
+                    { transition.name }
+                  </ion-item>
+                )}
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
 
         <ion-card>
           <ion-card-header>
