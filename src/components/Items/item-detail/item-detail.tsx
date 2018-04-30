@@ -2,7 +2,8 @@ import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { ToastController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
-import { Item, ItemType, Screen, FieldMetadata, 
+import * as GeolocationService from '../../../services/geolocation-service';
+import { GpsLocation, Item, ItemType, Screen, FieldMetadata, 
          FieldTypes, FieldValue, WorkflowTransition } from '../../../interfaces/interfaces';
 
 @Component({
@@ -20,6 +21,7 @@ export class ItemDetail {
   @State() subtitle: string = 'Item Detail';
   @State() item: Item;
   @State() itemType: ItemType;
+  @State() itemLocationName: string;
   @State() transitionOptions: Array<WorkflowTransition> = [];
   @State() transitionInProgress: WorkflowTransition;
   @State() editScreen: Screen;
@@ -76,6 +78,9 @@ export class ItemDetail {
 
         this.item = await response.json();
         this.itemType = this.item.type;
+        if (this.item.location) {
+          this.itemLocationName = this.item.location.name;
+        }
         this.subtitle = `${this.itemType.name} - ${this.item.name}`;
 
       } catch (error) {
@@ -213,6 +218,34 @@ export class ItemDetail {
 
       await this.completeTransition(transition);
     }
+  }
+
+  async handleSetGpsClick() {
+
+    if (!this.item.location) {
+      // Initializae the entire asset location
+      this.item.location = {
+        name: "GPS Location",
+        parentId: "000000000000000000000000",
+        gps: { latitude: -1, longitude: -1 }
+      }
+    }
+    else if (!this.item.location.gps) {
+      // Initialize the asset gps location
+      this.item.location.gps = {
+        latitude: -1,
+        longitude: -1
+      }
+    }
+
+    var result: GpsLocation = await GeolocationService.getDeviceCurrentLocation();
+
+    if (result && result.latitude && result.latitude > -1) {
+      this.item.location.gps.latitude = result.latitude;
+      this.item.location.gps.longitude = result.longitude;
+    }
+
+    this.itemLocationName = this.item.location.name;
   }
 
   async presentScreensDisplay(transition: WorkflowTransition) {
@@ -369,10 +402,6 @@ export class ItemDetail {
 
             this.item.fieldValues.push(newFV);
           }
-          else {
-
-            console.log("Could not find expected field metadata: " + event.target.id);
-          }
         }
       }
     }
@@ -412,25 +441,30 @@ export class ItemDetail {
           <ion-label position='fixed'>Item Type</ion-label>
           <ion-input disabled value={ this.itemType.name }></ion-input>
         </ion-item>
-          <ion-item>
-            <ion-label position='fixed'>Status</ion-label>
-            <ion-input disabled value={ this.item.workflowNode.name }></ion-input>
-          </ion-item>
+        <ion-item>
+          <ion-label position='fixed'>Status</ion-label>
+          <ion-input disabled value={ this.item.workflowNode.name }></ion-input>
+        </ion-item>
+        <ion-item style={{ display : this.item.type.isForPhysicalItems ? 'block' : 'none'}}>
+          <ion-label position='fixed'>Location</ion-label>
+          <ion-input disabled value={ this.itemLocationName }></ion-input>
+          <ion-button slot="end" onClick={ () => this.handleSetGpsClick() }>Set GPS</ion-button>
+        </ion-item>
 
-          <ion-card>
-            <ion-card-header>
-              Available Transitions
-            </ion-card-header>
-            <ion-card-content>
-              <ion-list>
-                {this.transitionOptions.map(transition => 
-                  <ion-item button onClick={ () => this.handleTransitionClick(transition) }>
-                    { transition.name }
-                  </ion-item>
-                )}
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
+        <ion-card>
+          <ion-card-header>
+            Available Transitions
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              {this.transitionOptions.map(transition => 
+                <ion-item button onClick={ () => this.handleTransitionClick(transition) }>
+                  { transition.name }
+                </ion-item>
+              )}
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
 
         <ion-card>
           <ion-card-header>
