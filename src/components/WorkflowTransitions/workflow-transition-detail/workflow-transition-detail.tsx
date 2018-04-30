@@ -24,6 +24,7 @@ export class WorkflowTransitionDetail {
   @State() postFunctions: Array<any> = [];
   public transition: WorkflowTransition;
   public workflowId: string;
+  public modalContext: string;
   
   async componentWillLoad() {
 
@@ -44,7 +45,6 @@ export class WorkflowTransitionDetail {
     navCtrl.push(url);
   }
 
-  @Listen('body:ionModalDidDismiss')
   async loadWorkflowTransition() {
 
     let response = await fetch(
@@ -64,7 +64,26 @@ export class WorkflowTransitionDetail {
     }
   }
 
+  @Listen('body:ionModalDidDismiss')
+  async handleModalDismissed(event: any) {
+
+    if (this.modalContext === "function") {
+      await this.loadWorkflowTransition();
+    }
+    else if (this.modalContext === "screen") {
+      if (event && event.detail && event.detail.data) {
+        this.screens = [...this.screens, event.detail.data];
+        if (!this.transition.screenIds) {
+          this.transition.screenIds = [];
+        }
+        this.transition.screenIds.push(event.detail.data.id);
+      }
+    }
+  }
+
   async handleNewFunctionClick(typeId: number) {
+
+    this.modalContext = "function";
 
     const modal = await this.modalCtrl.create({
       component: 'workflow-transition-function-create',
@@ -79,6 +98,8 @@ export class WorkflowTransitionDetail {
 
   async handleFunctionClick(functionId: string) {
 
+    this.modalContext = "function";
+
     const modal = await this.modalCtrl.create({
       component: 'workflow-transition-function-detail',
       componentProps: {
@@ -90,6 +111,8 @@ export class WorkflowTransitionDetail {
   }
 
   async handleNewScreenClick() {
+
+    this.modalContext = "screen";
 
     const modal = await this.modalCtrl.create({
       component: 'screen-search'
