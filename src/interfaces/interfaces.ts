@@ -74,6 +74,7 @@ export interface Item {
   typeId: string,
   type: ItemType,
   parentId: string,
+  workflowNodeId: string,
   workflowNode: WorkflowNode,
   fieldValues: Array<FieldValue>,
   location: ItemLocation
@@ -119,6 +120,7 @@ export interface Workflow {
 export interface WorkflowNode {
   id: string,
   name: string,
+  color: string,
   workflowId: string
 }
 

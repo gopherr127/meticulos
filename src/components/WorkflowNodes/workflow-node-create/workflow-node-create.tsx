@@ -10,6 +10,7 @@ export class WorkflowNodeCreate {
   @Element() el: any;
   @Prop() workflowId: string;
   @State() name: string;
+  @State() color: string;
   
   dismiss(data?: any) {
     
@@ -26,7 +27,8 @@ export class WorkflowNodeCreate {
         },
         body: JSON.stringify({
           workflowId: this.workflowId,
-          name: this.name
+          name: this.name,
+          color: this.color
         })
     });
 
@@ -37,9 +39,14 @@ export class WorkflowNodeCreate {
   }
 
   @Listen('ionInput')
-  handleNameChanged(event: CustomEvent) {
+  handleNameChanged(event: any) {
 
-    this.name = event.detail.target.value;
+    if (event.target.id === "nodeName") {
+      this.name = event.detail.target.value;
+    }
+    else if (event.target.id === "color") {
+      this.color = event.detail.target.value;
+    }
   }
 
   render() {
@@ -58,6 +65,10 @@ export class WorkflowNodeCreate {
         <ion-item>
           <ion-label position='fixed'>Name</ion-label>
           <ion-input id="nodeName" debounce={ 200 } value={ this.name }></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position='fixed'>Color</ion-label>
+          <ion-input id="color" debounce={ 200 } value={ this.color }></ion-input>
         </ion-item>
 
       </ion-content>,

@@ -143,7 +143,7 @@ export class ItemsList {
           {this.items.map(item => 
             <ion-item-sliding>
               <ion-item onClick={ () => this.handleItemClick(item) }>
-                <ion-avatar slot="start">
+                <ion-avatar slot="start" style={{ 'background-color': item.workflowNode.color ? item.workflowNode.color : 'transparent' }}>
                   <img src={this.itemType.iconUrl}/>
                 </ion-avatar>
                 <ion-label>
