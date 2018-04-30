@@ -1,5 +1,6 @@
-import { Component, Element, State, Listen } from '@stencil/core';
+import { Component, Element, Prop, State, Listen } from '@stencil/core';
 import { ENV } from '../../../environments/environment';
+import { Icon, Screen, Workflow } from '../../../interfaces/interfaces';
 
 @Component({
   tag: 'item-type-create'
@@ -8,6 +9,7 @@ export class ItemTypeCreate {
 
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
+  @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   fieldsList: HTMLIonListElement;
   @State() name: string;
   @State() pluralName: string;
@@ -15,8 +17,12 @@ export class ItemTypeCreate {
   @State() allowNestedItems: boolean;
   @State() iconUrl: string;
   @State() selectedWorkflowId: string;
-  public iconOptions: Array<any> = [];
-  public workflowOptions: Array<any> = [];
+  @State() selectedCreateScreen: Screen;
+  @State() selectedEditScreen: Screen;
+  @State() selectedViewScreen: Screen;
+  public iconOptions: Array<Icon> = [];
+  public workflowOptions: Array<Workflow> = [];
+  public modalInitByElementId: string;
   
   async componentWillLoad() {
     
@@ -38,6 +44,15 @@ export class ItemTypeCreate {
     this.workflowOptions = await response.json();
   }
 
+  async presentScreenSearch(elementId: string) {
+
+    this.modalInitByElementId = elementId;
+    const modal = await this.modalCtrl.create({
+      component: 'screen-search'
+    });
+    await modal.present();
+  }
+  
   handleIconOptionClick(iconUrl: string) {
 
     this.iconUrl = iconUrl;
@@ -57,13 +72,42 @@ export class ItemTypeCreate {
           workflowId: this.selectedWorkflowId,
           isForPhysicalItems: this.isForPhysicalItems,
           allowNestedItems: this.allowNestedItems,
-          iconUrl: this.iconUrl
+          iconUrl: this.iconUrl,
+          createScreenId: this.selectedCreateScreen.id,
+          editScreenId: this.selectedEditScreen.id,
+          viewScreenId: this.selectedViewScreen.id
         })
     });
 
     if (response.ok) {
       
       this.dismiss();
+    }
+  }
+
+  @Listen('body:ionModalDidDismiss')
+  async modalDidDismiss(event: CustomEvent) {
+    if (event) {
+
+      switch (this.modalInitByElementId) {
+        case "createScreen": {
+          this.selectedCreateScreen = event.detail.data;
+          break;
+        }
+        case "editScreen": {
+          this.selectedEditScreen = event.detail.data;
+          break;
+        }
+        case "viewScreen": {
+          this.selectedViewScreen = event.detail.data;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+
+      this.modalInitByElementId = "";
     }
   }
 
@@ -131,6 +175,21 @@ export class ItemTypeCreate {
                   { workflow.name }
                 </ion-select-option>)}
             </ion-select>
+          </ion-item>
+          <ion-item button onClick={ () => this.presentScreenSearch("createScreen") }>
+            <ion-label position='fixed'>Create Screen</ion-label>
+            <ion-input slot="end" disabled value={ this.selectedCreateScreen ? this.selectedCreateScreen.name : "" }></ion-input>
+            <ion-icon slot="end" name="more" color="tertiary"></ion-icon>
+          </ion-item>
+          <ion-item button onClick={ () => this.presentScreenSearch("editScreen") }>
+            <ion-label position='fixed'>Edit Screen</ion-label>
+            <ion-input slot="end" disabled value={ this.selectedEditScreen ? this.selectedEditScreen.name : "" }></ion-input>
+            <ion-icon slot="end" name="more" color="tertiary"></ion-icon>
+          </ion-item>
+          <ion-item button onClick={ () => this.presentScreenSearch("viewScreen") }>
+            <ion-label position='fixed'>View Screen</ion-label>
+            <ion-input slot="end" disabled value={ this.selectedViewScreen ? this.selectedViewScreen.name : "" }></ion-input>
+            <ion-icon slot="end" name="more" color="tertiary"></ion-icon>
           </ion-item>
           <ion-item>
             <ion-label position='fixed'>Is For Physical Items</ion-label>
