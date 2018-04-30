@@ -146,7 +146,10 @@ export class ItemsList {
                 <ion-avatar slot="start">
                   <img src={this.itemType.iconUrl}/>
                 </ion-avatar>
-                <h2>{item.name}</h2><p></p>
+                <ion-label>
+                  <h2>{item.name}</h2>
+                  <p>{item.workflowNode.name}</p>
+                </ion-label>
               </ion-item>
               <ion-item-options>
                 <ion-item-option color="danger" onClick={ () =>
