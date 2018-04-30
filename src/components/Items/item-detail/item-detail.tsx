@@ -16,6 +16,7 @@ export class ItemDetail {
   @Prop({ connect: 'ion-router' }) router;
   @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
+  @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: HTMLIonPopoverControllerElement;
   @Prop() itemId: string;
   @Prop() returnUrl = '/';
   @State() subtitle: string = 'Item Detail';
@@ -248,6 +249,21 @@ export class ItemDetail {
     this.itemLocationName = this.item.location.name;
   }
 
+  async presentOptionsMenu(event?: any) {
+
+    const popover = await this.popoverCtrl.create({
+      component: 'item-detail-options-menu', 
+      componentProps : {
+        itemId : this.itemId,
+        returnUrl: this.returnUrl
+      },
+      ev: event,
+      translucent: false
+    });
+
+    await popover.present();
+  }
+
   async presentScreensDisplay(transition: WorkflowTransition) {
 
     this.transitionInProgress = transition;
@@ -407,6 +423,15 @@ export class ItemDetail {
     }
   }
 
+  @Listen('ionFocus')
+  async handleElementFocused(event: any) {
+
+    if (event.target.id === "optionsMenu") {
+
+      await this.presentOptionsMenu(event);
+    }
+  }
+
   render() {
     return[
       <ion-header>
@@ -422,7 +447,7 @@ export class ItemDetail {
         <ion-toolbar color="secondary">
           <ion-title>{ this.subtitle }</ion-title>
           <ion-buttons slot="end">
-            <ion-button>
+            <ion-button id="optionsMenu">
               <ion-icon slot="icon-only" name="more"></ion-icon>
             </ion-button>
           </ion-buttons>
