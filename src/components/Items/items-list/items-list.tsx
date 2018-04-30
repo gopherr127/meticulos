@@ -66,6 +66,11 @@ export class ItemsList {
     }
   }
 
+  handleQrSearchClick() {
+
+    this.pushComponent('item-qr-search');
+  }
+
   async handleAddFabClick() {
 
     const modal = await this.modalCtrl.create({
@@ -124,7 +129,7 @@ export class ItemsList {
           <ion-searchbar value={this.queryText} placeholder="Search">
           </ion-searchbar>
           <ion-buttons slot="end">
-            <ion-button>
+            <ion-button onClick={ () => this.handleQrSearchClick() }>
               <ion-icon slot="icon-only" name="barcode"></ion-icon>
             </ion-button>
           </ion-buttons>

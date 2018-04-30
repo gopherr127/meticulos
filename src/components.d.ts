@@ -462,6 +462,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ItemQrSearch {
+
+    }
+  }
+
+  interface HTMLItemQrSearchElement extends StencilComponents.ItemQrSearch, HTMLStencilElement {}
+
+  var HTMLItemQrSearchElement: {
+    prototype: HTMLItemQrSearchElement;
+    new (): HTMLItemQrSearchElement;
+  };
+  interface HTMLElementTagNameMap {
+    'item-qr-search': HTMLItemQrSearchElement;
+  }
+  interface ElementTagNameMap {
+    'item-qr-search': HTMLItemQrSearchElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'item-qr-search': JSXElements.ItemQrSearchAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemQrSearchAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ItemsList {
       'itemTypeId': string;
     }

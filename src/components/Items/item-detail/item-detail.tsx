@@ -16,8 +16,8 @@ export class ItemDetail {
   @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop() itemId: string;
-  @Prop() returnUrl = '/items';
-  @State() subtitle: string = 'Create Item';
+  @Prop() returnUrl = '/';
+  @State() subtitle: string = 'Item Detail';
   @State() item: Item;
   @State() itemType: ItemType;
   @State() transitionOptions: Array<WorkflowTransition> = [];
@@ -67,11 +67,20 @@ export class ItemDetail {
         method: "GET"
     });
 
+    
     if (response.ok) {
+      
+      try {
 
-      this.item = await response.json();
-      this.itemType = this.item.type;
-      this.subtitle = `${this.itemType.name} - ${this.item.name}`;
+        this.item = await response.json();
+        this.itemType = this.item.type;
+        this.subtitle = `${this.itemType.name} - ${this.item.name}`;
+
+      } catch (error) {
+
+        console.log(error);
+        //TODO: Navigate to 404 component
+      }
     }
   }
 
