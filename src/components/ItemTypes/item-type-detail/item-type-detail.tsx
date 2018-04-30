@@ -283,7 +283,7 @@ export class ItemTypeDetail {
 
           <ion-list>
             { this.iconOptions.map(icon => 
-              <ion-item onClick={ this.handleIconOptionClick.bind(this, `${icon.url}`) }>
+              <ion-item onClick={ () => this.handleIconOptionClick(icon.url) }>
                 <ion-avatar><img src={ icon.url }/></ion-avatar>
               </ion-item>
             )}
