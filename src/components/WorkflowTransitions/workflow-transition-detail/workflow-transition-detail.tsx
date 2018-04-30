@@ -56,6 +56,7 @@ export class WorkflowTransitionDetail {
 
       this.transition = await response.json();
 
+      this.subtitle = `Transition: ${this.transition.name}`;
       this.workflowId = this.transition.workflowId;
       this.preConditions = this.transition.preConditions ? this.transition.preConditions : [];
       this.screens = this.transition.screens ? this.transition.screens : [];
