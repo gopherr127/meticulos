@@ -11,6 +11,7 @@ export class ItemsList {
   @Element() el: any;
   itemsList: HTMLIonListElement;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
+  @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: HTMLIonPopoverControllerElement;
   @Prop() itemTypeId: string;
   @State() subtitle = 'Items';
   @State() queryText = '';
@@ -105,6 +106,28 @@ export class ItemsList {
     }
   }
 
+  async presentOptionsMenu(event?: any) {
+
+    const popover = await this.popoverCtrl.create({
+      component: 'items-list-options-menu', 
+      componentProps : {
+        itemTypeId : this.itemTypeId
+      },
+      ev: event
+    });
+
+    await popover.present();
+  }
+
+  @Listen('ionFocus')
+  async handleElementFocused(event: any) {
+
+    if (event.target.id === "optionsMenu") {
+
+      await this.presentOptionsMenu(event);
+    }
+  }
+
   render() {
     return [
       <ion-header>
@@ -119,7 +142,7 @@ export class ItemsList {
         <ion-toolbar color="secondary">
           <ion-title>{ this.subtitle }</ion-title>
           <ion-buttons slot="end">
-            <ion-button>
+            <ion-button id="optionsMenu">
               <ion-icon slot="icon-only" name="more"></ion-icon>
             </ion-button>
           </ion-buttons>

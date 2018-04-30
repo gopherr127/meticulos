@@ -530,6 +530,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ItemsListOptionsMenu {
+      'itemTypeId': string;
+    }
+  }
+
+  interface HTMLItemsListOptionsMenuElement extends StencilComponents.ItemsListOptionsMenu, HTMLStencilElement {}
+
+  var HTMLItemsListOptionsMenuElement: {
+    prototype: HTMLItemsListOptionsMenuElement;
+    new (): HTMLItemsListOptionsMenuElement;
+  };
+  interface HTMLElementTagNameMap {
+    'items-list-options-menu': HTMLItemsListOptionsMenuElement;
+  }
+  interface ElementTagNameMap {
+    'items-list-options-menu': HTMLItemsListOptionsMenuElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'items-list-options-menu': JSXElements.ItemsListOptionsMenuAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemsListOptionsMenuAttributes extends HTMLAttributes {
+      'itemTypeId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ItemsList {
       'itemTypeId': string;
     }
