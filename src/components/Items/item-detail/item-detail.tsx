@@ -37,16 +37,18 @@ export class ItemDetail {
     await this.addFieldsFromMetadata();
   }
 
-  async navigate(url: string) {
-
-    const routerCtrl: HTMLIonRouterElement = await (this.router as any).componentOnReady();
-    routerCtrl.push(url);
-  }
-
   popComponent() {
 
     const navCtrl = document.querySelector('ion-nav');
     navCtrl.pop();
+  }
+
+  setRootComponent() {
+
+    const navCtrl = document.querySelector('ion-nav');
+    navCtrl.setRoot('items-list', {
+      itemTypeId: this.item.typeId
+    });
   }
 
   async showErrorToast(messageToDisplay: string) {
@@ -273,7 +275,7 @@ export class ItemDetail {
   
       if (response.ok) {
   
-        this.navigate(this.returnUrl);
+        this.setRootComponent();
       }
       else
       {
