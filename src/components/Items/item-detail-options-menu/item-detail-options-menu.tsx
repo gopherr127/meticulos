@@ -7,7 +7,6 @@ import { Item } from '../../../interfaces/interfaces';
 export class ItemDetailOptionsMenu {
 
   @Element() el: any;
-  @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop() item: Item;
   @Prop() returnUrl = '/';
   
@@ -37,15 +36,10 @@ export class ItemDetailOptionsMenu {
     
     this.dismiss();
 
-    const modal = await this.modalCtrl.create({
-      component: 'item-map',
-      componentProps: { itemLocation: { 
-        latitude: this.item.location.gps.latitude,
-        longitude: this.item.location.gps.longitude
-       }}
+    const navCtrl = document.querySelector('ion-nav');
+    navCtrl.push('item-map', {
+      item: this.item
     });
-
-    await modal.present();
   }
 
   render() {

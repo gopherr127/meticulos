@@ -27,7 +27,6 @@ import 'ionicons';
 import '@ionic/core';
 
 import {
-  GpsLocation,
   Item,
   WorkflowTransition,
 } from './interfaces/interfaces';
@@ -499,7 +498,7 @@ declare global {
 
   namespace StencilComponents {
     interface ItemMap {
-      'itemLocation': GpsLocation;
+      'item': Item;
     }
   }
 
@@ -522,7 +521,7 @@ declare global {
   }
   namespace JSXElements {
     export interface ItemMapAttributes extends HTMLAttributes {
-      'itemLocation'?: GpsLocation;
+      'item'?: Item;
     }
   }
 }

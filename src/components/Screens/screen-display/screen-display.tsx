@@ -23,7 +23,6 @@ export class ScreenDisplay {
   
   async componentWillLoad() {
 
-    console.log(this.transition.screenIds);
     let response = await fetch(
       this.apiBaseUrl + "/screens/find", {
         method: "POST",
@@ -33,11 +32,9 @@ export class ScreenDisplay {
         body: JSON.stringify(this.transition.screenIds)
     });
 
-    console.log(response);
     if (response.ok) {
 
       this.screens = await response.json();
-      console.log(this.screens);
       this.currentScreen = this.screens ? this.screens[0] : null;
     }
   }

@@ -23,15 +23,15 @@ export class AppRoot {
   appPages = [
     { title: 'Schedule', url: '/schedule', icon: 'calendar' },
     { title: 'Speakers', url: '/speakers', icon: 'contacts' },
-    { title: 'Map',      url: '/map',      icon: 'map' },
+    { title: 'Item Map',      url: '/item-map',      icon: 'map' },
     { title: 'About',    url: '/about',    icon: 'information-circle' }
   ];
   
   adminPages = [
     { title: 'Item Types', url: '/item-types', icon: 'albums' },
-    { title: 'Workflows',  url: '/workflows', icon: 'git-merge' },
-    { title: 'Screens',    url: '/screens',   icon: 'desktop' },
-    { title: 'Fields',     url: '/fields',    icon: 'switch' }
+    { title: 'Workflows',  url: '/workflows',  icon: 'git-merge' },
+    { title: 'Screens',    url: '/screens',    icon: 'desktop' },
+    { title: 'Fields',     url: '/fields',     icon: 'switch' }
   ];
 
   async componentWillLoad() {
@@ -96,6 +96,7 @@ export class AppRoot {
         <ion-route url="/items/type/:itemTypeId" component="items-list"></ion-route>
         <ion-route url="/items/create/:itemTypeId" component="item-create"></ion-route>
         <ion-route url="/items/:itemId" component="item-detail"></ion-route>
+        <ion-route url="/items/:itemId/map" component="item-map"></ion-route>
 
         <ion-route url="/item-types" component="item-types-list"></ion-route>
         <ion-route url="/item-types/:itemTypeId" component="item-type-detail"></ion-route>

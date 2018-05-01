@@ -1,5 +1,4 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
-//import { ToastController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
 import * as GeolocationService from '../../../services/geolocation-service';
@@ -14,7 +13,6 @@ export class ItemDetail {
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
   @Prop({ connect: 'ion-router' }) router;
-  //@Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: HTMLIonPopoverControllerElement;
   @Prop() itemId: string;
@@ -446,7 +444,7 @@ export class ItemDetail {
         <ion-toolbar>
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
-            <ion-back-button defaultHref={ this.returnUrl }></ion-back-button>
+            <ion-back-button></ion-back-button>
           </ion-buttons>
           <ion-title>Meticulos</ion-title>
         </ion-toolbar>
