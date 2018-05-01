@@ -113,11 +113,11 @@ export class LocationDetail {
           <ion-label position='fixed'>Name</ion-label>
           <ion-input id="locationName" debounce={ 200 } value={ this.location.name }></ion-input>
         </ion-item>
-          <ion-item button onClick={ () => this.presentLocationSearch() }>
-            <ion-label position='fixed'>Parent Location</ion-label>
-            <ion-input slot="end" disabled value={ this.selectedParentLocation ? this.selectedParentLocation.name : "" }></ion-input>
-            <ion-icon slot="end" name="more" color="tertiary"></ion-icon>
-          </ion-item>
+        <ion-item button onClick={ () => this.presentLocationSearch() }>
+          <ion-label position='fixed'>Parent Location</ion-label>
+          <ion-input slot="end" disabled value={ this.selectedParentLocation ? this.selectedParentLocation.name : "" }></ion-input>
+          <ion-icon slot="end" name="more" color="tertiary"></ion-icon>
+        </ion-item>
 
       </ion-content>,
 

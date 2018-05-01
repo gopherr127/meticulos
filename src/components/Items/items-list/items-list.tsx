@@ -169,10 +169,16 @@ export class ItemsList {
                 <ion-avatar slot="start" style={{ 'background-color': item.workflowNode.color ? item.workflowNode.color : 'transparent' }}>
                   <img src={this.itemType.iconUrl}/>
                 </ion-avatar>
-                <ion-label>
-                  <h2>{item.name}</h2>
-                  <p>{item.workflowNode.name}</p>
-                </ion-label>
+                { item.location 
+                ? <ion-label>
+                    <h2>{item.name}</h2>
+                    <p>{item.workflowNode.name} - {item.location.name}</p>
+                  </ion-label>
+                : <ion-label>
+                    <h2>{item.name}</h2>
+                    <p>{item.workflowNode.name}</p>
+                  </ion-label>
+                }
               </ion-item>
               <ion-item-options>
                 <ion-item-option color="danger" onClick={ () =>

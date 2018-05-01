@@ -25,6 +25,7 @@ export class ItemDetail {
   @State() transitionInProgress: WorkflowTransition;
   @State() editScreen: Screen;
   @State() fieldMetadata: Array<FieldMetadata> = [];
+  private modalContext: string;
   
   async componentWillLoad() {
 
@@ -271,6 +272,7 @@ export class ItemDetail {
 
   async presentScreensDisplay(transition: WorkflowTransition) {
 
+    this.modalContext = "screen-display";
     this.transitionInProgress = transition;
 
     const modal = await this.modalCtrl.create({
@@ -284,6 +286,17 @@ export class ItemDetail {
     await modal.present();
   }
 
+  async presentLocationSearch() {
+
+    this.modalContext = "location-search";
+
+    const modal = await this.modalCtrl.create({
+      component: 'location-search'
+    });
+
+    await modal.present();
+  }
+  
   async completeTransition(transition: WorkflowTransition) {
 
     let execResponse = await fetch(
@@ -344,6 +357,20 @@ export class ItemDetail {
     }
   }
   
+  @Listen('body:ionModalDidDismiss')
+  async modalDidDismiss(event: CustomEvent) {
+    if (event) {
+      switch (this.modalContext) {
+        case "location-search": {
+          this.item.location = event.detail.data;
+          this.item.locationId = this.item.location.id;
+          this.itemLocationName = this.item.location.name;
+          break;
+        }
+      }
+    }
+  }
+
   @Listen('ionInput')
   handleFieldInput(event: any) {
 
@@ -480,7 +507,8 @@ export class ItemDetail {
         <ion-item style={{ display : this.item.type.isForPhysicalItems ? 'block' : 'none'}}>
           <ion-label position='fixed'>Location</ion-label>
           <ion-input disabled value={ this.itemLocationName }></ion-input>
-          <ion-button slot="end" onClick={ () => this.handleSetGpsClick() }>Set GPS</ion-button>
+          <ion-button slot="end" onClick={ () => this.presentLocationSearch() }>Select</ion-button>
+          <ion-button slot="end" onClick={ () => this.handleSetGpsClick() }>Use GPS</ion-button>
         </ion-item>
 
         <ion-card>
