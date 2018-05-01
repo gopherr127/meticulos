@@ -1,0 +1,13 @@
+.map-canvas {
+  width: 100%;
+  flex: 1;
+
+  background-color: transparent;
+
+  opacity: 0;
+  transition: opacity 150ms ease-in
+}
+
+.show-map {
+  opacity: 1;
+}

@@ -4,7 +4,8 @@ import * as Geolocation from '../../../services/geolocation-service';
 declare var google: any;
 
 @Component({
-  tag: 'item-map'
+  tag: 'item-map',
+  styleUrl: 'item-map.css'
 })
 export class ItemMap {
   
@@ -29,7 +30,7 @@ export class ItemMap {
       //   lng: deviceCurrentLocation.longitude
       // }
 
-      const mapElem = this.el.querySelector('#mapEl');
+      const mapElem = this.el.querySelector('.map-canvas');
 
       // Initialize map
       var bham = {lat: 33.5234291, lng: -86.80737189999999};
@@ -90,7 +91,7 @@ export class ItemMap {
 
         <ion-content>
           
-          <ion-card><div id="mapEl"></div></ion-card>
+          <ion-card><div class="map-canvas"></div></ion-card>
 
         </ion-content>,
 
