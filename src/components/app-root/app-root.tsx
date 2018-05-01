@@ -28,6 +28,7 @@ export class AppRoot {
   ];
   
   adminPages = [
+    { title: 'Locations',  url: '/locations',  icon: 'pin' },
     { title: 'Item Types', url: '/item-types', icon: 'albums' },
     { title: 'Workflows',  url: '/workflows',  icon: 'git-merge' },
     { title: 'Screens',    url: '/screens',    icon: 'desktop' },
@@ -96,7 +97,8 @@ export class AppRoot {
         <ion-route url="/items/type/:itemTypeId" component="items-list"></ion-route>
         <ion-route url="/items/create/:itemTypeId" component="item-create"></ion-route>
         <ion-route url="/items/:itemId" component="item-detail"></ion-route>
-        <ion-route url="/items/:itemId/map" component="item-map"></ion-route>
+
+        <ion-route url="/locations" component="locations-list"></ion-route>
 
         <ion-route url="/item-types" component="item-types-list"></ion-route>
         <ion-route url="/item-types/:itemTypeId" component="item-type-detail"></ion-route>

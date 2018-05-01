@@ -629,6 +629,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface LocationsList {
+
+    }
+  }
+
+  interface HTMLLocationsListElement extends StencilComponents.LocationsList, HTMLStencilElement {}
+
+  var HTMLLocationsListElement: {
+    prototype: HTMLLocationsListElement;
+    new (): HTMLLocationsListElement;
+  };
+  interface HTMLElementTagNameMap {
+    'locations-list': HTMLLocationsListElement;
+  }
+  interface ElementTagNameMap {
+    'locations-list': HTMLLocationsListElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'locations-list': JSXElements.LocationsListAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface LocationsListAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ScreenCreate {
 
     }

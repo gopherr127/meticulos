@@ -229,6 +229,7 @@ export class ItemDetail {
     if (!this.item.location) {
       // Initializae the entire asset location
       this.item.location = {
+        id: "000000000000000000000000",
         name: "GPS Location",
         parentId: "000000000000000000000000",
         gps: { latitude: -1, longitude: -1 }
