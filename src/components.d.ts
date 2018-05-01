@@ -662,6 +662,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface LocationDetail {
+      'itemLocationId': string;
+    }
+  }
+
+  interface HTMLLocationDetailElement extends StencilComponents.LocationDetail, HTMLStencilElement {}
+
+  var HTMLLocationDetailElement: {
+    prototype: HTMLLocationDetailElement;
+    new (): HTMLLocationDetailElement;
+  };
+  interface HTMLElementTagNameMap {
+    'location-detail': HTMLLocationDetailElement;
+  }
+  interface ElementTagNameMap {
+    'location-detail': HTMLLocationDetailElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'location-detail': JSXElements.LocationDetailAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface LocationDetailAttributes extends HTMLAttributes {
+      'itemLocationId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface LocationSearch {
 
     }

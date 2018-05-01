@@ -99,6 +99,7 @@ export class AppRoot {
         <ion-route url="/items/:itemId" component="item-detail"></ion-route>
 
         <ion-route url="/locations" component="locations-list"></ion-route>
+        <ion-route url="/locations/:itemLocationId" component="location-detail"></ion-route>
 
         <ion-route url="/item-types" component="item-types-list"></ion-route>
         <ion-route url="/item-types/:itemTypeId" component="item-type-detail"></ion-route>

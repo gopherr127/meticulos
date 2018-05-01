@@ -65,7 +65,7 @@ export class LocationsList {
   async handleLocationClick(location: ItemLocation) {
 
     this.pushComponent('location-detail', {
-      locationId: location.id
+      itemLocationId: location.id
     })
   }
 
