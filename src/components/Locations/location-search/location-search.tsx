@@ -1,27 +1,25 @@
 import { Component, Element, State } from '@stencil/core';
 import { ENV } from '../../../environments/environment';
-import { Screen } from '../../../interfaces/interfaces';
+import { ItemLocation } from '../../../interfaces/interfaces';
 
 @Component({
-  tag: 'screen-search'
+  tag: 'location-search'
 })
-export class ScreenSearch {
+export class LocationSearch {
 
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
   @State() queryText = '';
-  public screens: Array<Screen> = [];
-  public selectedScreen: Screen;
+  public locations: Array<ItemLocation> = [];
   
   async componentWillLoad() {
 
-    await this.loadScreens();
+    await this.loadLocations();
   }
 
-  async handleItemClick(item: any) {
+  async handleLocationClick(location: ItemLocation) {
     
-    this.selectedScreen = item;
-    this.dismiss(this.selectedScreen);
+    this.dismiss(location);
   }
 
   dismiss(data?: any) {
@@ -29,14 +27,14 @@ export class ScreenSearch {
     (this.el.closest('ion-modal') as any).dismiss(data);
   }
 
-  async loadScreens() {
+  async loadLocations() {
 
     let response = await fetch(
-      this.apiBaseUrl + "/screens", {
+      this.apiBaseUrl + "/itemlocations", {
         method: "GET"
     });
 
-    this.screens = await response.json();
+    this.locations = await response.json();
   }
   
   render() {
@@ -44,12 +42,7 @@ export class ScreenSearch {
       <ion-header>
 
         <ion-toolbar color="secondary">
-          <ion-title>Select Screen</ion-title>
-          <ion-buttons slot="end">
-            <ion-button>
-              <ion-icon slot="icon-only" name="more"></ion-icon>
-            </ion-button>
-          </ion-buttons>
+          <ion-title>Select Location</ion-title>
         </ion-toolbar>
 
         <ion-toolbar color="tertiary">
@@ -62,10 +55,10 @@ export class ScreenSearch {
       <ion-content>
 
         <ion-list>
-          {this.screens.map(screen =>
-            <ion-item onClick={ () => this.handleItemClick(screen) }>
+          {this.locations.map(location =>
+            <ion-item onClick={ () => this.handleLocationClick(location) }>
               <ion-label>
-                <h2>{ screen.name }</h2>
+                <h2>{ location.name }</h2>
               </ion-label>
             </ion-item>
           )}

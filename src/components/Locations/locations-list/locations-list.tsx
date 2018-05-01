@@ -140,15 +140,18 @@ export class LocationsList {
           {this.locations.map(location => 
             <ion-item-sliding>
               <ion-item onClick={ () => this.handleLocationClick(location) }>
-                <ion-label>
-                  <h2>{location.name}</h2>
-                  <p>{location.name}</p>
-                </ion-label>
+                { location.parent 
+                ? <ion-label>
+                    <h2>{location.name}</h2>
+                    <p>{location.parent.name}</p>
+                  </ion-label>
+                : <ion-label>
+                    <h2>{location.name}</h2>
+                  </ion-label>
+                }
               </ion-item>
               <ion-item-options>
-                <ion-item-option color="danger" onClick={ () =>
-                    this.handleDeleteClick(location)
-                  }>
+                <ion-item-option color="danger" onClick={ () => this.handleDeleteClick(location) }>
                   Delete
                 </ion-item-option>
               </ion-item-options>

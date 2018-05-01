@@ -232,6 +232,7 @@ export class ItemDetail {
         id: "000000000000000000000000",
         name: "GPS Location",
         parentId: "000000000000000000000000",
+        parent: null,
         gps: { latitude: -1, longitude: -1 }
       }
     }

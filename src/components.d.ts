@@ -629,6 +629,72 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface LocationCreate {
+
+    }
+  }
+
+  interface HTMLLocationCreateElement extends StencilComponents.LocationCreate, HTMLStencilElement {}
+
+  var HTMLLocationCreateElement: {
+    prototype: HTMLLocationCreateElement;
+    new (): HTMLLocationCreateElement;
+  };
+  interface HTMLElementTagNameMap {
+    'location-create': HTMLLocationCreateElement;
+  }
+  interface ElementTagNameMap {
+    'location-create': HTMLLocationCreateElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'location-create': JSXElements.LocationCreateAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface LocationCreateAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface LocationSearch {
+
+    }
+  }
+
+  interface HTMLLocationSearchElement extends StencilComponents.LocationSearch, HTMLStencilElement {}
+
+  var HTMLLocationSearchElement: {
+    prototype: HTMLLocationSearchElement;
+    new (): HTMLLocationSearchElement;
+  };
+  interface HTMLElementTagNameMap {
+    'location-search': HTMLLocationSearchElement;
+  }
+  interface ElementTagNameMap {
+    'location-search': HTMLLocationSearchElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'location-search': JSXElements.LocationSearchAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface LocationSearchAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface LocationsList {
 
     }
@@ -766,7 +832,7 @@ declare global {
 
   namespace StencilComponents {
     interface ScreenSearch {
-      'itemTypeFilterId': string;
+
     }
   }
 
@@ -789,7 +855,7 @@ declare global {
   }
   namespace JSXElements {
     export interface ScreenSearchAttributes extends HTMLAttributes {
-      'itemTypeFilterId'?: string;
+
     }
   }
 }

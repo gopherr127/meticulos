@@ -84,6 +84,7 @@ export interface ItemLocation {
   id: string,
   name: string,
   parentId: string,
+  parent: ItemLocation,
   gps: GpsLocation
 }
 
