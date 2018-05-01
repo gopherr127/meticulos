@@ -1,4 +1,5 @@
 import { Component, Element, Prop } from '@stencil/core';
+import { Item } from '../../../interfaces/interfaces';
 
 @Component({
   tag: 'item-detail-options-menu'
@@ -6,7 +7,8 @@ import { Component, Element, Prop } from '@stencil/core';
 export class ItemDetailOptionsMenu {
 
   @Element() el: any;
-  @Prop() itemId: string;
+  @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
+  @Prop() item: Item;
   @Prop() returnUrl = '/';
   
   dismiss(data?: any) {
@@ -23,17 +25,36 @@ export class ItemDetailOptionsMenu {
   refreshItem() {
 
     this.dismiss();
+
     this.setRootComponent('item-detail',
     {
-      itemId: this.itemId,
+      itemId: this.item.id,
       returnUrl: this.returnUrl
     });
+  }
+
+  async viewItemOnMap() {
+    
+    this.dismiss();
+
+    const modal = await this.modalCtrl.create({
+      component: 'item-map',
+      componentProps: { itemLocation: { 
+        latitude: this.item.location.gps.latitude,
+        longitude: this.item.location.gps.longitude
+       }}
+    });
+
+    await modal.present();
   }
 
   render() {
     return[
       <ion-item onClick={ () => this.refreshItem() }>
         <ion-label>Refresh</ion-label>
+      </ion-item>,
+      <ion-item onClick={ () => this.viewItemOnMap() }>
+        <ion-label>View on Map</ion-label>
       </ion-item>
     ];
   }

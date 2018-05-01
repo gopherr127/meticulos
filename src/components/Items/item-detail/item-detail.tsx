@@ -254,7 +254,7 @@ export class ItemDetail {
     const popover = await this.popoverCtrl.create({
       component: 'item-detail-options-menu', 
       componentProps : {
-        itemId : this.itemId,
+        item : this.item,
         returnUrl: this.returnUrl
       },
       ev: event,
