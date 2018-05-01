@@ -69,7 +69,8 @@ export class LocationDetail {
   
   @Listen('body:ionModalDidDismiss')
   async modalDidDismiss(event: CustomEvent) {
-    if (event) {
+    
+    if (event && event.detail && event.detail.data) {
 
       this.selectedParentLocation = event.detail.data;
     }

@@ -359,7 +359,9 @@ export class ItemDetail {
   
   @Listen('body:ionModalDidDismiss')
   async modalDidDismiss(event: CustomEvent) {
-    if (event) {
+
+    if (event && event.detail && event.detail.data) {
+      
       switch (this.modalContext) {
         case "location-search": {
           this.item.location = event.detail.data;
