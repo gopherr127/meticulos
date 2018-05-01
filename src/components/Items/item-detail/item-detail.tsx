@@ -1,5 +1,5 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
-import { ToastController } from '@ionic/core';
+//import { ToastController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
 import * as GeolocationService from '../../../services/geolocation-service';
@@ -14,7 +14,7 @@ export class ItemDetail {
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
   @Prop({ connect: 'ion-router' }) router;
-  @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
+  //@Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: HTMLIonPopoverControllerElement;
   @Prop() itemId: string;
@@ -56,13 +56,18 @@ export class ItemDetail {
 
   async showErrorToast(messageToDisplay: string) {
     
-    const toast = await this.toastCtrl.create({ 
-      position: 'top',
-      message: messageToDisplay, 
-      showCloseButton: true,
-      closeButtonText: 'OK'
+    const actionSheetController = this.el.querySelector('ion-action-sheet-controller');
+    await actionSheetController.componentOnReady();
+
+    const actionSheet = await actionSheetController.create({
+      header: messageToDisplay,
+      buttons: [{
+        text: 'OK',
+        role: 'cancel'
+      }]
     });
-    await toast.present();
+
+    await actionSheet.present();
   }
 
   async loadItem() {
@@ -269,12 +274,13 @@ export class ItemDetail {
     this.transitionInProgress = transition;
 
     const modal = await this.modalCtrl.create({
-      component: 'screens-display',
+      component: 'screen-display',
       componentProps: {
         item: this.item,
         transition: transition
       }
     });
+
     await modal.present();
   }
 
@@ -436,6 +442,7 @@ export class ItemDetail {
     return[
       <ion-header>
 
+        <ion-action-sheet-controller></ion-action-sheet-controller>
         <ion-toolbar>
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>

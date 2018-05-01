@@ -1,5 +1,5 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
-import { ToastController } from '@ionic/core';
+//import { ToastController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
 import { Item, ItemType, Screen, FieldMetadata, FieldTypes, FieldValue } from '../../../interfaces/interfaces';
@@ -12,7 +12,7 @@ export class ItemCreate {
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
   @Prop({ connect: 'ion-router' }) nav;
-  @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
+  //@Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
   @Prop() itemTypeId: string;
   @State() subtitle: string = 'Create Item';
   @State() item: Item;
@@ -170,15 +170,19 @@ export class ItemCreate {
   }
 
   async showToastMessage(messageToDisplay: string) {
+        
+    const actionSheetController = this.el.querySelector('ion-action-sheet-controller');
+    await actionSheetController.componentOnReady();
 
-    const toast = await this.toastCtrl.create({ 
-      position: 'top',
-      message: messageToDisplay, 
-      showCloseButton: true,
-      closeButtonText: 'OK'
+    const actionSheet = await actionSheetController.create({
+      header: messageToDisplay,
+      buttons: [{
+        text: 'OK',
+        role: 'cancel'
+      }]
     });
 
-    await toast.present();
+    await actionSheet.present();
   }
 
   async handleSaveClick() {
@@ -207,27 +211,13 @@ export class ItemCreate {
       }
       else
       {
-        
-        const toast = await this.toastCtrl.create({ 
-          position: 'top',
-          message: await response.text(), 
-          showCloseButton: true,
-          closeButtonText: 'OK'
-        });
-
-        await toast.present();
+       
+        this.showToastMessage(await response.text());
       }
     }
     else {
 
-      const toast = await this.toastCtrl.create({ 
-        position: 'top',
-        message: validationResult.displayMessage, 
-        showCloseButton: true,
-        closeButtonText: 'OK'
-      });
-
-      await toast.present();
+      this.showToastMessage(validationResult.displayMessage);
     }
   }
   
@@ -324,6 +314,7 @@ export class ItemCreate {
     return[
       <ion-header>
 
+        <ion-action-sheet-controller></ion-action-sheet-controller>
         <ion-toolbar color="secondary">
           <ion-title>{ this.subtitle }</ion-title>
           <ion-buttons slot="end">

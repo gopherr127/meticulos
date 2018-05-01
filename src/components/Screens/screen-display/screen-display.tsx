@@ -23,6 +23,7 @@ export class ScreenDisplay {
   
   async componentWillLoad() {
 
+    console.log(this.transition.screenIds);
     let response = await fetch(
       this.apiBaseUrl + "/screens/find", {
         method: "POST",
@@ -32,9 +33,11 @@ export class ScreenDisplay {
         body: JSON.stringify(this.transition.screenIds)
     });
 
+    console.log(response);
     if (response.ok) {
 
       this.screens = await response.json();
+      console.log(this.screens);
       this.currentScreen = this.screens ? this.screens[0] : null;
     }
   }
@@ -159,6 +162,22 @@ export class ScreenDisplay {
     (this.el.closest('ion-modal') as any).dismiss(data);
   }
 
+  async showToastMessage(messageToDisplay: string) {
+        
+    const actionSheetController = this.el.querySelector('ion-action-sheet-controller');
+    await actionSheetController.componentOnReady();
+
+    const actionSheet = await actionSheetController.create({
+      header: messageToDisplay,
+      buttons: [{
+        text: 'OK',
+        role: 'cancel'
+      }]
+    });
+
+    await actionSheet.present();
+  }
+
   async handlePreviousClick() {
 
     await this.navigateScreens(-1);
@@ -197,14 +216,7 @@ export class ScreenDisplay {
     }
     else {
 
-      const toast = await this.toastCtrl.create({ 
-        position: 'top',
-        message: validationResult.displayMessage, 
-        showCloseButton: true,
-        closeButtonText: 'OK'
-      });
-      
-      await toast.present();
+      this.showToastMessage(validationResult.displayMessage);
     }
   }
 
@@ -240,6 +252,7 @@ export class ScreenDisplay {
     return[
       <ion-header>
 
+        <ion-action-sheet-controller></ion-action-sheet-controller>
         <ion-toolbar color="secondary">
           <ion-buttons slot="start" style={{ display: this.hasPreviousScreen ? 'block' : 'none' }}>
             <ion-button onClick={() => this.handlePreviousClick()}>Previous</ion-button>
