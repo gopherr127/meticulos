@@ -1,8 +1,7 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
-import * as GeolocationService from '../../../services/geolocation-service';
-import { GpsLocation, Item, ItemType, Screen, FieldMetadata, 
+import { Item, ItemType, Screen, FieldMetadata, 
          FieldTypes, FieldValue, WorkflowTransition } from '../../../interfaces/interfaces';
 
 @Component({
@@ -12,7 +11,6 @@ export class ItemDetail {
 
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
-  @Prop({ connect: 'ion-router' }) router;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: HTMLIonPopoverControllerElement;
   @Prop() itemId: string;
@@ -26,6 +24,7 @@ export class ItemDetail {
   @State() editScreen: Screen;
   @State() fieldMetadata: Array<FieldMetadata> = [];
   private modalContext: string;
+  private popoverContext: string;
   
   async componentWillLoad() {
 
@@ -225,36 +224,6 @@ export class ItemDetail {
     }
   }
 
-  async handleSetGpsClick() {
-
-    if (!this.item.location) {
-      // Initializae the entire asset location
-      this.item.location = {
-        id: "000000000000000000000000",
-        name: "GPS Location",
-        parentId: "000000000000000000000000",
-        parent: null,
-        gps: { latitude: -1, longitude: -1 }
-      }
-    }
-    else if (!this.item.location.gps) {
-      // Initialize the asset gps location
-      this.item.location.gps = {
-        latitude: -1,
-        longitude: -1
-      }
-    }
-
-    var result: GpsLocation = await GeolocationService.getDeviceCurrentLocation();
-
-    if (result && result.latitude && result.latitude > -1) {
-      this.item.location.gps.latitude = result.latitude;
-      this.item.location.gps.longitude = result.longitude;
-    }
-
-    this.itemLocationName = this.item.location.name;
-  }
-
   async presentOptionsMenu(event?: any) {
 
     const popover = await this.popoverCtrl.create({
@@ -286,17 +255,6 @@ export class ItemDetail {
     await modal.present();
   }
 
-  async presentLocationSearch() {
-
-    this.modalContext = "location-search";
-
-    const modal = await this.modalCtrl.create({
-      component: 'location-search'
-    });
-
-    await modal.present();
-  }
-  
   async completeTransition(transition: WorkflowTransition) {
 
     let execResponse = await fetch(
@@ -356,20 +314,81 @@ export class ItemDetail {
       this.showErrorToast(validationResult.displayMessage);
     }
   }
+
+  async presentItemLocationOptions(event?: any) {
+
+    this.modalContext = "item-location-options-menu";
+    this.popoverContext = "item-location-options-menu";
+
+    const popover = await this.popoverCtrl.create({
+      component: 'item-location-options-menu',
+      componentProps: {
+        item: this.item
+      },
+      ev: event
+    });
+
+    await popover.present();
+  }
   
   @Listen('body:ionModalDidDismiss')
   async modalDidDismiss(event: CustomEvent) {
 
     if (event && event.detail && event.detail.data) {
-      
+
       switch (this.modalContext) {
-        case "location-search": {
+
+        case "item-location-options-menu": {
+          
           this.item.location = event.detail.data;
           this.item.locationId = this.item.location.id;
           this.itemLocationName = this.item.location.name;
           break;
         }
       }
+
+      this.modalContext = "";
+    }
+  }
+
+  @Listen('body:ionPopoverDidDismiss')
+  async popoverDidDismiss(event: any) {
+    
+    if (event && event.detail && event.detail.data) {
+
+      switch (this.popoverContext) {
+
+        case "item-location-options-menu": {
+
+          if (!this.item.location) {
+            // Initializae the entire asset location
+            this.item.location = {
+              id: "000000000000000000000000",
+              name: "GPS Location",
+              parentId: "000000000000000000000000",
+              parent: null,
+              gps: { latitude: -1, longitude: -1 }
+            }
+          }
+          else {
+
+            this.item.location.id = "000000000000000000000000";
+            this.item.location.name = "GPS Location";
+            this.item.parentId = "000000000000000000000000";
+            this.item.location.parent = null;
+            // Set gps location
+            this.item.location.gps = {
+              latitude: event.detail.data.latitude,
+              longitude: event.detail.data.longitude
+            }
+          }
+          
+          this.item.locationId = this.item.location.id;
+          this.itemLocationName = this.item.location.name;
+        }
+      }
+
+      this.popoverContext = "";
     }
   }
 
@@ -465,6 +484,10 @@ export class ItemDetail {
 
       await this.presentOptionsMenu(event);
     }
+    else if (event.target.id === "itemLocationOptionsMenu") {
+
+      await this.presentItemLocationOptions(event);
+    }
   }
 
   render() {
@@ -509,8 +532,9 @@ export class ItemDetail {
         <ion-item style={{ display : this.item.type.isForPhysicalItems ? 'block' : 'none'}}>
           <ion-label position='fixed'>Location</ion-label>
           <ion-input disabled value={ this.itemLocationName }></ion-input>
-          <ion-button slot="end" onClick={ () => this.presentLocationSearch() }>Select</ion-button>
-          <ion-button slot="end" onClick={ () => this.handleSetGpsClick() }>Use GPS</ion-button>
+          <ion-button slot="end" fill="clear" id="itemLocationOptionsMenu">
+            <ion-icon slot="icon-only" name="more" color="tertiary"></ion-icon>
+          </ion-button>
         </ion-item>
 
         <ion-card>

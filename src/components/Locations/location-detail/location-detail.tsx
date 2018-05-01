@@ -116,7 +116,7 @@ export class LocationDetail {
         </ion-item>
         <ion-item button onClick={ () => this.presentLocationSearch() }>
           <ion-label position='fixed'>Parent Location</ion-label>
-          <ion-input slot="end" disabled value={ this.selectedParentLocation ? this.selectedParentLocation.name : "" }></ion-input>
+          <ion-input disabled value={ this.selectedParentLocation ? this.selectedParentLocation.name : "" }></ion-input>
           <ion-icon slot="end" name="more" color="tertiary"></ion-icon>
         </ion-item>
 

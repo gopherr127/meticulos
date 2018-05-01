@@ -497,6 +497,41 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ItemLocationOptionsMenu {
+      'item': Item;
+      'returnUrl': string;
+    }
+  }
+
+  interface HTMLItemLocationOptionsMenuElement extends StencilComponents.ItemLocationOptionsMenu, HTMLStencilElement {}
+
+  var HTMLItemLocationOptionsMenuElement: {
+    prototype: HTMLItemLocationOptionsMenuElement;
+    new (): HTMLItemLocationOptionsMenuElement;
+  };
+  interface HTMLElementTagNameMap {
+    'item-location-options-menu': HTMLItemLocationOptionsMenuElement;
+  }
+  interface ElementTagNameMap {
+    'item-location-options-menu': HTMLItemLocationOptionsMenuElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'item-location-options-menu': JSXElements.ItemLocationOptionsMenuAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemLocationOptionsMenuAttributes extends HTMLAttributes {
+      'item'?: Item;
+      'returnUrl'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ItemMap {
       'item': Item;
     }
