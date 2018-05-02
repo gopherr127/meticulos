@@ -697,6 +697,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ItemsMap {
+      'item': Item;
+    }
+  }
+
+  interface HTMLItemsMapElement extends StencilComponents.ItemsMap, HTMLStencilElement {}
+
+  var HTMLItemsMapElement: {
+    prototype: HTMLItemsMapElement;
+    new (): HTMLItemsMapElement;
+  };
+  interface HTMLElementTagNameMap {
+    'items-map': HTMLItemsMapElement;
+  }
+  interface ElementTagNameMap {
+    'items-map': HTMLItemsMapElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'items-map': JSXElements.ItemsMapAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemsMapAttributes extends HTMLAttributes {
+      'item'?: Item;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ItemsSearch {
 
     }

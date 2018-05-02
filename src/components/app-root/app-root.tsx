@@ -22,7 +22,7 @@ export class AppRoot {
 
   appPages = [
     { title: 'Items Search', url: '/items-search', icon: 'search' },
-    { title: 'Item Map',     url: '/item-map',     icon: 'map' },
+    { title: 'Items Map',    url: '/items-map',    icon: 'map' },
     { title: 'Schedule',     url: '/schedule',     icon: 'calendar' }
   ];
   
@@ -112,6 +112,8 @@ export class AppRoot {
         <ion-route url="/items/:itemId" component="item-detail"></ion-route>
         
         <ion-route url="/items-search" component="items-search"></ion-route>
+        
+        <ion-route url="/items-map" component="items-map"></ion-route>
 
         <ion-route url="/locations" component="locations-list"></ion-route>
         <ion-route url="/locations/:itemLocationId" component="location-detail"></ion-route>

@@ -4,14 +4,13 @@ import * as Geolocation from '../../../services/geolocation-service';
 declare var google: any;
 
 @Component({
-  tag: 'item-map',
-  styleUrl: 'item-map.css'
+  tag: 'items-map',
+  styleUrl: 'items-map.css'
 })
-export class ItemMap {
+export class ItemsMap {
   
   @Element() private el: HTMLElement;
   @Prop() item: Item;
-  //@State() distanceToItem: string;
 
   async componentWillLoad() {
 
@@ -77,14 +76,6 @@ export class ItemMap {
           itemInfoWindow.open(map, itemMarker);
         });
         
-        // Calculate distance between two locations
-        // var service = new google.maps.DistanceMatrixService();
-        // service.getDistanceMatrix(
-        //   {
-        //     origins: [currentLoc],
-        //     destinations: [itemLoc],
-        //     travelMode: 'WALKING'
-        //   }, this.googleDistanceMatrixCallback.bind(this));
       }
 
       google.maps.event.addListenerOnce(map, 'idle', () => {
@@ -93,19 +84,16 @@ export class ItemMap {
     }
   }
 
-  // async googleDistanceMatrixCallback(response, status) {
-
-  //   if (response && status == 'OK') {
-
-  //     // For some reason, this is not updating on the UI
-  //     this.distanceToItem = response.rows[0].elements[0].distance.text;
-  //     console.log(this.distanceToItem);
-  //   }
-  // }
-
   render() {
     return [
         <ion-header>
+
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-menu-button></ion-menu-button>
+            </ion-buttons>
+            <ion-title>Meticulos</ion-title>
+          </ion-toolbar>
 
           <ion-toolbar color="secondary">
             <ion-buttons slot="start">
