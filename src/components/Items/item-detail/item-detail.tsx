@@ -514,7 +514,7 @@ export class ItemDetail {
 
       </ion-header>,
 
-      <ion-content>
+      <ion-content class="outer-content">
           
         <ion-item></ion-item>
         <ion-item>
@@ -537,30 +537,43 @@ export class ItemDetail {
           </ion-button>
         </ion-item>
 
-        <ion-card>
-          <ion-card-header>
-            Available Transitions
-          </ion-card-header>
-          <ion-card-content>
-            <ion-list>
-              {this.transitionOptions.map(transition => 
-                <ion-item button onClick={ () => this.handleTransitionClick(transition) }>
-                  { transition.name }
-                </ion-item>
-              )}
-            </ion-list>
-          </ion-card-content>
-        </ion-card>
+        <ion-list>
+          <ion-grid>
+            <ion-row align-items-stretch>
+              <ion-col col-lg-6 col-md-12 col-sm-12 align-self-stretch>
 
-        <ion-card>
-          <ion-card-header>
-            Fields
-          </ion-card-header>
-          <ion-card-content>
-            <ion-list id="fieldsList"></ion-list>
-          </ion-card-content>
-        </ion-card>
-        
+                <ion-card>
+                  <ion-card-header>
+                    Available Transitions
+                  </ion-card-header>
+                  <ion-card-content>
+                    <ion-list>
+                      {this.transitionOptions.map(transition => 
+                        <ion-item button onClick={ () => this.handleTransitionClick(transition) }>
+                          { transition.name }
+                        </ion-item>
+                      )}
+                    </ion-list>
+                  </ion-card-content>
+                </ion-card>
+
+              </ion-col>
+              <ion-col col-lg-6 col-md-12 col-sm-12 align-self-stretch>
+                
+                <ion-card>
+                    <ion-card-header>
+                      Fields
+                    </ion-card-header>
+                    <ion-card-content>
+                      <ion-list id="fieldsList"></ion-list>
+                    </ion-card-content>
+                  </ion-card>
+
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-list>
+
       </ion-content>,
 
       <ion-footer>
