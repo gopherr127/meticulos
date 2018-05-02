@@ -21,19 +21,32 @@ export class AppRoot {
   hasSeenTutorial = false;
 
   appPages = [
-    { title: 'Schedule', url: '/schedule', icon: 'calendar' },
-    { title: 'Speakers', url: '/speakers', icon: 'contacts' },
-    { title: 'Item Map',      url: '/item-map',      icon: 'map' },
-    { title: 'About',    url: '/about',    icon: 'information-circle' }
+    { title: 'Items Search', url: '/items-search', icon: 'search' },
+    { title: 'Item Map',     url: '/item-map',     icon: 'map' },
+    { title: 'Schedule',     url: '/schedule',     icon: 'calendar' }
   ];
   
   adminPages = [
-    { title: 'Locations',  url: '/locations',  icon: 'pin' },
-    { title: 'Item Types', url: '/item-types', icon: 'albums' },
-    { title: 'Workflows',  url: '/workflows',  icon: 'git-merge' },
-    { title: 'Screens',    url: '/screens',    icon: 'desktop' },
-    { title: 'Fields',     url: '/fields',     icon: 'switch' }
+    { title: 'Locations',   url: '/locations',   icon: 'pin' },
+    { title: 'Item Types',  url: '/item-types',  icon: 'albums' },
+    { title: 'Workflows',   url: '/workflows',   icon: 'git-merge' },
+    { title: 'Screens',     url: '/screens',     icon: 'desktop' },
+    { title: 'Fields',      url: '/fields',      icon: 'switch' },
+    { title: 'Users',       url: '/users',       icon: 'people' },
+    { title: 'Groups',      url: '/groups',      icon: 'apps' },
+    { title: 'Roles',       url: '/roles',       icon: 'contacts' },
+    { title: 'Permissions', url: '/permissions', icon: 'aperture' }
   ];
+
+  accountPages = [
+    { title: 'Log Out',  url: '/log-out',  icon: 'exit' },
+    { title: 'Profile',  url: '/profile',  icon: 'contact' },
+    { title: 'Tutorial', url: '/tutorial', icon: 'hammer' }
+  ]
+
+  systemPages = [
+    { title: 'About',    url: '/about',    icon: 'information-circle' }
+  ]
 
   async componentWillLoad() {
 
@@ -92,11 +105,13 @@ export class AppRoot {
     return (
       <ion-router useHash={false}>
 
-        <ion-route-redirect from="/" to={this.hasSeenTutorial ? '/schedule' : '/tutorial'} />
+        <ion-route-redirect from="/" to={this.hasSeenTutorial ? '/items-search' : '/tutorial'} />
 
         <ion-route url="/items/type/:itemTypeId" component="items-list"></ion-route>
         <ion-route url="/items/create/:itemTypeId" component="item-create"></ion-route>
         <ion-route url="/items/:itemId" component="item-detail"></ion-route>
+        
+        <ion-route url="/items-search" component="items-search"></ion-route>
 
         <ion-route url="/locations" component="locations-list"></ion-route>
         <ion-route url="/locations/:itemLocationId" component="location-detail"></ion-route>
@@ -120,6 +135,7 @@ export class AppRoot {
         <ion-route url="/fields/create" component="field-create"></ion-route>
 
         <ion-route component="page-tabs">
+
           <ion-route url="/schedule" component="tab-schedule">
             <ion-route component="page-schedule"></ion-route>
             <ion-route url="/session/:sessionId" component="page-session" componentProps={{ goback: '/schedule' }}></ion-route>
@@ -132,9 +148,10 @@ export class AppRoot {
           </ion-route>
 
           <ion-route url="/map" component="page-map"></ion-route>
-
           <ion-route url="/about" component="page-about"></ion-route>
         </ion-route>
+          
+        <ion-route url="/tutorial" component="page-tutorial"></ion-route>
 
       </ion-router>
     );
@@ -156,6 +173,24 @@ export class AppRoot {
               <ion-list>
                 <ion-list-header>
                   Navigate
+                </ion-list-header>
+                {this.appPages.map((page) =>
+                  <ion-menu-toggle autoHide={false}>
+                    <ion-item href={page.url}>
+                      <ion-icon slot="start" name={page.icon}></ion-icon>
+                      <ion-label>
+                        {page.title}
+                      </ion-label>
+                    </ion-item>
+                  </ion-menu-toggle>
+                )}
+              </ion-list>
+
+              <p></p>
+
+              <ion-list>
+                <ion-list-header>
+                  Item Types
                 </ion-list-header>
                 { this.itemTypes.map((itemType) =>
                   <ion-menu-toggle autoHide={false}>
@@ -193,9 +228,27 @@ export class AppRoot {
 
               <ion-list>
                 <ion-list-header>
-                  Demo Pages
+                  Account
                 </ion-list-header>
-                {this.appPages.map((page) =>
+                {this.accountPages.map((page) =>
+                  <ion-menu-toggle autoHide={false}>
+                    <ion-item href={page.url}>
+                      <ion-icon slot="start" name={page.icon}></ion-icon>
+                      <ion-label>
+                        {page.title}
+                      </ion-label>
+                    </ion-item>
+                  </ion-menu-toggle>
+                )}
+              </ion-list>
+
+              <p></p>
+
+              <ion-list>
+                <ion-list-header>
+                  System
+                </ion-list-header>
+                {this.systemPages.map((page) =>
                   <ion-menu-toggle autoHide={false}>
                     <ion-item href={page.url}>
                       <ion-icon slot="start" name={page.icon}></ion-icon>

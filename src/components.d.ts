@@ -598,6 +598,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ItemSearch {
+
+    }
+  }
+
+  interface HTMLItemSearchElement extends StencilComponents.ItemSearch, HTMLStencilElement {}
+
+  var HTMLItemSearchElement: {
+    prototype: HTMLItemSearchElement;
+    new (): HTMLItemSearchElement;
+  };
+  interface HTMLElementTagNameMap {
+    'item-search': HTMLItemSearchElement;
+  }
+  interface ElementTagNameMap {
+    'item-search': HTMLItemSearchElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'item-search': JSXElements.ItemSearchAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemSearchAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ItemsListOptionsMenu {
       'itemTypeId': string;
     }
@@ -656,6 +689,39 @@ declare global {
   namespace JSXElements {
     export interface ItemsListAttributes extends HTMLAttributes {
       'itemTypeId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface ItemsSearch {
+
+    }
+  }
+
+  interface HTMLItemsSearchElement extends StencilComponents.ItemsSearch, HTMLStencilElement {}
+
+  var HTMLItemsSearchElement: {
+    prototype: HTMLItemsSearchElement;
+    new (): HTMLItemsSearchElement;
+  };
+  interface HTMLElementTagNameMap {
+    'items-search': HTMLItemsSearchElement;
+  }
+  interface ElementTagNameMap {
+    'items-search': HTMLItemsSearchElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'items-search': JSXElements.ItemsSearchAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemsSearchAttributes extends HTMLAttributes {
+
     }
   }
 }

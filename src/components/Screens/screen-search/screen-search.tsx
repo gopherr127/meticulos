@@ -18,12 +18,6 @@ export class ScreenSearch {
     await this.loadScreens();
   }
 
-  async handleItemClick(item: any) {
-    
-    this.selectedScreen = item;
-    this.dismiss(this.selectedScreen);
-  }
-
   dismiss(data?: any) {
     
     (this.el.closest('ion-modal') as any).dismiss(data);
@@ -63,7 +57,7 @@ export class ScreenSearch {
 
         <ion-list>
           {this.screens.map(screen =>
-            <ion-item onClick={ () => this.handleItemClick(screen) }>
+            <ion-item onClick={ () => this.dismiss(screen) }>
               <ion-label>
                 <h2>{ screen.name }</h2>
               </ion-label>
