@@ -1,4 +1,4 @@
-import { Component, Element, State } from '@stencil/core';
+import { Component, Element, Listen, State } from '@stencil/core';
 import { ENV } from '../../../environments/environment';
 import { Item } from '../../../interfaces/interfaces';
 
@@ -36,16 +36,41 @@ export class ItemsSearch {
     }
   }
 
-  handleQrSearchClick() {
-
-    this.pushComponent('item-qr-search');
-  }
-
   async handleItemClick(item: Item) {
 
     this.pushComponent('item-detail', {
       itemId: item.id
     })
+  }
+
+  async filterItemsList() {
+
+    if (!this.queryText || this.queryText === "") {
+
+      await this.loadItems();
+    }
+    else {
+
+      let response = await fetch(
+        this.apiBaseUrl + `/items/search?name=${this.queryText}`, {
+          method: "GET"
+      });
+
+      if (response.ok) {
+
+        this.items = await response.json();
+      }
+    }
+  }
+
+  @Listen('ionChange')
+  handleFieldChange(event: any) {
+
+    if (event && event.detail) {
+
+      this.queryText = event.detail.value;
+    }
+    
   }
 
   render() {
@@ -69,8 +94,11 @@ export class ItemsSearch {
         </ion-toolbar>
 
         <ion-toolbar color="tertiary">
-          <ion-searchbar value={this.queryText} placeholder="Search">
+          <ion-searchbar debounce={500} value={this.queryText} placeholder="Search">
           </ion-searchbar>
+          <ion-buttons slot="end">
+            <ion-button fill="solid" color="primary" onClick={ () => this.filterItemsList() }>Go</ion-button>
+          </ion-buttons>
         </ion-toolbar>
 
       </ion-header>,
