@@ -47,6 +47,11 @@
   --ion-toolbar-md-text-color:         #fff;
 }
 
+/* TODO: Figure out how to use the official override of $split-pane-side-max-width */
+.split-pane-visible > ion-menu {
+  max-width: 350px !important;
+}
+
 ion-label {
   overflow: unset;
 }
