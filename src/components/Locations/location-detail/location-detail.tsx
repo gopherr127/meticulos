@@ -14,6 +14,9 @@ export class LocationDetail {
   @State() subtitle: string = 'Location: ';
   @State() location: ItemLocation;
   @State() selectedParentLocation: ItemLocation;
+  @State() latitude: number;
+  @State() longitude: number;
+  private modalContext: string;
   
   async componentWillLoad() {
 
@@ -38,6 +41,11 @@ export class LocationDetail {
       this.location = await response.json();
       this.selectedParentLocation = this.location.parent;
       this.subtitle = `Location: ${this.location.name}`;
+      if (this.location.gps) {
+
+        this.latitude = this.location.gps.latitude ? this.location.gps.latitude : 0;
+        this.longitude = this.location.gps.longitude ? this.location.gps.longitude : 0;
+      }
     }
   }
 
@@ -60,8 +68,21 @@ export class LocationDetail {
 
   async presentLocationSearch() {
 
+    this.modalContext = 'location-search';
+
     const modal = await this.modalCtrl.create({
       component: 'location-search'
+    });
+
+    await modal.present();
+  }
+
+  async presentGpsSelector() {
+
+    this.modalContext = 'gps-selector';
+
+    const modal = await this.modalCtrl.create({
+      component: 'gps-selector'
     });
 
     await modal.present();
@@ -72,7 +93,25 @@ export class LocationDetail {
     
     if (event && event.detail && event.detail.data) {
 
-      this.selectedParentLocation = event.detail.data;
+      switch (this.modalContext) {
+        case 'location-search': {
+
+          this.selectedParentLocation = event.detail.data;
+          break;
+        }
+        case 'gps-selector': {
+
+          this.location.gps = {
+            latitude: event.detail.data.lat,
+            longitude: event.detail.data.lng
+          }
+          this.latitude = event.detail.data.lat;
+          this.longitude = event.detail.data.lng;
+          break;
+        }
+      }
+
+      this.modalContext = '';
     }
   }
 
@@ -117,6 +156,11 @@ export class LocationDetail {
         <ion-item button onClick={ () => this.presentLocationSearch() }>
           <ion-label position='fixed'>Parent Location</ion-label>
           <ion-input disabled value={ this.selectedParentLocation ? this.selectedParentLocation.name : "" }></ion-input>
+          <ion-icon slot="end" name="more" color="tertiary"></ion-icon>
+        </ion-item>
+        <ion-item button onClick={ () => this.presentGpsSelector() }>
+          <ion-label position='fixed'>GPS Location</ion-label>
+          <ion-input disabled value={ `${this.latitude}, ${this.longitude}`}></ion-input>
           <ion-icon slot="end" name="more" color="tertiary"></ion-icon>
         </ion-item>
 

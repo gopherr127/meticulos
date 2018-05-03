@@ -1540,6 +1540,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface GpsSelector {
+      'item': Item;
+    }
+  }
+
+  interface HTMLGpsSelectorElement extends StencilComponents.GpsSelector, HTMLStencilElement {}
+
+  var HTMLGpsSelectorElement: {
+    prototype: HTMLGpsSelectorElement;
+    new (): HTMLGpsSelectorElement;
+  };
+  interface HTMLElementTagNameMap {
+    'gps-selector': HTMLGpsSelectorElement;
+  }
+  interface ElementTagNameMap {
+    'gps-selector': HTMLGpsSelectorElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'gps-selector': JSXElements.GpsSelectorAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface GpsSelectorAttributes extends HTMLAttributes {
+      'item'?: Item;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ImageCapturer {
 
     }
