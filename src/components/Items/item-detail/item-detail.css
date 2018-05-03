@@ -1,0 +1,23 @@
+@media (min-width: 0px) and (max-width: 768px) {
+  #footerSection {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  #footerSection {
+    display: none;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 768px) {
+  #headerSection {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  #headerSection {
+    display: block;
+  }
+}

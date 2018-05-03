@@ -5,7 +5,8 @@ import { Item, ItemType, Screen, FieldMetadata,
          FieldTypes, FieldValue, WorkflowTransition } from '../../../interfaces/interfaces';
 
 @Component({
-  tag: 'item-detail'
+  tag: 'item-detail',
+  styleUrl: 'item-detail.css'
 })
 export class ItemDetail {
 
@@ -556,6 +557,10 @@ export class ItemDetail {
           </ion-buttons>
         </ion-toolbar>
 
+        <ion-toolbar id="headerSection" color="tertiary">
+            <ion-button slot="start" color="primary" fill="solid" onClick={ () => this.handleSaveClick() }>Save</ion-button>
+        </ion-toolbar>
+
       </ion-header>,
 
       <ion-content class="outer-content">
@@ -620,7 +625,7 @@ export class ItemDetail {
 
       </ion-content>,
 
-      <ion-footer>
+      <ion-footer id="footerSection">
         <ion-buttons slot="end">
           <ion-button color="primary" fill="solid" onClick={ () => this.handleSaveClick() }>Save</ion-button>
           <ion-button color="primary" onClick={ () => this.popComponent() }>Cancel</ion-button>
