@@ -29,5 +29,5 @@ export async function validateForm(
     }
 
     resolve(res);
-  })
+  });
 }

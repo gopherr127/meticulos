@@ -221,6 +221,8 @@ export class ItemDetail {
     else {
 
       await this.completeTransition(transition);
+      await this.loadItem();
+      await this.loadTransitionOptions();
     }
   }
 
@@ -276,42 +278,56 @@ export class ItemDetail {
 
       await this.showErrorToast(transitionResult.errorMessages.join('\n'));
     }
-    else {
+  }
+
+  async saveItem(): Promise<boolean> {
+    
+    return new Promise<boolean>(async resolve => {
       
-      await this.loadItem();
-      await this.loadTransitionOptions();
-    }
+      let validationResult = await FormValidator.validateForm(
+        this.fieldMetadata, this.item.fieldValues);
+      
+      if (validationResult.result) {
+
+        let response = await fetch(
+          this.apiBaseUrl + "/items/" + this.item.id, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(this.item)
+        });
+    
+        if (response.ok) {
+    
+          this.loadItem();
+          resolve(true);
+        }
+        else
+        {
+          
+          this.showErrorToast(await response.text());
+        }
+      }
+      else {
+
+        this.showErrorToast(validationResult.displayMessage);
+      }
+
+      resolve(false);
+    });
   }
 
   async handleSaveClick() {
 
-    let validationResult = await FormValidator.validateForm(
-      this.fieldMetadata, this.item.fieldValues);
+    let result = await this.saveItem();
     
-    if (validationResult.result) {
+    if (result) {
 
-      let response = await fetch(
-        this.apiBaseUrl + "/items/" + this.item.id, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(this.item)
+      const navCtrl = document.querySelector('ion-nav');
+      navCtrl.setRoot('items-list', {
+        itemTypeId: this.item.typeId
       });
-  
-      if (response.ok) {
-  
-        this.setRootComponent();
-      }
-      else
-      {
-        
-        this.showErrorToast(await response.text());
-      }
-    }
-    else {
-
-      this.showErrorToast(validationResult.displayMessage);
     }
   }
 
@@ -345,8 +361,36 @@ export class ItemDetail {
           this.itemLocationName = this.item.location.name;
           break;
         }
-      }
+        case "screen-display": {
 
+          if (event.detail.data) {
+            
+            let fieldValues = JSON.parse(event.detail.data);
+            for (let fieldValue of fieldValues) {
+
+              let existingFieldValue = this.item.fieldValues.find((item) => {
+                return item.fieldId === fieldValue.fieldId;
+              });
+
+              if (existingFieldValue) {
+                existingFieldValue.value = fieldValue.value;
+              }
+              else {
+                this.item.fieldValues.push(fieldValue);
+              }
+            }
+
+            let saveResult = await this.saveItem();
+            
+            if (saveResult) {
+
+              await this.completeTransition(this.transitionInProgress);
+              await this.loadItem();
+              await this.loadTransitionOptions();
+            }
+          }
+        }
+      }
       this.modalContext = "";
     }
   }

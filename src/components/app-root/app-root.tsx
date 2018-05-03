@@ -83,6 +83,11 @@ export class AppRoot {
     });
 
     this.itemTypes = await response.json();
+    this.itemTypes.sort( (typeA, typeB) => {
+      if (typeA.name < typeB.name) return -1;
+      if (typeA.name > typeB.name) return 1;
+      return 0;
+    });
   } 
 
   async checkLoginStatus() {
