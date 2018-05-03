@@ -3,7 +3,8 @@ import { ENV } from '../../../environments/environment';
 import { Item, ItemType } from '../../../interfaces/interfaces';
 
 @Component({
-  tag: 'items-list'
+  tag: 'items-list',
+  styleUrl: 'items-list.css'
 })
 export class ItemsList {
 
@@ -142,6 +143,10 @@ export class ItemsList {
         <ion-toolbar color="secondary">
           <ion-title>{ this.subtitle }</ion-title>
           <ion-buttons slot="end">
+            <ion-button id="createButton" fill="solid" color="primary" 
+                        onClick={ () => this.handleAddFabClick() }>
+              Create
+            </ion-button>
             <ion-button id="optionsMenu">
               <ion-icon slot="icon-only" name="more"></ion-icon>
             </ion-button>
@@ -193,8 +198,8 @@ export class ItemsList {
           <ion-item disabled></ion-item>
         </ion-list>
 
-        <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-          <ion-fab-button onClick={ () => this.handleAddFabClick() }>Add</ion-fab-button>
+        <ion-fab id="fabSection" horizontal="end" vertical="bottom" slot="fixed">
+          <ion-fab-button onClick={ () => this.handleAddFabClick() }>Create</ion-fab-button>
         </ion-fab>
 
       </ion-content>
