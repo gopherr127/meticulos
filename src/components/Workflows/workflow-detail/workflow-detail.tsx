@@ -202,7 +202,8 @@ export class WorkflowDetail {
               <ion-item>
                 <ion-label>Nodes</ion-label>
                 <ion-button slot="end" onClick={ () => 
-                  this.handleNodeAddClick() }>Add</ion-button>
+                  this.handleNodeAddClick() }>Add
+                </ion-button>
               </ion-item>
             </ion-card-header>
             <ion-card-content>

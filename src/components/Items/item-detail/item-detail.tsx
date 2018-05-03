@@ -331,6 +331,11 @@ export class ItemDetail {
     }
   }
 
+  async handleLinkedItemsAddClick() {
+
+    
+  }
+
   async presentItemLocationOptions(event?: any) {
 
     this.modalContext = "item-location-options-menu";
@@ -606,17 +611,33 @@ export class ItemDetail {
                   </ion-card-content>
                 </ion-card>
 
+                <ion-card>
+                  <ion-card-header>
+                    Fields
+                  </ion-card-header>
+                  <ion-card-content>
+                    <ion-list id="fieldsList"></ion-list>
+                  </ion-card-content>
+                </ion-card>
+
               </ion-col>
               <ion-col col-lg-6 col-md-12 col-sm-12 col-12 align-self-stretch>
                 
                 <ion-card>
-                    <ion-card-header>
-                      Fields
-                    </ion-card-header>
-                    <ion-card-content>
-                      <ion-list id="fieldsList"></ion-list>
-                    </ion-card-content>
-                  </ion-card>
+                  <ion-card-header no-padding>
+                    <ion-item>
+                      <ion-label>Linked Items</ion-label>
+                      <ion-button slot="end" 
+                                  onClick={ () => this.handleLinkedItemsAddClick() }>
+                        Add
+                      </ion-button>
+                    </ion-item>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <ion-list id="linkedItemsList">
+                    </ion-list>
+                  </ion-card-content>
+                </ion-card>
 
               </ion-col>
             </ion-row>
