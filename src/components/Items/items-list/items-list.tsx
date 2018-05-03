@@ -3,8 +3,7 @@ import { ENV } from '../../../environments/environment';
 import { Item, ItemType } from '../../../interfaces/interfaces';
 
 @Component({
-  tag: 'items-list',
-  styleUrl: 'items-list.css'
+  tag: 'items-list'
 })
 export class ItemsList {
 

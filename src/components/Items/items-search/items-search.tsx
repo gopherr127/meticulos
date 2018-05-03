@@ -3,8 +3,7 @@ import { ENV } from '../../../environments/environment';
 import { Item } from '../../../interfaces/interfaces';
 
 @Component({
-  tag: 'items-search',
-  styleUrl: 'items-search.css'
+  tag: 'items-search'
 })
 export class ItemsSearch {
 
@@ -98,7 +97,10 @@ export class ItemsSearch {
           <ion-searchbar debounce={500} value={this.queryText} placeholder="Search">
           </ion-searchbar>
           <ion-buttons slot="end">
-            <ion-button id="goButton" fill="solid" color="primary" onClick={ () => this.filterItemsList() }>Go</ion-button>
+            <ion-button id="goButton" fill="solid" color="primary" 
+                        onClick={ () => this.filterItemsList() }>
+              Search
+            </ion-button>
           </ion-buttons>
         </ion-toolbar>
 

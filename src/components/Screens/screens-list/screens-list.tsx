@@ -81,6 +81,10 @@ export class ScreensList {
         <ion-toolbar color="secondary">
           <ion-title>{ this.subtitle }</ion-title>
           <ion-buttons slot="end">
+            <ion-button id="createButton" fill="solid" color="primary" 
+                        onClick={ () => this.handleAddFabClick() }>
+              Create
+            </ion-button>
             <ion-button>
               <ion-icon slot="icon-only" name="more"></ion-icon>
             </ion-button>
@@ -114,8 +118,8 @@ export class ScreensList {
           <ion-item disabled></ion-item>
         </ion-list>
 
-        <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-          <ion-fab-button onClick={ () => this.handleAddFabClick() }>Add</ion-fab-button>
+        <ion-fab id="fabSection" horizontal="end" vertical="bottom" slot="fixed">
+          <ion-fab-button onClick={ () => this.handleAddFabClick() }>Create</ion-fab-button>
         </ion-fab>
 
       </ion-content>

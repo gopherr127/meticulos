@@ -150,10 +150,15 @@ export class FieldDetail {
         <ion-toolbar color="secondary">
           <ion-title>{ this.subtitle }</ion-title>
           <ion-buttons slot="end">
-            <ion-button>
+            <ion-button id="optionsMenu">
               <ion-icon slot="icon-only" name="more"></ion-icon>
             </ion-button>
           </ion-buttons>
+        </ion-toolbar>
+
+        <ion-toolbar id="headerSection" color="tertiary">
+            <ion-button slot="start" color="primary" fill="solid" 
+                        onClick={ () => this.handleSaveClick() }>Save</ion-button>
         </ion-toolbar>
 
       </ion-header>,
@@ -201,7 +206,7 @@ export class FieldDetail {
         
       </ion-content>,
 
-      <ion-footer>
+      <ion-footer id="footerSection">
         <ion-buttons slot="end">
           <ion-button color="primary" fill="solid" onClick={ () => this.handleSaveClick() }>Save</ion-button>
           <ion-button color="primary" onClick={ () => this.navigate('/fields')}>Cancel</ion-button>

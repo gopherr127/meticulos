@@ -68,3 +68,51 @@ ion-footer ion-buttons ion-button button {
   width: 120px;
   height: 50px !important;
 }
+
+@media (min-width: 0px) and (max-width: 768px) {
+  #createButton {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  #createButton {
+    display: inline-block;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 768px) {
+  #fabSection {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  #fabSection {
+    display: none;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 768px) {
+  #footerSection {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  #footerSection {
+    display: none;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 768px) {
+  #headerSection {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  #headerSection {
+    display: block;
+  }
+}

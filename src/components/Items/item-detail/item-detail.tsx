@@ -5,8 +5,7 @@ import { Item, ItemType, Screen, FieldMetadata,
          FieldTypes, FieldValue, WorkflowTransition } from '../../../interfaces/interfaces';
 
 @Component({
-  tag: 'item-detail',
-  styleUrl: 'item-detail.css'
+  tag: 'item-detail'
 })
 export class ItemDetail {
 
@@ -558,7 +557,8 @@ export class ItemDetail {
         </ion-toolbar>
 
         <ion-toolbar id="headerSection" color="tertiary">
-            <ion-button slot="start" color="primary" fill="solid" onClick={ () => this.handleSaveClick() }>Save</ion-button>
+            <ion-button slot="start" color="primary" fill="solid" 
+                        onClick={ () => this.handleSaveClick() }>Save</ion-button>
         </ion-toolbar>
 
       </ion-header>,
