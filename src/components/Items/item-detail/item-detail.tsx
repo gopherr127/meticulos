@@ -584,7 +584,7 @@ export class ItemDetail {
         <ion-list>
           <ion-grid>
             <ion-row align-items-stretch>
-              <ion-col col-lg-6 col-md-12 col-sm-12 align-self-stretch>
+              <ion-col col-lg-6 col-md-12 col-sm-12 col-12 align-self-stretch>
 
                 <ion-card>
                   <ion-card-header>
@@ -602,7 +602,7 @@ export class ItemDetail {
                 </ion-card>
 
               </ion-col>
-              <ion-col col-lg-6 col-md-12 col-sm-12 align-self-stretch>
+              <ion-col col-lg-6 col-md-12 col-sm-12 col-12 align-self-stretch>
                 
                 <ion-card>
                     <ion-card-header>
