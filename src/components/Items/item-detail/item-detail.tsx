@@ -120,7 +120,7 @@ export class ItemDetail {
 
   async addFieldsFromMetadata() {
 
-    let fieldsListEl = document.getElementById("fieldsList");
+    let fieldsListEl = this.el.querySelector("#fieldsList");
     fieldsListEl.innerHTML = "";
     
     for (let fieldMeta of this.fieldMetadata) {
@@ -573,19 +573,19 @@ export class ItemDetail {
         <ion-item></ion-item>
         <ion-item>
           <ion-label position='fixed'>Name</ion-label>
-          <ion-input id="itemName" debounce={200} value={ this.item.name }></ion-input>
+          <ion-input id="itemName" debounce={200} value={ this.item ? this.item.name : '' }></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position='fixed'>Item Type</ion-label>
-          <ion-input disabled value={ this.itemType.name }></ion-input>
+          <ion-input disabled value={ this.itemType ? this.itemType.name : '' }></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position='fixed'>Status</ion-label>
-          <ion-input disabled value={ this.item.workflowNode.name }></ion-input>
+          <ion-input disabled value={ this.item ? this.item.workflowNode.name : '' }></ion-input>
         </ion-item>
-        <ion-item style={{ display : this.item.type.isForPhysicalItems ? 'block' : 'none'}}>
+        <ion-item style={{ display : this.item && this.item.type && this.item.type.isForPhysicalItems ? 'block' : 'none'}}>
           <ion-label position='fixed'>Location</ion-label>
-          <ion-input disabled value={ this.itemLocationName }></ion-input>
+          <ion-input disabled value={ this.item ? this.itemLocationName : '' }></ion-input>
           <ion-button slot="end" fill="clear" id="itemLocationOptionsMenu">
             <ion-icon slot="icon-only" name="more" color="tertiary"></ion-icon>
           </ion-button>
