@@ -20,16 +20,22 @@ export class LocationCreate {
 
   async handleSaveClick() {
 
+    let bodyJson = this.selectedParentLocation
+      ? JSON.stringify({
+        name: this.name,
+        parentId: this.selectedParentLocation.id
+      })
+      : JSON.stringify({
+        name: this.name
+      });
+
     let response = await fetch(
       this.apiBaseUrl + "/itemlocations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          name: this.name,
-          parentId: this.selectedParentLocation.id
-        })
+        body: bodyJson
     });
 
     if (response.ok) {

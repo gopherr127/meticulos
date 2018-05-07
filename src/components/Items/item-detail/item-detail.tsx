@@ -86,7 +86,6 @@ export class ItemDetail {
           this.itemLocationName = this.item.location.name;
         }
         this.subtitle = `${this.itemType.name} - ${this.item.name}`;
-
       } catch (error) {
 
         console.log(error);

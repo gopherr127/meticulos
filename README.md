@@ -1,6 +1,10 @@
 # Meticulos
 
-Soon-to-be replacement of Meticulos, built as a responsive web app for desktop and mobile.
+Meticulos is a prototype application that is intended to display the value of the following concepts:
+- Generic items configured as more specific entities using user-provided metadata
+- Highly configurable workflows to manage entity state as well as business logic in state transitions
+- Responsive web app design for desktop and mobile 
+- Ionic's StencilJS compiler for web component design
 
 ## Getting Started
 

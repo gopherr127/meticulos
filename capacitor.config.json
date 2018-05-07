@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.conferenceapp",
-  "appName": "ConferenceApp",
+  "appId": "com.meticulos.web",
+  "appName": "Meticulos",
   "bundledWebRuntime": false,
   "webDir": "www"
 }

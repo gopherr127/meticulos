@@ -201,7 +201,7 @@ export class AppRoot {
                 </ion-list-header>
                 { this.itemTypes.map((itemType) =>
                   <ion-menu-toggle autoHide={false}>
-                    <ion-item onClick={ () => this.pushComponent('items-list', { itemTypeId: itemType.id })}>
+                    <ion-item button onClick={ () => this.pushComponent('items-list', { itemTypeId: itemType.id })}>
                       <ion-avatar slot="start">
                         <img src={itemType.iconUrl}/>
                       </ion-avatar>
