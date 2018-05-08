@@ -1,4 +1,7 @@
 exports.config = {
+  copy: [
+    { src: 'web.config' }
+  ],
   outputTargets: [
     {
       type: 'www',
