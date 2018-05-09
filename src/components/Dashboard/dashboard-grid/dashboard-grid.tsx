@@ -1,9 +1,78 @@
-import { Component } from '@stencil/core';
+import { Component, Element, Listen, Prop, State } from '@stencil/core';
+import { ENV } from '../../../environments/environment';
+import { DashboardPanel } from '../../../interfaces/interfaces';
 
 @Component({
   tag: 'dashboard-grid'
 })
 export class DashboardGrid {
+  
+  public apiBaseUrl: string = new ENV().apiBaseUrl();
+  @Element() el: any;
+  @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: HTMLIonPopoverControllerElement;
+  private dashboardPanels: Array<DashboardPanel> = [];
+  @State() leftColumnPanels: Array<DashboardPanel> = [];
+  @State() rightColumnPanels: Array<DashboardPanel> = [];
+
+  async componentWillLoad() {
+
+    await this.loadDashboardPanels();
+  }
+
+  @Listen('panelDeleted')
+  async loadDashboardPanels() {
+    
+    let response = await fetch(
+      this.apiBaseUrl + "/dashboardpanels", { 
+        method: "GET"
+    });
+    
+    if (response.ok) {
+
+      this.dashboardPanels = await response.json();
+      
+      this.leftColumnPanels = this.dashboardPanels.splice(0, 
+        Math.ceil(this.dashboardPanels.length / 2));
+      this.rightColumnPanels = this.dashboardPanels;
+    }
+  }
+
+  async presentOptionsMenu(event?: any) {
+
+    const popover = await this.popoverCtrl.create({
+      component: 'dashboard-grid-options-menu',
+      ev: event,
+      translucent: false
+    });
+
+    await popover.present();
+  }
+
+  @Listen('ionFocus')
+  async handleElementFocused(event: any) {
+
+    if (event.target.id === "optionsMenu") {
+
+      await this.presentOptionsMenu(event);
+    }
+  }
+
+  
+  @Listen('body:ionPopoverDidDismiss')
+  async popoverDidDismiss(event: any) {
+    
+    if (event && event.detail && event.detail.data) {
+
+      let newPanel: DashboardPanel = {
+        id: "000000000000000000000000",
+        typeId: 'bar',
+        title: 'New Panel',
+        jsonQueryDocument: ''
+      };
+      
+      this.leftColumnPanels = [...this.leftColumnPanels, newPanel];
+    }
+  }
 
   render() {
     return [
@@ -31,7 +100,20 @@ export class DashboardGrid {
 
       <ion-content class="outer-content">
 
-        <dashboard-report-panel></dashboard-report-panel>
+        <ion-grid>
+          <ion-row align-items-stretch>
+            <ion-col col-lg-6 col-md-12 col-sm-12 col-12 align-self-stretch>
+              { this.leftColumnPanels.map(panel => 
+                <dashboard-pane panel-id={panel.id}></dashboard-pane>
+              )}
+            </ion-col>
+            <ion-col col-lg-6 col-md-12 col-sm-12 col-12 align-self-stretch>
+              { this.rightColumnPanels.map(panel => 
+                <dashboard-pane panel-id={panel.id}></dashboard-pane>
+              )}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       
       </ion-content>
     ];

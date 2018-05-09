@@ -114,7 +114,7 @@ export class AppRoot {
         <ion-route-redirect from="/" to={this.hasSeenTutorial ? '/items-search' : '/tutorial'} />
 
         <ion-route url="/dashboard" component="dashboard-grid"></ion-route>
-        <ion-route url="/dashboard/:panelId" component="dashboard-report-panel"></ion-route>
+        <ion-route url="/dashboard/:panelId" component="dashboard-panel"></ion-route>
 
         <ion-route url="/items/type/:itemTypeId" component="items-list"></ion-route>
         <ion-route url="/items/create/:itemTypeId" component="item-create"></ion-route>

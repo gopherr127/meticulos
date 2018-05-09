@@ -34,6 +34,39 @@ import {
 declare global {
 
   namespace StencilComponents {
+    interface DashboardGridOptionsMenu {
+
+    }
+  }
+
+  interface HTMLDashboardGridOptionsMenuElement extends StencilComponents.DashboardGridOptionsMenu, HTMLStencilElement {}
+
+  var HTMLDashboardGridOptionsMenuElement: {
+    prototype: HTMLDashboardGridOptionsMenuElement;
+    new (): HTMLDashboardGridOptionsMenuElement;
+  };
+  interface HTMLElementTagNameMap {
+    'dashboard-grid-options-menu': HTMLDashboardGridOptionsMenuElement;
+  }
+  interface ElementTagNameMap {
+    'dashboard-grid-options-menu': HTMLDashboardGridOptionsMenuElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'dashboard-grid-options-menu': JSXElements.DashboardGridOptionsMenuAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface DashboardGridOptionsMenuAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface DashboardGrid {
 
     }
@@ -67,31 +100,32 @@ declare global {
 declare global {
 
   namespace StencilComponents {
-    interface DashboardReportPanel {
-
+    interface DashboardPane {
+      'panelId': string;
     }
   }
 
-  interface HTMLDashboardReportPanelElement extends StencilComponents.DashboardReportPanel, HTMLStencilElement {}
+  interface HTMLDashboardPaneElement extends StencilComponents.DashboardPane, HTMLStencilElement {}
 
-  var HTMLDashboardReportPanelElement: {
-    prototype: HTMLDashboardReportPanelElement;
-    new (): HTMLDashboardReportPanelElement;
+  var HTMLDashboardPaneElement: {
+    prototype: HTMLDashboardPaneElement;
+    new (): HTMLDashboardPaneElement;
   };
   interface HTMLElementTagNameMap {
-    'dashboard-report-panel': HTMLDashboardReportPanelElement;
+    'dashboard-pane': HTMLDashboardPaneElement;
   }
   interface ElementTagNameMap {
-    'dashboard-report-panel': HTMLDashboardReportPanelElement;
+    'dashboard-pane': HTMLDashboardPaneElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      'dashboard-report-panel': JSXElements.DashboardReportPanelAttributes;
+      'dashboard-pane': JSXElements.DashboardPaneAttributes;
     }
   }
   namespace JSXElements {
-    export interface DashboardReportPanelAttributes extends HTMLAttributes {
-
+    export interface DashboardPaneAttributes extends HTMLAttributes {
+      'onPanelDeleted'?: (event: CustomEvent) => void;
+      'panelId'?: string;
     }
   }
 }

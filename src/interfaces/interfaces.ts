@@ -1,3 +1,10 @@
+export interface DashboardPanel {
+  id: string,
+  title: string,
+  typeId: string,
+  jsonQueryDocument: string
+}
+
 export interface Field {
   id: string,
   name: string,
