@@ -34,6 +34,72 @@ import {
 declare global {
 
   namespace StencilComponents {
+    interface DashboardGrid {
+
+    }
+  }
+
+  interface HTMLDashboardGridElement extends StencilComponents.DashboardGrid, HTMLStencilElement {}
+
+  var HTMLDashboardGridElement: {
+    prototype: HTMLDashboardGridElement;
+    new (): HTMLDashboardGridElement;
+  };
+  interface HTMLElementTagNameMap {
+    'dashboard-grid': HTMLDashboardGridElement;
+  }
+  interface ElementTagNameMap {
+    'dashboard-grid': HTMLDashboardGridElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'dashboard-grid': JSXElements.DashboardGridAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface DashboardGridAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface DashboardReportPanel {
+
+    }
+  }
+
+  interface HTMLDashboardReportPanelElement extends StencilComponents.DashboardReportPanel, HTMLStencilElement {}
+
+  var HTMLDashboardReportPanelElement: {
+    prototype: HTMLDashboardReportPanelElement;
+    new (): HTMLDashboardReportPanelElement;
+  };
+  interface HTMLElementTagNameMap {
+    'dashboard-report-panel': HTMLDashboardReportPanelElement;
+  }
+  interface ElementTagNameMap {
+    'dashboard-report-panel': HTMLDashboardReportPanelElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'dashboard-report-panel': JSXElements.DashboardReportPanelAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface DashboardReportPanelAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface FieldCreate {
 
     }

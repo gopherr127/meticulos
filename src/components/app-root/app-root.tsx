@@ -21,6 +21,7 @@ export class AppRoot {
   hasSeenTutorial = false;
 
   appPages = [
+    { title: 'Dashboard',    url: '/dashboard',    icon: 'pulse' },
     { title: 'Items Search', url: '/items-search', icon: 'search' },
     { title: 'Items Map',    url: '/items-map',    icon: 'map' },
     { title: 'Schedule',     url: '/schedule',     icon: 'calendar' }
@@ -111,6 +112,9 @@ export class AppRoot {
       <ion-router useHash={false}>
 
         <ion-route-redirect from="/" to={this.hasSeenTutorial ? '/items-search' : '/tutorial'} />
+
+        <ion-route url="/dashboard" component="dashboard-grid"></ion-route>
+        <ion-route url="/dashboard/:panelId" component="dashboard-report-panel"></ion-route>
 
         <ion-route url="/items/type/:itemTypeId" component="items-list"></ion-route>
         <ion-route url="/items/create/:itemTypeId" component="item-create"></ion-route>
