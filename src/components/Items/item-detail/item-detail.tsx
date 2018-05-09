@@ -1,7 +1,7 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
-import { Item, ItemType, Screen, FieldMetadata, 
+import { Item, ItemType, Screen, FieldChangeGroup, FieldMetadata, 
          FieldTypes, FieldValue, WorkflowTransition } from '../../../interfaces/interfaces';
 
 @Component({
@@ -11,6 +11,7 @@ export class ItemDetail {
 
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
+  linkedItemsList: HTMLIonListElement;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: HTMLIonPopoverControllerElement;
   @Prop() itemId: string;
@@ -23,6 +24,8 @@ export class ItemDetail {
   @State() transitionInProgress: WorkflowTransition;
   @State() editScreen: Screen;
   @State() fieldMetadata: Array<FieldMetadata> = [];
+  @State() fieldChangeGroups: Array<FieldChangeGroup> = [];
+  @State() linkedItems: Array<Item> = [];
   private modalContext: string;
   private popoverContext: string;
   
@@ -36,6 +39,7 @@ export class ItemDetail {
 
     await this.loadEditScreen();
     await this.addFieldsFromMetadata();
+    this.linkedItemsList = this.el.querySelector('#linkedItemsList');
   }
 
   popComponent() {
@@ -82,6 +86,9 @@ export class ItemDetail {
 
         this.item = await response.json();
         this.itemType = this.item.type;
+        if (this.item.linkedItems) {
+          this.linkedItems = this.item.linkedItems;
+        }
         if (this.item.location) {
           this.itemLocationName = this.item.location.name;
         }
@@ -114,6 +121,19 @@ export class ItemDetail {
 
       this.editScreen = await response.json();
       this.fieldMetadata = this.editScreen.fields;
+    }
+  }
+
+  async loadChangeHistory() {
+
+    let response = await fetch(
+      this.apiBaseUrl + "/fieldchangegroups/search?itemId=" + this.item.id, {
+        method: "GET"
+    });
+
+    if (response.ok) {
+
+      this.fieldChangeGroups = await response.json();
     }
   }
 
@@ -331,8 +351,27 @@ export class ItemDetail {
   }
 
   async handleLinkedItemsAddClick() {
-
     
+    this.modalContext = "item-search";
+
+    const modal = await this.modalCtrl.create({
+      component: 'item-search'
+    });
+
+    await modal.present();
+  }
+
+  async handleLinkedItemDelete(linkedItem: Item) {
+
+    this.linkedItems = this.linkedItems.filter((item) => {
+      return item.id != linkedItem.id;
+    })
+
+    this.item.linkedItemIds = this.item.linkedItemIds.filter((id) => {
+      return id != linkedItem.id;
+    })
+
+    this.linkedItemsList.closeSlidingItems();
   }
 
   async presentItemLocationOptions(event?: any) {
@@ -393,6 +432,19 @@ export class ItemDetail {
               await this.loadTransitionOptions();
             }
           }
+          break;
+        }
+        case "item-search": {
+
+          if (event.detail.data) {
+
+            this.linkedItems = [...this.linkedItems, event.detail.data];
+            if (!this.item.linkedItemIds) {
+              this.item.linkedItemIds = [];
+            }
+            this.item.linkedItemIds = [...this.item.linkedItemIds, event.detail.data.id];
+          }
+          break;
         }
       }
       this.modalContext = "";
@@ -634,6 +686,56 @@ export class ItemDetail {
                   </ion-card-header>
                   <ion-card-content>
                     <ion-list id="linkedItemsList">
+                    {this.linkedItems.map(item => 
+                      <ion-item-sliding>
+                        <ion-item >
+                          <ion-avatar slot="start">
+                            <img src={this.itemType.iconUrl}/>
+                          </ion-avatar>
+                          { item.location 
+                          ? <ion-label>
+                              <h2>{item.name}</h2>
+                              <p>{item.workflowNode.name} - {item.location.name}</p>
+                            </ion-label>
+                          : <ion-label>
+                              <h2>{item.name}</h2>
+                              <p>{item.workflowNode.name}</p>
+                            </ion-label>
+                          }
+                        </ion-item>
+                        <ion-item-options>
+                          <ion-item-option color="danger" onClick={ () => this.handleLinkedItemDelete(item) }>
+                            Delete
+                          </ion-item-option>
+                        </ion-item-options>
+                      </ion-item-sliding>
+                    )}
+                    </ion-list>
+                  </ion-card-content>
+                </ion-card>
+                
+                <ion-card>
+                  <ion-card-header no-padding>
+                    <ion-item>
+                      <ion-label>Change History</ion-label>
+                      <ion-button slot="end" onClick={() => this.loadChangeHistory() }>Load</ion-button>
+                    </ion-item>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <ion-list id="changeGroupsList">
+                      { this.fieldChangeGroups.map(fieldChangeGroup => 
+                        <ion-item-group>
+                          <ion-item-divider color="light">{ fieldChangeGroup.changedDateTime }</ion-item-divider>
+                          { fieldChangeGroup.fieldChanges.map(fieldChange => 
+                            <ion-item>
+                              <ion-label>
+                                <h2>{ fieldChange.fieldName }</h2>
+                                <h4>{ fieldChange.oldValue } => { fieldChange.newValue }</h4>
+                              </ion-label>
+                            </ion-item>
+                          )}
+                        </ion-item-group>
+                      )}
                     </ion-list>
                   </ion-card-content>
                 </ion-card>

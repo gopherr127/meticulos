@@ -117,6 +117,7 @@ export class AppRoot {
         <ion-route url="/items/:itemId" component="item-detail"></ion-route>
         
         <ion-route url="/items-search" component="items-search"></ion-route>
+        <ion-route url="/item-qr-search" component="item-qr-search"></ion-route>
         
         <ion-route url="/items-map" component="items-map"></ion-route>
 

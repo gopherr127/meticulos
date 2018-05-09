@@ -77,6 +77,8 @@ export interface Item {
   workflowNodeId: string,
   workflowNode: WorkflowNode,
   fieldValues: Array<FieldValue>,
+  linkedItemIds: Array<string>,
+  linkedItems: Array<Item>,
   locationId: string,
   location: ItemLocation
 }

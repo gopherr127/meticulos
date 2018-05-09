@@ -9,7 +9,7 @@ export class ENV {
         return "http://localhost:10652/api";
       }
       case "prod": {
-        return "https://meticulos-api.azurewebsites.net/api";
+        return "https://meticulos-server.azurewebsites.net/api";
       }
       default: {
         return "";
