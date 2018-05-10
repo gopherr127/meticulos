@@ -34,7 +34,8 @@ export class DashboardPane {
     'rgba(255, 159, 64, 1)'
   ];
   private chartTypes: Array<any> = [
-    { id: 'bar', name: 'Bar'},
+    { id: 'bar', name: 'Vertical Bar'},
+    { id: 'horizontalBar', name: 'Horizontal Bar'},
     { id: 'bubble', name: 'Bubble'},
     { id: 'doughnut', name: 'Doughnut'},
     { id: 'line', name: 'Line'},
@@ -150,7 +151,18 @@ export class DashboardPane {
           display: false
         },
         scales: {
+          xAxes: [{
+            gridLines: {
+              display: false
+            },
+            ticks: {
+              beginAtZero:true
+            }
+          }],
           yAxes: [{
+            gridLines: {
+              display: false
+            },
             ticks: {
               beginAtZero:true
             }
