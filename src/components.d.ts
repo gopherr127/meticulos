@@ -2170,6 +2170,72 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface AuthRedirect {
+
+    }
+  }
+
+  interface HTMLAuthRedirectElement extends StencilComponents.AuthRedirect, HTMLStencilElement {}
+
+  var HTMLAuthRedirectElement: {
+    prototype: HTMLAuthRedirectElement;
+    new (): HTMLAuthRedirectElement;
+  };
+  interface HTMLElementTagNameMap {
+    'auth-redirect': HTMLAuthRedirectElement;
+  }
+  interface ElementTagNameMap {
+    'auth-redirect': HTMLAuthRedirectElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'auth-redirect': JSXElements.AuthRedirectAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface AuthRedirectAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface PublicHome {
+
+    }
+  }
+
+  interface HTMLPublicHomeElement extends StencilComponents.PublicHome, HTMLStencilElement {}
+
+  var HTMLPublicHomeElement: {
+    prototype: HTMLPublicHomeElement;
+    new (): HTMLPublicHomeElement;
+  };
+  interface HTMLElementTagNameMap {
+    'public-home': HTMLPublicHomeElement;
+  }
+  interface ElementTagNameMap {
+    'public-home': HTMLPublicHomeElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'public-home': JSXElements.PublicHomeAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface PublicHomeAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface QrCameraScanner {
       'instructionText': string;
       'resetReader': () => void;

@@ -1,9 +1,10 @@
 import '@ionic/core';
 
-import { Component, Listen, Prop, State } from '@stencil/core';
+import { Component, Prop, State } from '@stencil/core';
 import { UserData } from '../../providers/user-data';
 import { Plugins } from '@capacitor/core';
 import { ENV } from '../../environments/environment';
+import * as AuthService from '../../services/auth-service';
 import { ItemType } from '../../interfaces/interfaces';
 
 const { SplashScreen } = Plugins;
@@ -14,9 +15,11 @@ const { SplashScreen } = Plugins;
 })
 export class AppRoot {
   
+  public serverUrl: string = new ENV().serverUrl();
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Prop({ context: 'isServer' }) isServer: boolean;
-  @State() loggedIn = false;
+  @State() authClient: any;
+  @State() isUserAuthenticated: boolean;
   @State() itemTypes: Array<ItemType> = [];
   hasSeenTutorial = false;
 
@@ -50,16 +53,32 @@ export class AppRoot {
   ]
 
   async componentWillLoad() {
-
-    this.hasSeenTutorial = this.isServer
-      ? true
-      : await UserData.checkHasSeenTutorial();
     
-    this.loadItemTypes();
+    this.isUserAuthenticated = await AuthService.getIsUserAuthenticated();
+
+    if (!this.isUserAuthenticated) {
+
+      try {
+
+        await AuthService.handleAuthentication();
+
+      }
+      catch {
+
+      }
+    }
+    else {
+
+      this.hasSeenTutorial = this.isServer
+        ? true
+        : await UserData.checkHasSeenTutorial();
+      
+      await this.loadItemTypes();
+    }
   }
 
   async componentDidLoad() {
-    this.checkLoginStatus();
+    
     try {
       await SplashScreen.hide();
     } catch {
@@ -75,43 +94,34 @@ export class AppRoot {
   
   async loadItemTypes() {
 
-    let response = await fetch(
-      this.apiBaseUrl + "/itemtypes", { 
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-    });
+    if (this.isUserAuthenticated) {
 
-    this.itemTypes = await response.json();
-    this.itemTypes.sort( (typeA, typeB) => {
-      if (typeA.name < typeB.name) return -1;
-      if (typeA.name > typeB.name) return 1;
-      return 0;
-    });
+      let response = await fetch(
+        this.apiBaseUrl + "/itemtypes", { 
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+      });
+  
+      this.itemTypes = await response.json();
+      this.itemTypes.sort( (typeA, typeB) => {
+        if (typeA.name < typeB.name) return -1;
+        if (typeA.name > typeB.name) return 1;
+        return 0;
+      });
+    }
   } 
-
-  async checkLoginStatus() {
-    const loggedIn = this.loggedIn = await UserData.isLoggedIn();
-    return loggedIn;
-  }
-
-  async logout() {
-    await UserData.logout();
-    this.loggedIn = false;
-  }
-
-  @Listen('userDidLogIn')
-  @Listen('userDidLogOut')
-  updateLoggedInStatus(loggedEvent) {
-    this.loggedIn = loggedEvent.detail.loginStatus;
-  }
 
   renderRouter() {
     return (
       <ion-router useHash={false}>
 
-        <ion-route-redirect from="/" to={this.hasSeenTutorial ? '/items-search' : '/tutorial'} />
+        {/* <ion-route-redirect from="/" to={this.hasSeenTutorial ? '/items-search' : '/tutorial'} /> */}
+        <ion-route-redirect from="/" to="/home"></ion-route-redirect>
+
+        <ion-route url="/home" component="public-home"></ion-route>
+        <ion-route url="/authredirect" component="auth-redirect"></ion-route>
 
         <ion-route url="/dashboard" component="dashboard-grid"></ion-route>
         <ion-route url="/dashboard/:panelId" component="dashboard-panel"></ion-route>

@@ -16,14 +16,28 @@ export class ENV {
       }
     }
   }
-
-  someOtherSetting() {
+  
+  clientUrl() {
     switch (ENV.currentEnvironment) {
       case "dev": {
-        return "yes";
+        return "http://localhost:3333";
       }
       case "prod": {
-        return "no";
+        return "https://meticulos.com";
+      }
+      default: {
+        return "";
+      }
+    }
+  }
+
+  serverUrl() {
+    switch (ENV.currentEnvironment) {
+      case "dev": {
+        return "http://localhost:10652";
+      }
+      case "prod": {
+        return "https://meticulos-server.azurewebsites.net";
       }
       default: {
         return "";
