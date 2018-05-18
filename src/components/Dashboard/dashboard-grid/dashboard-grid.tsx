@@ -1,4 +1,5 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
+import { PopoverController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import { DashboardPanel } from '../../../interfaces/interfaces';
 
@@ -9,7 +10,7 @@ export class DashboardGrid {
   
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
-  @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: HTMLIonPopoverControllerElement;
+  @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: PopoverController;
   private dashboardPanels: Array<DashboardPanel> = [];
   @State() leftColumnPanels: Array<DashboardPanel> = [];
   @State() rightColumnPanels: Array<DashboardPanel> = [];
@@ -41,11 +42,10 @@ export class DashboardGrid {
 
     const popover = await this.popoverCtrl.create({
       component: 'dashboard-grid-options-menu',
-      ev: event,
-      translucent: false
+      ev: event
     });
 
-    await popover.present();
+    popover.present();
   }
 
   @Listen('ionFocus')

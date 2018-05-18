@@ -1,4 +1,5 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
+import { PopoverController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import { Item, ItemType } from '../../../interfaces/interfaces';
 
@@ -11,7 +12,7 @@ export class ItemsList {
   @Element() el: any;
   itemsList: HTMLIonListElement;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
-  @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: HTMLIonPopoverControllerElement;
+  @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: PopoverController;
   @Prop() itemTypeId: string;
   @State() subtitle = 'Items';
   @State() queryText = '';
@@ -116,7 +117,7 @@ export class ItemsList {
       ev: event
     });
 
-    await popover.present();
+    popover.present();
   }
 
   @Listen('ionFocus')

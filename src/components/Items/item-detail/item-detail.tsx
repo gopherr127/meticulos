@@ -1,4 +1,5 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
+import { PopoverController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
 import { Item, ItemType, Screen, FieldChangeGroup, FieldMetadata, 
@@ -13,7 +14,7 @@ export class ItemDetail {
   @Element() el: any;
   linkedItemsList: HTMLIonListElement;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
-  @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: HTMLIonPopoverControllerElement;
+  @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: PopoverController;
   @Prop() itemId: string;
   @Prop() returnUrl = '/';
   @State() subtitle: string = 'Item Detail';
@@ -253,11 +254,10 @@ export class ItemDetail {
         item : this.item,
         returnUrl: this.returnUrl
       },
-      ev: event,
-      translucent: false
+      ev: event
     });
 
-    await popover.present();
+    popover.present();
   }
 
   async presentScreensDisplay(transition: WorkflowTransition) {
@@ -387,7 +387,7 @@ export class ItemDetail {
       ev: event
     });
 
-    await popover.present();
+    popover.present();
   }
   
   @Listen('body:ionModalDidDismiss')

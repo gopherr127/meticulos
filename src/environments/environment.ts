@@ -4,17 +4,7 @@ export class ENV {
   //public static currentEnvironment: string = "prod";
 
   apiBaseUrl() {
-    switch (ENV.currentEnvironment) {
-      case "dev": {
-        return "http://localhost:10652/api";
-      }
-      case "prod": {
-        return "https://meticulos-server.azurewebsites.net/api";
-      }
-      default: {
-        return "";
-      }
-    }
+    return `${this.serverUrl()}/api`;
   }
   
   clientUrl() {
