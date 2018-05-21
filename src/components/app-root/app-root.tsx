@@ -63,14 +63,14 @@ export class AppRoot {
       
       this.tryUpdateIsUserAuthenticated();
     }
-    else {
+    // else {
 
       this.hasSeenTutorial = this.isServer
         ? true
         : await UserData.checkHasSeenTutorial();
       
       await this.loadItemTypes();
-    }
+    // }
   }
 
   async componentDidLoad() {
@@ -202,11 +202,13 @@ export class AppRoot {
       <p></p>,
       <ion-list>
         <ion-list-header>
-          Item Types
+          Item Lists
         </ion-list-header>
         { this.itemTypes.map((itemType) =>
           <ion-menu-toggle autoHide={false}>
-            <ion-item button onClick={ () => this.pushComponent('items-list', { itemTypeId: itemType.id })}>
+            <ion-item button onClick={ () => this.pushComponent(
+                'items-list', 
+                { itemTypeId: itemType.id })}>
               <ion-avatar slot="start">
                 <img src={itemType.iconUrl}/>
               </ion-avatar>

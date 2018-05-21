@@ -1,0 +1,13 @@
+#createButton {
+  margin-left: 15px;
+}
+
+#viewAsListButton .bar-button-md {
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+#viewAsNavButton .bar-button-md {
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+}

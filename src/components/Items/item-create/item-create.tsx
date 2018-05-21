@@ -1,4 +1,4 @@
-import { Component, Element, Listen, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Listen, Prop, State } from '@stencil/core';
 //import { ToastController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
@@ -11,9 +11,12 @@ export class ItemCreate {
 
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
+  @Event() itemCreated: EventEmitter;
   @Prop({ connect: 'ion-router' }) nav;
   //@Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
   @Prop() itemTypeId: string;
+  @Prop() parentId: string;
+  @State() selectedParentId: string;
   @State() subtitle: string = 'Create Item';
   @State() item: Item;
   @State() itemType: ItemType;
@@ -25,12 +28,15 @@ export class ItemCreate {
   async componentWillLoad() {
 
     await this.loadItemType();
+
+    if (this.itemType.allowNestedItems) {
+
+      this.selectedParentId = this.parentId ? this.parentId : '000000000000000000000000';
+    }
   }
 
   async componentDidLoad() {
 
-    // Possible race condition in trying to load fields
-    // when the screen and metadata has not yet completed.
     await this.loadCreateScreen();
     await this.addFieldsFromMetadata();
   }
@@ -65,7 +71,7 @@ export class ItemCreate {
 
   async addFieldsFromMetadata() {
 
-    let fieldsListEl = document.getElementById("fieldsList");
+    let fieldsListEl = this.el.querySelector("#itemCreateFieldsList");
     fieldsListEl.innerHTML = "";
     
     for (let fieldMeta of this.fieldMetadata) {
@@ -192,21 +198,29 @@ export class ItemCreate {
     
     if (validationResult.result) {
 
+      let bodyString = this.itemType.allowNestedItems
+        ? JSON.stringify({
+          name: this.name,
+          typeId: this.itemTypeId,
+          parentId: this.selectedParentId,
+          fieldValues: this.fieldValues})
+        : JSON.stringify({
+          name: this.name,
+          typeId: this.itemTypeId,
+          fieldValues: this.fieldValues});
+
       let response = await fetch(
         this.apiBaseUrl + "/items", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({
-            name: this.name,
-            typeId: this.itemTypeId,
-            fieldValues: this.fieldValues
-          })
+          body: bodyString
       });
   
       if (response.ok) {
   
+        this.itemCreated.emit(bodyString);
         this.dismiss();
       }
       else
@@ -343,7 +357,7 @@ export class ItemCreate {
             Fields
           </ion-card-header>
           <ion-card-content>
-            <ion-list id="fieldsList"></ion-list>
+            <ion-list id="itemCreateFieldsList"></ion-list>
           </ion-card-content>
         </ion-card>
         

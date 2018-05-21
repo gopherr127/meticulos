@@ -496,6 +496,7 @@ declare global {
   namespace StencilComponents {
     interface ItemCreate {
       'itemTypeId': string;
+      'parentId': string;
     }
   }
 
@@ -519,6 +520,8 @@ declare global {
   namespace JSXElements {
     export interface ItemCreateAttributes extends HTMLAttributes {
       'itemTypeId'?: string;
+      'onItemCreated'?: (event: CustomEvent) => void;
+      'parentId'?: string;
     }
   }
 }
@@ -765,7 +768,9 @@ declare global {
 
   namespace StencilComponents {
     interface ItemsList {
+      'displayNavMode': boolean;
       'itemTypeId': string;
+      'parentId': string;
     }
   }
 
@@ -788,7 +793,9 @@ declare global {
   }
   namespace JSXElements {
     export interface ItemsListAttributes extends HTMLAttributes {
+      'displayNavMode'?: boolean;
       'itemTypeId'?: string;
+      'parentId'?: string;
     }
   }
 }

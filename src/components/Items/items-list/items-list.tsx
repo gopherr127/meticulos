@@ -4,7 +4,8 @@ import { ENV } from '../../../environments/environment';
 import { Item, ItemType } from '../../../interfaces/interfaces';
 
 @Component({
-  tag: 'items-list'
+  tag: 'items-list',
+  styleUrl: 'items-list.css'
 })
 export class ItemsList {
 
@@ -14,6 +15,11 @@ export class ItemsList {
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: PopoverController;
   @Prop() itemTypeId: string;
+  @Prop() parentId: string;
+  @Prop() displayNavMode: boolean;
+  @State() selectedParentId: string;
+  @State() selectedViewMode: string;
+  @State() isInNavViewMode: boolean;
   @State() subtitle = 'Items';
   @State() queryText = '';
   @State() itemType: ItemType;
@@ -21,6 +27,12 @@ export class ItemsList {
 
   async componentWillLoad() {
 
+    if (this.displayNavMode) {
+      this.isInNavViewMode = this.displayNavMode;
+    }
+
+    this.selectedParentId = this.parentId ? this.parentId : '000000000000000000000000';
+    
     await this.loadItemType();
     await this.loadItems();
   }
@@ -57,8 +69,18 @@ export class ItemsList {
   @Listen('body:ionModalDidDismiss')
   async loadItems() {
 
+    let url = `${this.apiBaseUrl}/items/search?typeId=${this.itemTypeId}`;
+
+    if (this.isInNavViewMode) {
+      url += `&parentId=${this.selectedParentId}`;
+    }
+
+    if (this.queryText && this.queryText != '') {
+      url += `&name=${this.queryText}`;
+    }
+
     let response = await fetch(
-      this.apiBaseUrl + `/items/search?typeId=${this.itemTypeId}`, {
+      url, {
         method: "GET"
     });
 
@@ -73,13 +95,20 @@ export class ItemsList {
     this.pushComponent('item-qr-search');
   }
 
-  async handleAddFabClick() {
+  async handleCreateItemClick() {
+
+    let compProps = this.isInNavViewMode
+    ? {
+      itemTypeId: this.itemTypeId,
+      parentId: this.selectedParentId
+    }
+    : {
+      itemTypeId: this.itemTypeId
+    };
 
     const modal = await this.modalCtrl.create({
       component: 'item-create',
-      componentProps: {
-        itemTypeId: this.itemTypeId
-      }
+      componentProps: compProps
     });
     
     await modal.present();
@@ -87,10 +116,21 @@ export class ItemsList {
 
   async handleItemClick(item: Item) {
 
-    this.pushComponent('item-detail', {
-      itemId: item.id,
-      returnUrl: `/items/type/${this.itemTypeId}`
-    })
+    if (this.isInNavViewMode) {
+
+      this.pushComponent('items-list', {
+        itemTypeId: this.itemTypeId,
+        parentId: item.id,
+        displayNavMode: this.isInNavViewMode
+      });
+    }
+    else {
+
+      this.pushComponent('item-detail', {
+        itemId: item.id,
+        returnUrl: `/items/type/${this.itemTypeId}`
+      })
+    }
   }
 
   async handleDeleteClick(item: Item) {
@@ -120,12 +160,33 @@ export class ItemsList {
     popover.present();
   }
 
+  async toggleViewModel(displayNavMode: boolean) {
+
+    this.isInNavViewMode = displayNavMode;
+    await this.loadItems();
+    
+    // When switching to Flat List, going back to Nav
+    // should start back at the top of the nav "tree"
+    if (!this.isInNavViewMode) {
+      this.selectedParentId = '000000000000000000000000';
+    }
+  }
+
   @Listen('ionFocus')
   async handleElementFocused(event: any) {
 
     if (event.target.id === "optionsMenu") {
 
       await this.presentOptionsMenu(event);
+    }
+  }
+
+  @Listen('ionChange')
+  async handleFieldValueChange(event: any) {
+    if (event.detail) {
+      if (event.target.id === "itemsListSearchbar") {
+        await this.loadItems();
+      }
     }
   }
 
@@ -140,21 +201,46 @@ export class ItemsList {
           <ion-title>Meticulos</ion-title>
         </ion-toolbar>
 
-        <ion-toolbar color="secondary">
-          <ion-title>{ this.subtitle }</ion-title>
-          <ion-buttons slot="end">
-            <ion-button id="createButton" fill="solid" color="primary" 
-                        onClick={ () => this.handleAddFabClick() }>
-              Create
-            </ion-button>
-            <ion-button id="optionsMenu">
-              <ion-icon slot="icon-only" name="more"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
+        {this.itemType.allowNestedItems
+        ? <ion-toolbar color="secondary">
+            <ion-title slot="start">{ this.subtitle }</ion-title>
+            <ion-buttons slot="end">
+              <ion-button id="viewAsListButton" 
+                          onClick={ () => this.toggleViewModel(false) }
+                          fill={ !this.isInNavViewMode ? 'solid' : 'outline'} >
+                Flat List
+              </ion-button>
+              <ion-button id="viewAsNavButton" 
+                          onClick={ () => this.toggleViewModel(true) }
+                          fill={ this.isInNavViewMode ? 'solid' : 'outline'}>
+                Navigation
+              </ion-button>
+              <ion-button id="createButton" fill="solid" color="primary" 
+                          onClick={ () => this.handleCreateItemClick() }>
+                Create
+              </ion-button>
+              <ion-button id="optionsMenu">
+                <ion-icon slot="icon-only" name="more"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        : <ion-toolbar color="secondary">
+            <ion-title slot="start">{ this.subtitle }</ion-title>
+            <ion-buttons slot="end">
+              <ion-button id="createButton" fill="solid" color="primary" 
+                          onClick={ () => this.handleCreateItemClick() }>
+                Create
+              </ion-button>
+              <ion-button id="optionsMenu">
+                <ion-icon slot="icon-only" name="more"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>}
+        
 
         <ion-toolbar color="tertiary">
-          <ion-searchbar value={this.queryText} placeholder="Search">
+          <ion-searchbar id="itemsListSearchbar" value={this.queryText} 
+                         placeholder="Search" debounce={500}>
           </ion-searchbar>
           <ion-buttons slot="end">
             <ion-button onClick={ () => this.handleQrSearchClick() }>
@@ -199,7 +285,7 @@ export class ItemsList {
         </ion-list>
 
         <ion-fab id="fabSection" horizontal="end" vertical="bottom" slot="fixed">
-          <ion-fab-button onClick={ () => this.handleAddFabClick() }>Create</ion-fab-button>
+          <ion-fab-button onClick={ () => this.handleCreateItemClick() }>Create</ion-fab-button>
         </ion-fab>
 
       </ion-content>

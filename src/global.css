@@ -52,6 +52,10 @@
   max-width: 300px !important;
 }
 
+.bar-button-md {
+  padding: 0 10px;
+}
+
 ion-label {
   overflow: unset;
 }

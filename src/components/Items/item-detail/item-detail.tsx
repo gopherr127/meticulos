@@ -13,6 +13,7 @@ export class ItemDetail {
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
   linkedItemsList: HTMLIonListElement;
+  childItemsList: HTMLIonListElement;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: PopoverController;
   @Prop() itemId: string;
@@ -27,6 +28,7 @@ export class ItemDetail {
   @State() fieldMetadata: Array<FieldMetadata> = [];
   @State() fieldChangeGroups: Array<FieldChangeGroup> = [];
   @State() linkedItems: Array<Item> = [];
+  @State() childItems: Array<Item> = [];
   private modalContext: string;
   private popoverContext: string;
   
@@ -34,6 +36,7 @@ export class ItemDetail {
 
     await this.loadItem();
     await this.loadTransitionOptions();
+    await this.loadChildItems();
   }
 
   async componentDidLoad() {
@@ -41,6 +44,7 @@ export class ItemDetail {
     await this.loadEditScreen();
     await this.addFieldsFromMetadata();
     this.linkedItemsList = this.el.querySelector('#linkedItemsList');
+    this.childItemsList = this.el.querySelector('#childItemsList');
   }
 
   popComponent() {
@@ -79,7 +83,6 @@ export class ItemDetail {
       this.apiBaseUrl + "/items/" + this.itemId, { 
         method: "GET"
     });
-
     
     if (response.ok) {
       
@@ -97,12 +100,27 @@ export class ItemDetail {
       } catch (error) {
 
         console.log(error);
-        //TODO: Navigate to 404 component
+        //TODO: Navigate to 404 page/component
       }
     }
   }
 
+  @Listen('body:itemCreated')
+  async loadChildItems() {
+
+    let response = await fetch(
+      `${this.apiBaseUrl}/items/search?parentId=${this.itemId}`, {
+        method: 'GET'
+    });
+
+    if (response.ok) {
+
+      this.childItems = await response.json();
+    }
+  }
+
   async loadTransitionOptions() {
+
     let transitionsResponse = await fetch(
       this.apiBaseUrl + "/workflowtransitions/search?fromNodeId=" + this.item.workflowNode.id, {
         method: "GET"
@@ -140,7 +158,7 @@ export class ItemDetail {
 
   async addFieldsFromMetadata() {
 
-    let fieldsListEl = this.el.querySelector("#fieldsList");
+    let fieldsListEl = this.el.querySelector("#itemDetailFieldsList");
     fieldsListEl.innerHTML = "";
     
     for (let fieldMeta of this.fieldMetadata) {
@@ -359,6 +377,30 @@ export class ItemDetail {
     });
 
     await modal.present();
+  }
+
+  async handleChildItemsAddClick() {
+
+    //TODO: Guard against cyclical relationships
+    //TODO: Warn if selected item already has a parent item.
+    //TODO: Update ParentID of selected item to this item.
+  }
+
+  async handleChildItemsCreateClick() {
+
+    //TODO: Consider a configuration where child item types
+    // may be different from the parent item (i.e., pre-
+    // defined hierarchy)
+    const modal = await this.modalCtrl.create({
+      component: 'item-create',
+      componentProps: {
+        itemTypeId: this.itemType.id,
+        parentId: this.item.id
+      }
+    });
+
+    await modal.present();
+
   }
 
   async handleLinkedItemDelete(linkedItem: Item) {
@@ -667,7 +709,7 @@ export class ItemDetail {
                     Fields
                   </ion-card-header>
                   <ion-card-content>
-                    <ion-list id="fieldsList"></ion-list>
+                    <ion-list id="itemDetailFieldsList"></ion-list>
                   </ion-card-content>
                 </ion-card>
 
@@ -678,7 +720,7 @@ export class ItemDetail {
                   <ion-card-header no-padding>
                     <ion-item>
                       <ion-label>Linked Items</ion-label>
-                      <ion-button slot="end" 
+                      <ion-button slot="end"  color="secondary"
                                   onClick={ () => this.handleLinkedItemsAddClick() }>
                         Add
                       </ion-button>
@@ -686,25 +728,25 @@ export class ItemDetail {
                   </ion-card-header>
                   <ion-card-content>
                     <ion-list id="linkedItemsList">
-                    {this.linkedItems.map(item => 
+                    {this.linkedItems.map(linkedItem => 
                       <ion-item-sliding>
                         <ion-item >
                           <ion-avatar slot="start">
-                            <img src={this.itemType.iconUrl}/>
+                            <img src={linkedItem.type.iconUrl}/>
                           </ion-avatar>
-                          { item.location 
+                          { linkedItem.location 
                           ? <ion-label>
-                              <h2>{item.name}</h2>
-                              <p>{item.workflowNode.name} - {item.location.name}</p>
+                              <h2>{linkedItem.name}</h2>
+                              <p>{linkedItem.workflowNode.name} - {linkedItem.location.name}</p>
                             </ion-label>
                           : <ion-label>
-                              <h2>{item.name}</h2>
-                              <p>{item.workflowNode.name}</p>
+                              <h2>{linkedItem.name}</h2>
+                              <p>{linkedItem.workflowNode.name}</p>
                             </ion-label>
                           }
                         </ion-item>
                         <ion-item-options>
-                          <ion-item-option color="danger" onClick={ () => this.handleLinkedItemDelete(item) }>
+                          <ion-item-option color="danger" onClick={ () => this.handleLinkedItemDelete(linkedItem) }>
                             Delete
                           </ion-item-option>
                         </ion-item-options>
@@ -714,11 +756,55 @@ export class ItemDetail {
                   </ion-card-content>
                 </ion-card>
                 
+                {this.item.type.allowNestedItems
+                ? <ion-card>
+                    <ion-card-header no-padding>
+                      <ion-item>
+                        <ion-label>Child Items</ion-label>
+                        <ion-button slot="end" color="secondary"
+                                    onClick={ () => this.handleChildItemsAddClick() }>
+                          Add
+                        </ion-button>
+                        <ion-button slot="end" color="secondary"
+                                    onClick={ () => this.handleChildItemsCreateClick() }>
+                          Create
+                        </ion-button>
+                      </ion-item>
+                    </ion-card-header>
+                    <ion-card-content>
+                      <ion-list id="childItemsList">
+                      {this.childItems.map(childItem => 
+                        <ion-item-sliding>
+                          <ion-item >
+                            <ion-avatar slot="start">
+                              <img src={childItem.type.iconUrl}/>
+                            </ion-avatar>
+                            { childItem.location 
+                            ? <ion-label>
+                                <h2>{childItem.name}</h2>
+                                <p>{childItem.workflowNode.name} - {childItem.location.name}</p>
+                              </ion-label>
+                            : <ion-label>
+                                <h2>{childItem.name}</h2>
+                                <p>{childItem.workflowNode.name}</p>
+                              </ion-label>
+                            }
+                          </ion-item>
+                        </ion-item-sliding>
+                      )}
+                      </ion-list>
+                    </ion-card-content>
+                  </ion-card>
+                : <span></span>}
+
                 <ion-card>
                   <ion-card-header no-padding>
                     <ion-item>
                       <ion-label>Change History</ion-label>
-                      <ion-button slot="end" onClick={() => this.loadChangeHistory() }>Load</ion-button>
+                      <ion-button slot="end" color="secondary"
+                                  onClick={() => this.loadChangeHistory() }>
+                        Load
+                      </ion-button>
                     </ion-item>
                   </ion-card-header>
                   <ion-card-content>
