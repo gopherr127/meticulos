@@ -183,8 +183,10 @@ export class ItemsList {
 
   @Listen('ionChange')
   async handleFieldValueChange(event: any) {
+    
     if (event.detail) {
       if (event.target.id === "itemsListSearchbar") {
+        this.queryText = event.detail.value;
         await this.loadItems();
       }
     }
