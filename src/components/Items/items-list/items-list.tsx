@@ -127,8 +127,7 @@ export class ItemsList {
     else {
 
       this.pushComponent('item-detail', {
-        itemId: item.id,
-        returnUrl: `/items/type/${this.itemTypeId}`
+        itemId: item.id
       })
     }
   }

@@ -8,7 +8,6 @@ export class ItemDetailOptionsMenu {
 
   @Element() el: any;
   @Prop() item: Item;
-  @Prop() returnUrl = '/';
   
   dismiss(data?: any) {
     
@@ -27,8 +26,7 @@ export class ItemDetailOptionsMenu {
 
     this.setRootComponent('item-detail',
     {
-      itemId: this.item.id,
-      returnUrl: this.returnUrl
+      itemId: this.item.id
     });
   }
 

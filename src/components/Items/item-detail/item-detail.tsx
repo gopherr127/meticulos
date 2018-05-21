@@ -17,7 +17,6 @@ export class ItemDetail {
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: PopoverController;
   @Prop() itemId: string;
-  @Prop() returnUrl = '/';
   @State() subtitle: string = 'Item Detail';
   @State() item: Item;
   @State() itemType: ItemType;
@@ -45,6 +44,12 @@ export class ItemDetail {
     await this.addFieldsFromMetadata();
     this.linkedItemsList = this.el.querySelector('#linkedItemsList');
     this.childItemsList = this.el.querySelector('#childItemsList');
+  }
+
+  pushComponent(component, componentProps?) {
+
+    const navCtrl = document.querySelector('ion-nav');
+    navCtrl.push(component, componentProps);
   }
 
   popComponent() {
@@ -269,8 +274,7 @@ export class ItemDetail {
     const popover = await this.popoverCtrl.create({
       component: 'item-detail-options-menu', 
       componentProps : {
-        item : this.item,
-        returnUrl: this.returnUrl
+        item : this.item
       },
       ev: event
     });
@@ -368,6 +372,13 @@ export class ItemDetail {
     }
   }
 
+  async handleLinkedItemClick(linkedItem: Item) {
+
+    this.pushComponent('item-detail', {
+      itemId: linkedItem.id
+    });
+  }
+
   async handleLinkedItemsAddClick() {
     
     this.modalContext = "item-search";
@@ -377,6 +388,26 @@ export class ItemDetail {
     });
 
     await modal.present();
+  }
+
+  async handleLinkedItemDelete(linkedItem: Item) {
+
+    this.linkedItems = this.linkedItems.filter((item) => {
+      return item.id != linkedItem.id;
+    })
+
+    this.item.linkedItemIds = this.item.linkedItemIds.filter((id) => {
+      return id != linkedItem.id;
+    })
+
+    this.linkedItemsList.closeSlidingItems();
+  }
+
+  async handleChildItemClick(childItem: Item) {
+
+    this.pushComponent('item-detail', {
+      itemId: childItem.id
+    });
   }
 
   async handleChildItemsAddClick() {
@@ -403,17 +434,8 @@ export class ItemDetail {
 
   }
 
-  async handleLinkedItemDelete(linkedItem: Item) {
+  async handleChildItemsClick() {
 
-    this.linkedItems = this.linkedItems.filter((item) => {
-      return item.id != linkedItem.id;
-    })
-
-    this.item.linkedItemIds = this.item.linkedItemIds.filter((id) => {
-      return id != linkedItem.id;
-    })
-
-    this.linkedItemsList.closeSlidingItems();
   }
 
   async presentItemLocationOptions(event?: any) {
@@ -730,7 +752,7 @@ export class ItemDetail {
                     <ion-list id="linkedItemsList">
                     {this.linkedItems.map(linkedItem => 
                       <ion-item-sliding>
-                        <ion-item >
+                        <ion-item onClick={ () => this.handleLinkedItemClick(linkedItem) }>
                           <ion-avatar slot="start">
                             <img src={linkedItem.type.iconUrl}/>
                           </ion-avatar>
@@ -775,7 +797,7 @@ export class ItemDetail {
                       <ion-list id="childItemsList">
                       {this.childItems.map(childItem => 
                         <ion-item-sliding>
-                          <ion-item >
+                          <ion-item onClick={ () => this.handleChildItemClick(childItem) }>
                             <ion-avatar slot="start">
                               <img src={childItem.type.iconUrl}/>
                             </ion-avatar>
