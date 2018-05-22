@@ -1,9 +1,9 @@
 import { Component, Prop, Listen, Method } from '@stencil/core';
 
 @Component({
-  tag: 'function-user-in-group'
+  tag: 'condition-user-in-group'
 })
-export class FunctionUserInGroup {
+export class ConditionUserInGroup {
 
   @Prop() functionArgs: any;
   public selectedGroupIds: Array<any> = [];

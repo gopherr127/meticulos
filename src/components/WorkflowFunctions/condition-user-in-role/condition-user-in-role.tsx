@@ -1,9 +1,9 @@
 import { Component, Prop, Listen, Method } from '@stencil/core';
 
 @Component({
-  tag: 'function-user-in-role'
+  tag: 'condition-user-in-role'
 })
-export class FunctionUserInRole {
+export class ConditionUserInRole {
 
   @Prop() functionArgs: any;
   public selectedRoleIds: Array<any> = [];

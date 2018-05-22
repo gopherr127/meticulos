@@ -102,6 +102,7 @@ export class ItemDetail {
           this.itemLocationName = this.item.location.name;
         }
         this.subtitle = `${this.itemType.name} - ${this.item.name}`;
+
       } catch (error) {
 
         console.log(error);
@@ -171,7 +172,6 @@ export class ItemDetail {
       var fieldValue = this.item.fieldValues.find((item) => {
         return item.fieldId === fieldMeta.id;
       });
-      
       
       switch (fieldMeta.type) {
         case FieldTypes.Textbox:
@@ -255,6 +255,32 @@ export class ItemDetail {
     }
   }
 
+  async updateItemFieldValues() {
+
+    for (let fieldMeta of this.fieldMetadata) {
+
+      var fieldValue = this.item.fieldValues.find((item) => {
+        return item.fieldId === fieldMeta.id;
+      });
+
+      if (fieldValue) {
+        try {
+
+          switch (fieldMeta.type) {
+            case FieldTypes.Textbox:
+            case FieldTypes.TextArea:
+            case FieldTypes.Number:
+              (document.getElementById(fieldMeta.id) as any).value = fieldValue.value;
+              break;
+            default:
+              break;
+          }
+        }
+        catch {}
+      }
+    }
+  }
+
   async handleTransitionClick(transition: WorkflowTransition) {
 
     if (transition.screenIds && transition.screenIds.length > 0) {
@@ -265,6 +291,7 @@ export class ItemDetail {
 
       await this.completeTransition(transition);
       await this.loadItem();
+      await this.updateItemFieldValues();
       await this.loadTransitionOptions();
     }
   }
@@ -313,11 +340,17 @@ export class ItemDetail {
       })
     });
 
-    let transitionResult = await execResponse.json();
-    
-    if (transitionResult.errorMessages && transitionResult.errorMessages.length > 0) {
+    if (execResponse.ok) {
 
-      await this.showErrorToast(transitionResult.errorMessages.join('\n'));
+      let transitionResult = await execResponse.json();
+      
+      if (transitionResult.errorMessages && transitionResult.errorMessages.length > 0) {
+  
+        await this.showErrorToast(transitionResult.errorMessages.join('\n'));
+      }
+    }
+    else {
+      this.showErrorToast(await execResponse.text());
     }
   }
 

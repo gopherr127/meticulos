@@ -48,23 +48,28 @@ export class WorkflowTransitionFunctionDetail {
 
       switch (this.transitionFunction.function.id) {
         case "5aa805dd0af6814a103b25ad": { 
-          functionArgsElement.innerHTML = `<function-user-in-role 
-            function-args=${this.transitionFunction.functionArgs}></function-user-in-role>`; 
+          functionArgsElement.innerHTML = `<condition-user-in-role 
+            function-args=${this.transitionFunction.functionArgs}></condition-user-in-role>`; 
           break; 
         }
         case "5aa805dd0af6814a103b25ae": { 
-          functionArgsElement.innerHTML = `<function-user-in-group
-            function-args=${this.transitionFunction.functionArgs}></function-user-in-group>`;
+          functionArgsElement.innerHTML = `<condition-user-in-group
+            function-args=${this.transitionFunction.functionArgs}></condition-user-in-group>`;
           break; 
         }
         case "5aa805de0af6814a103b25b0": {
-          functionArgsElement.innerHTML = `<function-field-required
-            function-args=${this.transitionFunction.functionArgs}></function-field-required>`;
+          functionArgsElement.innerHTML = `<validation-field-required
+            function-args=${this.transitionFunction.functionArgs}></validation-field-required>`;
           break;
         }
         case "5aa805e00af6814a103b25b5": {
           functionArgsElement.innerHTML = `<function-make-api-call
           function-args=${this.transitionFunction.functionArgs}></function-make-api-call>`;
+          break;
+        }
+        case "5aa805df0af6814a103b25b2": {
+          functionArgsElement.innerHTML = `<function-set-field-value
+          function-args=${this.transitionFunction.functionArgs}></function-set-field-value>`;
           break;
         }
         default: {

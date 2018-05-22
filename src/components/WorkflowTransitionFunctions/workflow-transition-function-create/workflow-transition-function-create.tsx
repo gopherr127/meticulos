@@ -73,19 +73,23 @@ export class WorkflowTransitionFunctionCreate {
 
       switch (this.selectedFunctionId) {
         case "5aa805dd0af6814a103b25ad": { 
-          functionArgsElement.innerHTML = `<function-user-in-role/>`; 
+          functionArgsElement.innerHTML = `<condition-user-in-role/>`; 
           break; 
         }
         case "5aa805dd0af6814a103b25ae": { 
-          functionArgsElement.innerHTML = `<function-user-in-group/>`; 
+          functionArgsElement.innerHTML = `<condition-user-in-group/>`; 
           break; 
         }
         case "5aa805de0af6814a103b25b0": {
-          functionArgsElement.innerHTML = `<function-field-required/>`;
+          functionArgsElement.innerHTML = `<validation-field-required/>`;
           break;
         }
         case "5aa805e00af6814a103b25b5": {
           functionArgsElement.innerHTML = `<function-make-api-call/>`;
+          break;
+        }
+        case "5aa805df0af6814a103b25b2": {
+          functionArgsElement.innerHTML = `<function-set-field-value/>`;
           break;
         }
         default: {

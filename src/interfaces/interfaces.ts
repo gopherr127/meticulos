@@ -44,6 +44,7 @@ export interface FieldTypeMetadata {
   supportsValueOptions: boolean
 }
 
+//TODO: export const enum FieldTypes
 export enum FieldTypes {
   Default,
   Textbox,

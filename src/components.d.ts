@@ -1167,31 +1167,65 @@ declare global {
 declare global {
 
   namespace StencilComponents {
-    interface FunctionFieldRequired {
+    interface ConditionUserInGroup {
       'functionArgs': any;
       'getFunctionArgs': () => string;
     }
   }
 
-  interface HTMLFunctionFieldRequiredElement extends StencilComponents.FunctionFieldRequired, HTMLStencilElement {}
+  interface HTMLConditionUserInGroupElement extends StencilComponents.ConditionUserInGroup, HTMLStencilElement {}
 
-  var HTMLFunctionFieldRequiredElement: {
-    prototype: HTMLFunctionFieldRequiredElement;
-    new (): HTMLFunctionFieldRequiredElement;
+  var HTMLConditionUserInGroupElement: {
+    prototype: HTMLConditionUserInGroupElement;
+    new (): HTMLConditionUserInGroupElement;
   };
   interface HTMLElementTagNameMap {
-    'function-field-required': HTMLFunctionFieldRequiredElement;
+    'condition-user-in-group': HTMLConditionUserInGroupElement;
   }
   interface ElementTagNameMap {
-    'function-field-required': HTMLFunctionFieldRequiredElement;
+    'condition-user-in-group': HTMLConditionUserInGroupElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      'function-field-required': JSXElements.FunctionFieldRequiredAttributes;
+      'condition-user-in-group': JSXElements.ConditionUserInGroupAttributes;
     }
   }
   namespace JSXElements {
-    export interface FunctionFieldRequiredAttributes extends HTMLAttributes {
+    export interface ConditionUserInGroupAttributes extends HTMLAttributes {
+      'functionArgs'?: any;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface ConditionUserInRole {
+      'functionArgs': any;
+      'getFunctionArgs': () => string;
+    }
+  }
+
+  interface HTMLConditionUserInRoleElement extends StencilComponents.ConditionUserInRole, HTMLStencilElement {}
+
+  var HTMLConditionUserInRoleElement: {
+    prototype: HTMLConditionUserInRoleElement;
+    new (): HTMLConditionUserInRoleElement;
+  };
+  interface HTMLElementTagNameMap {
+    'condition-user-in-role': HTMLConditionUserInRoleElement;
+  }
+  interface ElementTagNameMap {
+    'condition-user-in-role': HTMLConditionUserInRoleElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'condition-user-in-role': JSXElements.ConditionUserInRoleAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ConditionUserInRoleAttributes extends HTMLAttributes {
       'functionArgs'?: any;
     }
   }
@@ -1235,31 +1269,31 @@ declare global {
 declare global {
 
   namespace StencilComponents {
-    interface FunctionUserInGroup {
+    interface FunctionSetFieldValue {
       'functionArgs': any;
       'getFunctionArgs': () => string;
     }
   }
 
-  interface HTMLFunctionUserInGroupElement extends StencilComponents.FunctionUserInGroup, HTMLStencilElement {}
+  interface HTMLFunctionSetFieldValueElement extends StencilComponents.FunctionSetFieldValue, HTMLStencilElement {}
 
-  var HTMLFunctionUserInGroupElement: {
-    prototype: HTMLFunctionUserInGroupElement;
-    new (): HTMLFunctionUserInGroupElement;
+  var HTMLFunctionSetFieldValueElement: {
+    prototype: HTMLFunctionSetFieldValueElement;
+    new (): HTMLFunctionSetFieldValueElement;
   };
   interface HTMLElementTagNameMap {
-    'function-user-in-group': HTMLFunctionUserInGroupElement;
+    'function-set-field-value': HTMLFunctionSetFieldValueElement;
   }
   interface ElementTagNameMap {
-    'function-user-in-group': HTMLFunctionUserInGroupElement;
+    'function-set-field-value': HTMLFunctionSetFieldValueElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      'function-user-in-group': JSXElements.FunctionUserInGroupAttributes;
+      'function-set-field-value': JSXElements.FunctionSetFieldValueAttributes;
     }
   }
   namespace JSXElements {
-    export interface FunctionUserInGroupAttributes extends HTMLAttributes {
+    export interface FunctionSetFieldValueAttributes extends HTMLAttributes {
       'functionArgs'?: any;
     }
   }
@@ -1269,31 +1303,31 @@ declare global {
 declare global {
 
   namespace StencilComponents {
-    interface FunctionUserInRole {
+    interface ValidationFieldRequired {
       'functionArgs': any;
       'getFunctionArgs': () => string;
     }
   }
 
-  interface HTMLFunctionUserInRoleElement extends StencilComponents.FunctionUserInRole, HTMLStencilElement {}
+  interface HTMLValidationFieldRequiredElement extends StencilComponents.ValidationFieldRequired, HTMLStencilElement {}
 
-  var HTMLFunctionUserInRoleElement: {
-    prototype: HTMLFunctionUserInRoleElement;
-    new (): HTMLFunctionUserInRoleElement;
+  var HTMLValidationFieldRequiredElement: {
+    prototype: HTMLValidationFieldRequiredElement;
+    new (): HTMLValidationFieldRequiredElement;
   };
   interface HTMLElementTagNameMap {
-    'function-user-in-role': HTMLFunctionUserInRoleElement;
+    'validation-field-required': HTMLValidationFieldRequiredElement;
   }
   interface ElementTagNameMap {
-    'function-user-in-role': HTMLFunctionUserInRoleElement;
+    'validation-field-required': HTMLValidationFieldRequiredElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      'function-user-in-role': JSXElements.FunctionUserInRoleAttributes;
+      'validation-field-required': JSXElements.ValidationFieldRequiredAttributes;
     }
   }
   namespace JSXElements {
-    export interface FunctionUserInRoleAttributes extends HTMLAttributes {
+    export interface ValidationFieldRequiredAttributes extends HTMLAttributes {
       'functionArgs'?: any;
     }
   }

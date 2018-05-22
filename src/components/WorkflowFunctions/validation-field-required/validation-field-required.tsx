@@ -3,14 +3,13 @@ import { ENV } from '../../../environments/environment';
 import { FieldMetadata } from '../../../interfaces/interfaces';
 
 @Component({
-  tag: 'function-field-required'
+  tag: 'validation-field-required'
 })
-export class FunctionFieldRequired {
+export class ValidationFieldRequired {
 
   @Prop() functionArgs: any;
   @State() fields: Array<FieldMetadata> = [];
   public apiBaseUrl: string = new ENV().apiBaseUrl();
-
   public selectedFields: Array<string> = [];
 
   async componentWillLoad() {
