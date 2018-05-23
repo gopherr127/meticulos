@@ -1167,6 +1167,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface UsersList {
+
+    }
+  }
+
+  interface HTMLUsersListElement extends StencilComponents.UsersList, HTMLStencilElement {}
+
+  var HTMLUsersListElement: {
+    prototype: HTMLUsersListElement;
+    new (): HTMLUsersListElement;
+  };
+  interface HTMLElementTagNameMap {
+    'users-list': HTMLUsersListElement;
+  }
+  interface ElementTagNameMap {
+    'users-list': HTMLUsersListElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'users-list': JSXElements.UsersListAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface UsersListAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ConditionUserInGroup {
       'functionArgs': any;
       'getFunctionArgs': () => string;

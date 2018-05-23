@@ -118,6 +118,12 @@ export interface Screen {
   fields: Array<FieldMetadata>
 }
 
+export interface User {
+  id: string,
+  name: string,
+  last_login: string
+}
+
 export interface ValidationResult {
   result: boolean,
   displayMessage: string

@@ -30,10 +30,7 @@ export class ScreensList {
 
     let response = await fetch(
       this.apiBaseUrl + "/screens", { 
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
+        method: "GET"
     });
 
     if (response.ok) {
