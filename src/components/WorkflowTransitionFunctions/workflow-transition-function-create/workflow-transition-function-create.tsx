@@ -92,6 +92,10 @@ export class WorkflowTransitionFunctionCreate {
           functionArgsElement.innerHTML = `<function-set-field-value/>`;
           break;
         }
+        case "5aa805e00af6814a103b25b3": {
+          functionArgsElement.innerHTML = `<function-send-email/>`;
+          break;
+        }
         default: {
           functionArgsElement.innerHTML = null;
           break;

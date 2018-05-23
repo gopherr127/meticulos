@@ -75,7 +75,7 @@ export class FunctionSetFieldValue {
           <ion-item>
             <ion-label>Value</ion-label>
             <ion-input id='fieldValue' debounce={300} 
-                      value={this.fieldValue}></ion-input>
+                       value={this.fieldValue}></ion-input>
           </ion-item>
         </ion-card-content>
       </ion-card>

@@ -1269,6 +1269,40 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface FunctionSendEmail {
+      'functionArgs': any;
+      'getFunctionArgs': () => string;
+    }
+  }
+
+  interface HTMLFunctionSendEmailElement extends StencilComponents.FunctionSendEmail, HTMLStencilElement {}
+
+  var HTMLFunctionSendEmailElement: {
+    prototype: HTMLFunctionSendEmailElement;
+    new (): HTMLFunctionSendEmailElement;
+  };
+  interface HTMLElementTagNameMap {
+    'function-send-email': HTMLFunctionSendEmailElement;
+  }
+  interface ElementTagNameMap {
+    'function-send-email': HTMLFunctionSendEmailElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'function-send-email': JSXElements.FunctionSendEmailAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface FunctionSendEmailAttributes extends HTMLAttributes {
+      'functionArgs'?: any;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface FunctionSetFieldValue {
       'functionArgs': any;
       'getFunctionArgs': () => string;

@@ -72,6 +72,11 @@ export class WorkflowTransitionFunctionDetail {
           function-args=${this.transitionFunction.functionArgs}></function-set-field-value>`;
           break;
         }
+        case "5aa805e00af6814a103b25b3": {
+          functionArgsElement.innerHTML = `<function-send-email
+          function-args=${this.transitionFunction.functionArgs}></function-send-email>`;
+          break;
+        }
         default: {
           functionArgsElement.innerHTML = null;
           break;
