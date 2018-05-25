@@ -768,7 +768,9 @@ export class ItemDetail {
                 <ion-card>
                   <ion-card-header no-padding>
                     <ion-item>
-                      <ion-label>Linked Items</ion-label>
+                      <ion-label>
+                        Linked Items
+                      </ion-label>
                       <ion-button slot="end"  color="secondary"
                                   onClick={ () => this.handleLinkedItemsAddClick() }>
                         Add
@@ -810,7 +812,9 @@ export class ItemDetail {
                 ? <ion-card>
                     <ion-card-header no-padding>
                       <ion-item>
-                        <ion-label>Child Items</ion-label>
+                        <ion-label>
+                          Child Items
+                        </ion-label>
                         <ion-button slot="end" color="secondary"
                                     onClick={ () => this.handleChildItemsAddClick() }>
                           Add
@@ -850,10 +854,12 @@ export class ItemDetail {
                 <ion-card>
                   <ion-card-header no-padding>
                     <ion-item>
-                      <ion-label>Change History</ion-label>
-                      <ion-button slot="end" color="secondary"
+                      <ion-label>
+                        Change History
+                      </ion-label>
+                      <ion-button slot="end" fill="clear"
                                   onClick={() => this.loadChangeHistory() }>
-                        Load
+                        <ion-icon slot="icon-only" name="refresh" color="tertiary"></ion-icon>
                       </ion-button>
                     </ion-item>
                   </ion-card-header>
@@ -861,7 +867,9 @@ export class ItemDetail {
                     <ion-list id="changeGroupsList">
                       { this.fieldChangeGroups.map(fieldChangeGroup => 
                         <ion-item-group>
-                          <ion-item-divider color="light">{ fieldChangeGroup.changedDateTime }</ion-item-divider>
+                          <ion-item-divider color="light">
+                            { new Date(fieldChangeGroup.changedDateTime).toLocaleString() }
+                          </ion-item-divider>
                           { fieldChangeGroup.fieldChanges.map(fieldChange => 
                             <ion-item>
                               <ion-label>
