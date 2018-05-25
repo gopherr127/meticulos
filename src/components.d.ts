@@ -1200,6 +1200,40 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ConditionLinkedItemOfTypeInStatus {
+      'functionArgs': any;
+      'getFunctionArgs': () => string;
+    }
+  }
+
+  interface HTMLConditionLinkedItemOfTypeInStatusElement extends StencilComponents.ConditionLinkedItemOfTypeInStatus, HTMLStencilElement {}
+
+  var HTMLConditionLinkedItemOfTypeInStatusElement: {
+    prototype: HTMLConditionLinkedItemOfTypeInStatusElement;
+    new (): HTMLConditionLinkedItemOfTypeInStatusElement;
+  };
+  interface HTMLElementTagNameMap {
+    'condition-linked-item-of-type-in-status': HTMLConditionLinkedItemOfTypeInStatusElement;
+  }
+  interface ElementTagNameMap {
+    'condition-linked-item-of-type-in-status': HTMLConditionLinkedItemOfTypeInStatusElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'condition-linked-item-of-type-in-status': JSXElements.ConditionLinkedItemOfTypeInStatusAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ConditionLinkedItemOfTypeInStatusAttributes extends HTMLAttributes {
+      'functionArgs'?: any;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ConditionUserInGroup {
       'functionArgs': any;
       'getFunctionArgs': () => string;

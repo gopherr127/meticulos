@@ -178,7 +178,7 @@ export class AppRoot {
         <ion-route url="/fields/:fieldId" component="field-detail"></ion-route>
         <ion-route url="/fields/create" component="field-create"></ion-route>
         
-        <ion-route url="/users" component="users-list"></ion-route>
+        {/* <ion-route url="/users" component="users-list"></ion-route> */}
 
       </ion-router>
     );

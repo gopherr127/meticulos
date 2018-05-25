@@ -57,6 +57,11 @@ export class WorkflowTransitionFunctionDetail {
             function-args=${this.transitionFunction.functionArgs}></condition-user-in-group>`;
           break; 
         }
+        case "5b061754fc312607140abb54": {
+          functionArgsElement.innerHTML = `<condition-linked-item-of-type-in-status
+            function-args=${this.transitionFunction.functionArgs}></condition-linked-item-of-type-in-status>`;
+          break;
+        }
         case "5aa805de0af6814a103b25b0": {
           functionArgsElement.innerHTML = `<validation-field-required
             function-args=${this.transitionFunction.functionArgs}></validation-field-required>`;

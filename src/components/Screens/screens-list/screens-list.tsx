@@ -29,7 +29,7 @@ export class ScreensList {
   async loadScreens() {
 
     let response = await fetch(
-      this.apiBaseUrl + "/screens", { 
+      `${this.apiBaseUrl}/screens`, { 
         method: "GET"
     });
 

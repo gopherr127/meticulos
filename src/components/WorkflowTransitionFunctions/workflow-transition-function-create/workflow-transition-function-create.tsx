@@ -80,6 +80,10 @@ export class WorkflowTransitionFunctionCreate {
           functionArgsElement.innerHTML = `<condition-user-in-group/>`; 
           break; 
         }
+        case "5b061754fc312607140abb54": {
+          functionArgsElement.innerHTML = `<condition-linked-item-of-type-in-status/>`;
+          break;
+        }
         case "5aa805de0af6814a103b25b0": {
           functionArgsElement.innerHTML = `<validation-field-required/>`;
           break;

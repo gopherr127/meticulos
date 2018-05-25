@@ -34,7 +34,6 @@ export class ItemDetail {
   async componentWillLoad() {
 
     await this.loadItem();
-    await this.loadTransitionOptions();
     await this.loadChildItems();
   }
 
@@ -85,7 +84,7 @@ export class ItemDetail {
   async loadItem() {
 
     let response = await fetch(
-      this.apiBaseUrl + "/items/" + this.itemId, { 
+      `${this.apiBaseUrl}/items/${this.itemId}?expand=linkeditems,transitions`, { 
         method: "GET"
     });
     
@@ -95,12 +94,19 @@ export class ItemDetail {
 
         this.item = await response.json();
         this.itemType = this.item.type;
-        if (this.item.linkedItems) {
-          this.linkedItems = this.item.linkedItems;
-        }
+
+        this.transitionOptions = (this.item.transitions)
+          ? this.item.transitions
+          : [];
+        
+        this.linkedItems = (this.item.linkedItems)
+          ? this.item.linkedItems
+          : [];
+
         if (this.item.location) {
           this.itemLocationName = this.item.location.name;
         }
+
         this.subtitle = `${this.itemType.name} - ${this.item.name}`;
 
       } catch (error) {
@@ -123,16 +129,6 @@ export class ItemDetail {
 
       this.childItems = await response.json();
     }
-  }
-
-  async loadTransitionOptions() {
-
-    let transitionsResponse = await fetch(
-      this.apiBaseUrl + "/workflowtransitions/search?fromNodeId=" + this.item.workflowNode.id, {
-        method: "GET"
-    });
-
-    this.transitionOptions = await transitionsResponse.json();
   }
 
   async loadEditScreen() {
@@ -292,7 +288,6 @@ export class ItemDetail {
       await this.completeTransition(transition);
       await this.loadItem();
       await this.updateItemFieldValues();
-      await this.loadTransitionOptions();
     }
   }
 
@@ -374,7 +369,6 @@ export class ItemDetail {
     
         if (response.ok) {
     
-          this.loadItem();
           resolve(true);
         }
         else
@@ -395,13 +389,10 @@ export class ItemDetail {
   async handleSaveClick() {
 
     let result = await this.saveItem();
-    
-    if (result) {
 
-      const navCtrl = document.querySelector('ion-nav');
-      navCtrl.setRoot('items-list', {
-        itemTypeId: this.item.typeId
-      });
+    if (result) {
+      
+      await this.loadItem();
     }
   }
 
@@ -434,6 +425,8 @@ export class ItemDetail {
     })
 
     this.linkedItemsList.closeSlidingItems();
+
+    await this.handleSaveClick();
   }
 
   async handleChildItemClick(childItem: Item) {
@@ -526,7 +519,6 @@ export class ItemDetail {
 
               await this.completeTransition(this.transitionInProgress);
               await this.loadItem();
-              await this.loadTransitionOptions();
             }
           }
           break;
@@ -540,6 +532,8 @@ export class ItemDetail {
               this.item.linkedItemIds = [];
             }
             this.item.linkedItemIds = [...this.item.linkedItemIds, event.detail.data.id];
+
+            await this.handleSaveClick();
           }
           break;
         }
@@ -801,7 +795,8 @@ export class ItemDetail {
                           }
                         </ion-item>
                         <ion-item-options>
-                          <ion-item-option color="danger" onClick={ () => this.handleLinkedItemDelete(linkedItem) }>
+                          <ion-item-option color="danger" 
+                                           onClick={ () => this.handleLinkedItemDelete(linkedItem) }>
                             Delete
                           </ion-item-option>
                         </ion-item-options>

@@ -88,7 +88,8 @@ export interface Item {
   linkedItemIds: Array<string>,
   linkedItems: Array<Item>,
   locationId: string,
-  location: ItemLocation
+  location: ItemLocation,
+  transitions: Array<WorkflowTransition>
 }
 
 export interface ItemLocation {
