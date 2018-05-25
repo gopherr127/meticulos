@@ -396,37 +396,37 @@ export class ItemDetail {
     }
   }
 
-  async handleLinkedItemClick(linkedItem: Item) {
+  async handleLinkedItemClicked(event: any) {
 
     this.pushComponent('item-detail', {
-      itemId: linkedItem.id
+      itemId: event.detail.id
     });
   }
 
-  async handleLinkedItemsAddClick() {
-    
-    this.modalContext = "item-search";
+  async handleLinkedItemAdded(event: any) {
 
-    const modal = await this.modalCtrl.create({
-      component: 'item-search'
-    });
+    if (event.detail) {
 
-    await modal.present();
+      if (!this.item.linkedItemIds) {
+        this.item.linkedItemIds = [];
+      }
+
+      this.item.linkedItemIds = [...this.item.linkedItemIds, event.detail.id];
+
+      await this.handleSaveClick();
+    }
   }
 
-  async handleLinkedItemDelete(linkedItem: Item) {
+  async handleLinkedItemRemoved(event: any) {
 
-    this.linkedItems = this.linkedItems.filter((item) => {
-      return item.id != linkedItem.id;
-    })
+    if (event.detail) {
 
-    this.item.linkedItemIds = this.item.linkedItemIds.filter((id) => {
-      return id != linkedItem.id;
-    })
-
-    this.linkedItemsList.closeSlidingItems();
-
-    await this.handleSaveClick();
+      this.item.linkedItemIds = this.item.linkedItemIds.filter((id) => {
+        return id != event.detail.id;
+      })
+  
+      await this.handleSaveClick();
+    }
   }
 
   async handleChildItemClick(childItem: Item) {
@@ -520,20 +520,6 @@ export class ItemDetail {
               await this.completeTransition(this.transitionInProgress);
               await this.loadItem();
             }
-          }
-          break;
-        }
-        case "item-search": {
-
-          if (event.detail.data) {
-
-            this.linkedItems = [...this.linkedItems, event.detail.data];
-            if (!this.item.linkedItemIds) {
-              this.item.linkedItemIds = [];
-            }
-            this.item.linkedItemIds = [...this.item.linkedItemIds, event.detail.data.id];
-
-            await this.handleSaveClick();
           }
           break;
         }
@@ -765,48 +751,11 @@ export class ItemDetail {
               </ion-col>
               <ion-col col-lg-6 col-md-12 col-sm-12 col-12 align-self-stretch>
                 
-                <ion-card>
-                  <ion-card-header no-padding>
-                    <ion-item>
-                      <ion-label>
-                        Linked Items
-                      </ion-label>
-                      <ion-button slot="end"  color="secondary"
-                                  onClick={ () => this.handleLinkedItemsAddClick() }>
-                        Add
-                      </ion-button>
-                    </ion-item>
-                  </ion-card-header>
-                  <ion-card-content>
-                    <ion-list id="linkedItemsList">
-                    {this.linkedItems.map(linkedItem => 
-                      <ion-item-sliding>
-                        <ion-item onClick={ () => this.handleLinkedItemClick(linkedItem) }>
-                          <ion-avatar slot="start">
-                            <img src={linkedItem.type.iconUrl}/>
-                          </ion-avatar>
-                          { linkedItem.location 
-                          ? <ion-label>
-                              <h2>{linkedItem.name}</h2>
-                              <p>{linkedItem.workflowNode.name} - {linkedItem.location.name}</p>
-                            </ion-label>
-                          : <ion-label>
-                              <h2>{linkedItem.name}</h2>
-                              <p>{linkedItem.workflowNode.name}</p>
-                            </ion-label>
-                          }
-                        </ion-item>
-                        <ion-item-options>
-                          <ion-item-option color="danger" 
-                                           onClick={ () => this.handleLinkedItemDelete(linkedItem) }>
-                            Delete
-                          </ion-item-option>
-                        </ion-item-options>
-                      </ion-item-sliding>
-                    )}
-                    </ion-list>
-                  </ion-card-content>
-                </ion-card>
+                <linkeditems-field linked-items={ JSON.stringify(this.linkedItems) }
+                                   onLinkedItemClicked={ (ev) => this.handleLinkedItemClicked(ev) }
+                                   onLinkedItemAdded={ (ev) => this.handleLinkedItemAdded(ev) }
+                                   onLinkedItemRemoved={ (ev) => this.handleLinkedItemRemoved(ev) }>
+                </linkeditems-field>
                 
                 {this.item.type.allowNestedItems
                 ? <ion-card>

@@ -268,6 +268,42 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface LinkeditemsField {
+      'linkedItems': string;
+    }
+  }
+
+  interface HTMLLinkeditemsFieldElement extends StencilComponents.LinkeditemsField, HTMLStencilElement {}
+
+  var HTMLLinkeditemsFieldElement: {
+    prototype: HTMLLinkeditemsFieldElement;
+    new (): HTMLLinkeditemsFieldElement;
+  };
+  interface HTMLElementTagNameMap {
+    'linkeditems-field': HTMLLinkeditemsFieldElement;
+  }
+  interface ElementTagNameMap {
+    'linkeditems-field': HTMLLinkeditemsFieldElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'linkeditems-field': JSXElements.LinkeditemsFieldAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface LinkeditemsFieldAttributes extends HTMLAttributes {
+      'linkedItems'?: string;
+      'onLinkedItemAdded'?: (event: CustomEvent) => void;
+      'onLinkedItemClicked'?: (event: CustomEvent) => void;
+      'onLinkedItemRemoved'?: (event: CustomEvent) => void;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface SelectlistField {
       'fieldId': string;
       'fieldName': string;
