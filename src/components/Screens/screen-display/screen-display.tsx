@@ -1,8 +1,9 @@
-import { Component, Element, Prop, State, Listen } from "@stencil/core";
+import { Component, Element, Event, EventEmitter, Prop, State } from "@stencil/core";
 import { ToastController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
-import { FieldMetadata, FieldTypes, FieldValue, Item, Screen, WorkflowTransition } from '../../../interfaces/interfaces';
+import { FieldMetadata, Item, Screen, WorkflowTransition } from '../../../interfaces/interfaces';
+import { CustomFieldsGroup } from '../../Fields/customfields-group/customfields-group';
 
 @Component({
   tag: 'screen-display'
@@ -11,6 +12,7 @@ export class ScreenDisplay {
 
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
+  @Event() screenDisplayDismissed: EventEmitter;
   @Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
   @Prop() item: Item;
   @Prop() transition: WorkflowTransition;
@@ -55,108 +57,15 @@ export class ScreenDisplay {
 
       this.fieldMetadata = this.currentScreen.fields ? this.currentScreen.fields : [];
       
-      await this.addFieldsFromMetadata();
+      const fieldGroupElem = this.el.querySelector('#screenDisplayCustomFieldsGroup') as CustomFieldsGroup;
+      await fieldGroupElem.addFieldsFromMetadata(this.fieldMetadata);
     }
-  }
-  
-  async addFieldsFromMetadata() {
-
-    let fieldsListEl = document.getElementById("modalFieldsList");
-    fieldsListEl.innerHTML = "";
-
-    for (let fieldMeta of this.fieldMetadata) {
-      
-      var fieldValue = this.item.fieldValues.find((item) => {
-        return item.fieldId === fieldMeta.id;
-      });
-      
-      switch (fieldMeta.type) {
-        case FieldTypes.Textbox:
-          var txtNode = document.createElement("textbox-field");
-          txtNode.setAttribute("field-id", fieldMeta.id);
-          txtNode.setAttribute("field-name", fieldMeta.name);
-          txtNode.setAttribute("debounce", '200');
-          if (fieldValue) {
-            txtNode.setAttribute("field-value", fieldValue.value);
-          }
-          if (fieldMeta.isRequired) {
-            txtNode.setAttribute("is-required", 'true');
-          }
-          fieldsListEl.appendChild(txtNode);
-          break;
-        
-        case FieldTypes.TextArea:
-          var txtAreaNode = document.createElement("textarea-field");
-          txtAreaNode.setAttribute("field-id", fieldMeta.id);
-          txtAreaNode.setAttribute("field-name", fieldMeta.name);
-          txtAreaNode.setAttribute("debounce", '200');
-          if (fieldValue) {
-            txtAreaNode.setAttribute("field-value", fieldValue.value);
-          }
-          if (fieldMeta.isRequired) {
-            txtAreaNode.setAttribute("is-required", 'true');
-          }
-          fieldsListEl.appendChild(txtAreaNode);
-          break;
-
-        case FieldTypes.Number:
-          var txtNode = document.createElement("textbox-field");
-          txtNode.setAttribute("field-id", fieldMeta.id);
-          txtNode.setAttribute("field-name", fieldMeta.name);
-          txtNode.setAttribute("debounce", '200');
-          if (fieldValue) {
-            txtNode.setAttribute("field-value", fieldValue.value);
-          }
-          if (fieldMeta.isRequired) {
-            txtNode.setAttribute("is-required", 'true');
-          }
-          fieldsListEl.appendChild(txtNode);
-          break;
-        
-        case FieldTypes.SingleSelectList:
-          var sslNode = document.createElement("selectlist-field");
-          sslNode.setAttribute("field-id", fieldMeta.id);
-          sslNode.setAttribute("field-name", fieldMeta.name);
-          sslNode.setAttribute("field-options", JSON.stringify(fieldMeta.valueOptions));
-          if (fieldValue) {
-            sslNode.setAttribute("field-value", fieldValue.value);
-          }
-          if (fieldMeta.isRequired) {
-            sslNode.setAttribute("is-required", 'true');
-          }
-          fieldsListEl.appendChild(sslNode);
-          break;
-
-        case FieldTypes.MultiSelectList:
-          var mslNode = document.createElement("selectlist-field");
-          mslNode.setAttribute("field-id", fieldMeta.id);
-          mslNode.setAttribute("field-name", fieldMeta.name);
-          mslNode.setAttribute("field-options", JSON.stringify(fieldMeta.valueOptions));
-          if (fieldValue) {
-            mslNode.setAttribute("field-value", fieldValue.value);
-          }
-          if (fieldMeta.isRequired) {
-            mslNode.setAttribute("is-required", 'true');
-          }
-          mslNode.setAttribute("is-multiple", 'true');
-          fieldsListEl.appendChild(mslNode);
-          break;
-
-        case FieldTypes.ImageCapture: {
-          var imgNode = document.createElement("imagecapture-field");
-          fieldsListEl.appendChild(imgNode);
-          break;
-        }   
-        default:
-          break;
-      }   
-    }
-
   }
   
   dismiss(data?: any) {
     
-    (this.el.closest('ion-modal') as any).dismiss(data);
+    this.screenDisplayDismissed.emit(data);
+    (this.el.closest('ion-modal') as any).dismiss();
   }
 
   async showToastMessage(messageToDisplay: string) {
@@ -217,31 +126,25 @@ export class ScreenDisplay {
     }
   }
 
-  @Listen('ionChange')
-  handleFieldChange(event: any) { 
+  handleCustomFieldValueChanged(event: any) {
+    
+    if (event.detail) {
 
-    // See if we've already stored a value for the field
-    var fv = this.item.fieldValues.find((item) => {
-      return item.fieldId === event.target.id;
-    });
-
-    if (fv) {
-      
-      // Update the existing field value
-      fv.value = event.detail.value;
-    }
-    else {
-
-      // Store a new field value
-      let fMeta = this.fieldMetadata.find((item) => {
-        return item.id === event.target.id;
+      // See if we've already stored a value for the field
+      var fv = this.item.fieldValues.find((item) => {
+        return item.fieldId === event.detail.fieldId;
       });
-      let newFV: FieldValue = {
-        fieldId: event.target.id,
-        fieldName: fMeta.name,
-        value: event.detail.value
-      };
-      this.item.fieldValues.push(newFV);
+  
+      if (fv) {
+        
+        // Update the existing field value
+        fv.value = event.detail.value;
+      }
+      else {
+  
+        // Store a new field value
+        this.item.fieldValues.push(event.detail);
+      }
     }
   }
 
@@ -267,14 +170,12 @@ export class ScreenDisplay {
 
       <ion-content>
 
-        <ion-card>
-          <ion-card-header>
-            Fields
-          </ion-card-header>
-          <ion-card-content>
-            <ion-list id="modalFieldsList"></ion-list>
-          </ion-card-content>
-        </ion-card>
+        <customfields-group id="screenDisplayCustomFieldsGroup"
+                            list-id="screenDisplayCustomFieldsList"
+                            field-metadata-json={ JSON.stringify(this.fieldMetadata) }
+                            field-values-json={ JSON.stringify(this.item.fieldValues) }
+                            onCustomFieldValueChanged={ (ev) => this.handleCustomFieldValueChanged(ev) }>
+        </customfields-group>
 
       </ion-content>,
 

@@ -10,17 +10,17 @@ export class LinkedItemsField {
   @Event() linkedItemClicked: EventEmitter;
   @Event() linkedItemAdded: EventEmitter;
   @Event() linkedItemRemoved: EventEmitter;
-  @Prop() linkedItems: string;
+  @Prop() linkedItemsJson: string;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
-  @State() items: Array<Item> = [];
+  @State() linkedItems: Array<Item> = [];
   @State() addedItems: Array<Item> = [];
   @State() removedItems: Array<Item> = [];
   linkedItemsList: HTMLIonListElement;
 
   componentWillLoad() {
 
-    this.items = (this.linkedItems)
-      ? JSON.parse(this.linkedItems)
+    this.linkedItems = (this.linkedItemsJson)
+      ? JSON.parse(this.linkedItemsJson)
       : [];
   }
 
@@ -45,7 +45,7 @@ export class LinkedItemsField {
 
   handleLinkedItemRemove(linkedItem: Item) {
 
-    this.items = this.items.filter((item) => {
+    this.linkedItems = this.linkedItems.filter((item) => {
       return item.id != linkedItem.id;
     })
     this.removedItems = [...this.removedItems, linkedItem];
@@ -53,12 +53,13 @@ export class LinkedItemsField {
     this.linkedItemRemoved.emit(linkedItem);
   }
 
-  @Listen('body:ionModalDidDismiss')
+  @Listen('ionModalDidDismiss')
   modalDidDismiss(event: any) {
     
     if (event.detail) {
 
-      this.items = [...this.items, event.detail.data];
+      //TODO: Add more context to modal to avoid exceptions
+      this.linkedItems = [...this.linkedItems, event.detail.data];
       this.addedItems = [...this.addedItems, event.detail.data];
       this.linkedItemAdded.emit(event.detail.data);
     }
@@ -80,7 +81,7 @@ export class LinkedItemsField {
         </ion-card-header>
         <ion-card-content>
           <ion-list id="linkedItemsList">
-          {this.items.map(linkedItem => 
+          {this.linkedItems.map(linkedItem => 
             <ion-item-sliding>
               <ion-item onClick={ () => this.handleLinkedItemClick(linkedItem) }>
                 <ion-avatar slot="start">

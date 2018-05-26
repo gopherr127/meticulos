@@ -22,7 +22,8 @@ export class TextboxField {
           id={this.fieldId} 
           value={this.fieldValue} 
           required={this.isRequired}
-          disabled={this.isDisabled}>
+          disabled={this.isDisabled}
+          debounce={500}>
         </ion-input>
       </ion-item>
     );

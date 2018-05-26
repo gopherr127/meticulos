@@ -22,7 +22,8 @@ export class TextareaField {
           id={this.fieldId} 
           value={this.fieldValue} 
           required={this.isRequired}
-          disabled={this.isDisabled}>
+          disabled={this.isDisabled}
+          debounce={500}>
         </ion-textarea>
       </ion-item>
     );

@@ -2,8 +2,7 @@ import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { PopoverController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
-import { Item, ItemType, Screen, FieldChangeGroup, FieldMetadata, 
-         FieldTypes, FieldValue, WorkflowTransition } from '../../../interfaces/interfaces';
+import { Item, ItemType, Screen, FieldChangeGroup, FieldMetadata, WorkflowTransition } from '../../../interfaces/interfaces';
 
 @Component({
   tag: 'item-detail'
@@ -12,7 +11,6 @@ export class ItemDetail {
 
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
-  linkedItemsList: HTMLIonListElement;
   childItemsList: HTMLIonListElement;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: PopoverController;
@@ -34,14 +32,12 @@ export class ItemDetail {
   async componentWillLoad() {
 
     await this.loadItem();
+    await this.loadEditScreen();
     await this.loadChildItems();
   }
 
   async componentDidLoad() {
 
-    await this.loadEditScreen();
-    await this.addFieldsFromMetadata();
-    this.linkedItemsList = this.el.querySelector('#linkedItemsList');
     this.childItemsList = this.el.querySelector('#childItemsList');
   }
 
@@ -158,125 +154,6 @@ export class ItemDetail {
     }
   }
 
-  async addFieldsFromMetadata() {
-
-    let fieldsListEl = this.el.querySelector("#itemDetailFieldsList");
-    fieldsListEl.innerHTML = "";
-    
-    for (let fieldMeta of this.fieldMetadata) {
-
-      var fieldValue = this.item.fieldValues.find((item) => {
-        return item.fieldId === fieldMeta.id;
-      });
-      
-      switch (fieldMeta.type) {
-        case FieldTypes.Textbox:
-          var txtNode = document.createElement("textbox-field");
-          txtNode.setAttribute("field-id", fieldMeta.id);
-          txtNode.setAttribute("field-name", fieldMeta.name);
-          txtNode.setAttribute("debounce", '200');
-          if (fieldValue) {
-            txtNode.setAttribute("field-value", fieldValue.value);
-          }
-          if (fieldMeta.isRequired) {
-            txtNode.setAttribute("is-required", 'true');
-          }
-          fieldsListEl.appendChild(txtNode);
-          break;
-        
-        case FieldTypes.TextArea:
-          var txtAreaNode = document.createElement("textarea-field");
-          txtAreaNode.setAttribute("field-id", fieldMeta.id);
-          txtAreaNode.setAttribute("field-name", fieldMeta.name);
-          txtAreaNode.setAttribute("debounce", '200');
-          if (fieldValue) {
-            txtAreaNode.setAttribute("field-value", fieldValue.value);
-          }
-          if (fieldMeta.isRequired) {
-            txtAreaNode.setAttribute("is-required", 'true');
-          }
-          fieldsListEl.appendChild(txtAreaNode);
-          break;
-
-        case FieldTypes.Number:
-          var numNode = document.createElement("textbox-field");
-          numNode.setAttribute("field-id", fieldMeta.id);
-          numNode.setAttribute("field-name", fieldMeta.name);
-          numNode.setAttribute("debounce", '200');
-          if (fieldValue) {
-            numNode.setAttribute("field-value", fieldValue.value);
-          }
-          if (fieldMeta.isRequired) {
-            numNode.setAttribute("is-required", 'true');
-          }
-          fieldsListEl.appendChild(numNode);
-          break;
-        
-        case FieldTypes.SingleSelectList:
-          var sslNode = document.createElement("selectlist-field");
-          sslNode.setAttribute("field-id", fieldMeta.id);
-          sslNode.setAttribute("field-name", fieldMeta.name);
-          sslNode.setAttribute("field-options", JSON.stringify(fieldMeta.valueOptions));
-          if (fieldValue) {
-            sslNode.setAttribute("field-value", fieldValue.value);
-          }
-          if (fieldMeta.isRequired) {
-            sslNode.setAttribute("is-required", 'true');
-          }
-          fieldsListEl.appendChild(sslNode);
-          break;
-
-        case FieldTypes.MultiSelectList:
-          var mslNode = document.createElement("selectlist-field");
-          mslNode.setAttribute("field-id", fieldMeta.id);
-          mslNode.setAttribute("field-name", fieldMeta.name);
-          mslNode.setAttribute("field-options", JSON.stringify(fieldMeta.valueOptions));
-          mslNode.setAttribute("is-multiple", '');
-          if (fieldValue) {
-            mslNode.setAttribute("field-value", JSON.stringify(fieldValue.value));
-          }
-          if (fieldMeta.isRequired) {
-            mslNode.setAttribute("is-required", 'true');
-          }
-          fieldsListEl.appendChild(mslNode);
-          break;
-
-        case FieldTypes.DateSelect:
-        case FieldTypes.DateTimeSelect:
-        case FieldTypes.CheckboxList:
-        case FieldTypes.RadioList:        
-        default:
-          break;
-      }   
-    }
-  }
-
-  async updateItemFieldValues() {
-
-    for (let fieldMeta of this.fieldMetadata) {
-
-      var fieldValue = this.item.fieldValues.find((item) => {
-        return item.fieldId === fieldMeta.id;
-      });
-
-      if (fieldValue) {
-        try {
-
-          switch (fieldMeta.type) {
-            case FieldTypes.Textbox:
-            case FieldTypes.TextArea:
-            case FieldTypes.Number:
-              (document.getElementById(fieldMeta.id) as any).value = fieldValue.value;
-              break;
-            default:
-              break;
-          }
-        }
-        catch {}
-      }
-    }
-  }
-
   async handleTransitionClick(transition: WorkflowTransition) {
 
     if (transition.screenIds && transition.screenIds.length > 0) {
@@ -287,7 +164,6 @@ export class ItemDetail {
 
       await this.completeTransition(transition);
       await this.loadItem();
-      await this.updateItemFieldValues();
     }
   }
 
@@ -322,8 +198,20 @@ export class ItemDetail {
 
   async completeTransition(transition: WorkflowTransition) {
 
+    //INFO: there is a bug in Stencil where events are getting fired multiple times.
+    // Steps:
+    // Put console.log(...) message in handleScreenDisplayDismissed
+    // Go to the main list for an item type.
+    // Open the detail form for an item.
+    // Execute a transition that displays screens.
+    // Click Cancel.
+    // Repeat the previous steps, noticing how each time one more event is handled
+    if (!transition) {
+      return; 
+    }
+
     let execResponse = await fetch(
-      this.apiBaseUrl + "/workflowtransitions/executions/" + transition.id, {
+      `${this.apiBaseUrl}/workflowtransitions/executions/${transition.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -479,6 +367,36 @@ export class ItemDetail {
 
     popover.present();
   }
+
+  @Listen('body:screenDisplayDismissed') 
+  async handleScreenDisplayDismissed(event: any) {
+
+    if (event.detail) {
+
+      let fieldValues = JSON.parse(event.detail);
+      for (let fieldValue of fieldValues) {
+
+        let existingFieldValue = this.item.fieldValues.find((item) => {
+          return item.fieldId === fieldValue.fieldId;
+        });
+
+        if (existingFieldValue) {
+          existingFieldValue.value = fieldValue.value;
+        }
+        else {
+          this.item.fieldValues.push(fieldValue);
+        }
+      }
+
+      let saveResult = await this.saveItem();
+      
+      if (saveResult) {
+
+        await this.completeTransition(this.transitionInProgress);
+        await this.loadItem();
+      }
+    }
+  }
   
   @Listen('body:ionModalDidDismiss')
   async modalDidDismiss(event: CustomEvent) {
@@ -492,35 +410,6 @@ export class ItemDetail {
           this.item.location = event.detail.data;
           this.item.locationId = this.item.location.id;
           this.itemLocationName = this.item.location.name;
-          break;
-        }
-        case "screen-display": {
-
-          if (event.detail.data) {
-            
-            let fieldValues = JSON.parse(event.detail.data);
-            for (let fieldValue of fieldValues) {
-
-              let existingFieldValue = this.item.fieldValues.find((item) => {
-                return item.fieldId === fieldValue.fieldId;
-              });
-
-              if (existingFieldValue) {
-                existingFieldValue.value = fieldValue.value;
-              }
-              else {
-                this.item.fieldValues.push(fieldValue);
-              }
-            }
-
-            let saveResult = await this.saveItem();
-            
-            if (saveResult) {
-
-              await this.completeTransition(this.transitionInProgress);
-              await this.loadItem();
-            }
-          }
           break;
         }
       }
@@ -569,44 +458,28 @@ export class ItemDetail {
     }
   }
 
-  @Listen('ionInput')
-  handleFieldInput(event: any) {
+  handleCustomFieldValueChanged(event: any) {
 
-    if (event.detail.target) {
+    if (event.detail) {
 
-      if (event.target.id === "itemName") {
+      // See if we've already stored a value for the field
+      var fv = this.item.fieldValues.find((item) => {
+        return item.fieldId === event.detail.fieldId;
+      });
+  
+      if (fv) {
 
-        // Update Name field
-        this.item.name = event.detail.target.value;
+        // Update the existing field value
+        fv.value = event.detail.value;
       }
       else {
-        
-        // See if we've already stored a value for the field
-        var fv = this.item.fieldValues.find((item) => {
-          return item.fieldId === event.target.id;
+
+        // Store a new field value
+        this.item.fieldValues.push({
+          fieldId: event.detail.fieldId,
+          fieldName: event.detail.fieldName,
+          value: event.detail.value
         });
-
-        var fvValue = event.detail.target.value;
-
-        if (fv) {
-
-          // Update the existing field value
-          fv.value = fvValue;
-        }
-        else {
-
-          // Store a new field value
-          let fMeta = this.fieldMetadata.find((item) => {
-            return item.id === event.target.id;
-          });
-          let newFV: FieldValue = {
-            fieldId: event.target.id,
-            fieldName: fMeta.name,
-            value: fvValue
-          };
-
-          this.item.fieldValues.push(newFV);
-        }
       }
     }
   }
@@ -616,40 +489,10 @@ export class ItemDetail {
 
     if (event.detail) {
 
-      if (event.target.id != "itemName") {
+      if (event.target.id === "itemName") {
 
-        // See if we've already stored a value for the field
-        var fv = this.item.fieldValues.find((item) => {
-          return item.fieldId === event.target.id;
-        });
-
-        var fvValue = Array.isArray(event.detail.value)
-          ? JSON.stringify(event.detail.value)
-          : event.detail.value;
-
-        if (fv) {
-
-          // Update the existing field value
-          fv.value = fvValue;
-        }
-        else {
-
-          // Store a new field value
-          let fMeta = this.fieldMetadata.find((item) => {
-            return item.id === event.target.id;
-          });
-
-          if (fMeta) {
-
-            let newFV: FieldValue = {
-              fieldId: event.target.id,
-              fieldName: fMeta.name,
-              value: fvValue
-            };
-
-            this.item.fieldValues.push(newFV);
-          }
-        }
+        // Update Name field
+        this.item.name = event.detail.value;
       }
     }
   }
@@ -739,19 +582,16 @@ export class ItemDetail {
                   </ion-card-content>
                 </ion-card>
 
-                <ion-card>
-                  <ion-card-header>
-                    Fields
-                  </ion-card-header>
-                  <ion-card-content>
-                    <ion-list id="itemDetailFieldsList"></ion-list>
-                  </ion-card-content>
-                </ion-card>
-
+                <customfields-group list-id="itemDetailCustomFieldsList"
+                                    field-metadata-json={ JSON.stringify(this.fieldMetadata) }
+                                    field-values-json={ JSON.stringify(this.item.fieldValues) }
+                                    onCustomFieldValueChanged={ (ev) => this.handleCustomFieldValueChanged(ev) }>
+                </customfields-group>
+                
               </ion-col>
               <ion-col col-lg-6 col-md-12 col-sm-12 col-12 align-self-stretch>
                 
-                <linkeditems-field linked-items={ JSON.stringify(this.linkedItems) }
+                <linkeditems-field linked-items-json={ JSON.stringify(this.linkedItems) }
                                    onLinkedItemClicked={ (ev) => this.handleLinkedItemClicked(ev) }
                                    onLinkedItemAdded={ (ev) => this.handleLinkedItemAdded(ev) }
                                    onLinkedItemRemoved={ (ev) => this.handleLinkedItemRemoved(ev) }>

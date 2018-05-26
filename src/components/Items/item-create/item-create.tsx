@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, Listen, Prop, State } from '@s
 //import { ToastController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
-import { Item, ItemType, Screen, FieldMetadata, FieldTypes, FieldValue } from '../../../interfaces/interfaces';
+import { ItemType, Screen, FieldMetadata, FieldValue } from '../../../interfaces/interfaces';
 
 @Component({
   tag: 'item-create'
@@ -18,7 +18,6 @@ export class ItemCreate {
   @Prop() parentId: string;
   @State() selectedParentId: string;
   @State() subtitle: string = 'Create Item';
-  @State() item: Item;
   @State() itemType: ItemType;
   @State() createScreen: Screen;
   @State() name: string;
@@ -28,17 +27,14 @@ export class ItemCreate {
   async componentWillLoad() {
 
     await this.loadItemType();
+    await this.loadCreateScreen();
 
     if (this.itemType.allowNestedItems) {
 
-      this.selectedParentId = this.parentId ? this.parentId : '000000000000000000000000';
+      this.selectedParentId = this.parentId 
+        ? this.parentId 
+        : '000000000000000000000000';
     }
-  }
-
-  async componentDidLoad() {
-
-    await this.loadCreateScreen();
-    await this.addFieldsFromMetadata();
   }
 
   async loadItemType() {
@@ -58,7 +54,7 @@ export class ItemCreate {
   async loadCreateScreen() {
 
     let response = await fetch(
-      this.apiBaseUrl + `/screens/${ this.itemType.createScreenId }`, {
+      this.apiBaseUrl + `/screens/${this.itemType.createScreenId}`, {
         method: "GET"
     });
 
@@ -69,110 +65,10 @@ export class ItemCreate {
     }
   }
 
-  async addFieldsFromMetadata() {
-
-    let fieldsListEl = this.el.querySelector("#itemCreateFieldsList");
-    fieldsListEl.innerHTML = "";
-    
-    for (let fieldMeta of this.fieldMetadata) {
-
-      if (fieldMeta.defaultValue) {
-        // Store default field values to be saved
-        let newFV: FieldValue = {
-          fieldId: fieldMeta.id,
-          fieldName: fieldMeta.name,
-          value: fieldMeta.defaultValue
-        };
-
-        this.fieldValues.push(newFV);
-      }
-      
-      switch (fieldMeta.type) {
-        case FieldTypes.Textbox:
-          var txtNode = document.createElement("textbox-field");
-          txtNode.setAttribute("field-id", fieldMeta.id);
-          txtNode.setAttribute("field-name", fieldMeta.name);
-          txtNode.setAttribute("debounce", '200');
-          if (fieldMeta.isRequired) {
-            txtNode.setAttribute("is-required", 'true');
-          }
-          if (fieldMeta.defaultValue) {
-            txtNode.setAttribute("field-value", fieldMeta.defaultValue);
-          }
-          fieldsListEl.appendChild(txtNode);
-          break;
-
-        case FieldTypes.TextArea:
-          var txtAreaNode = document.createElement("textarea-field");
-          txtAreaNode.setAttribute("field-id", fieldMeta.id);
-          txtAreaNode.setAttribute("field-name", fieldMeta.name);
-          txtAreaNode.setAttribute("debounce", '200');
-          if (fieldMeta.isRequired) {
-            txtAreaNode.setAttribute("is-required", 'true');
-          }
-          if (fieldMeta.defaultValue) {
-            txtAreaNode.setAttribute("field-value", fieldMeta.defaultValue);
-          }
-          fieldsListEl.appendChild(txtAreaNode);
-          break;
-
-        case FieldTypes.Number:
-          var numNode = document.createElement("textbox-field");
-          numNode.setAttribute("type", 'number');
-          numNode.setAttribute("field-id", fieldMeta.id);
-          numNode.setAttribute("field-name", fieldMeta.name);
-          numNode.setAttribute("debounce", '200');
-          if (fieldMeta.isRequired) {
-            numNode.setAttribute("is-required", 'true');
-          }
-          if (fieldMeta.defaultValue) {
-            numNode.setAttribute("field-value", fieldMeta.defaultValue);
-          }
-          fieldsListEl.appendChild(numNode);
-          break;
-        
-        case FieldTypes.SingleSelectList:
-          var sslNode = document.createElement("selectlist-field");
-          sslNode.setAttribute("field-id", fieldMeta.id);
-          sslNode.setAttribute("field-name", fieldMeta.name);
-          sslNode.setAttribute("field-options", JSON.stringify(fieldMeta.valueOptions));
-          if (fieldMeta.isRequired) {
-            sslNode.setAttribute("is-required", 'true');
-          }
-          if (fieldMeta.defaultValue) {
-            sslNode.setAttribute("field-value", fieldMeta.defaultValue);
-          }
-          fieldsListEl.appendChild(sslNode);
-          break;
-
-        case FieldTypes.MultiSelectList:
-          var mslNode = document.createElement("selectlist-field");
-          mslNode.setAttribute("field-id", fieldMeta.id);
-          mslNode.setAttribute("field-name", fieldMeta.name);
-          mslNode.setAttribute("field-options", JSON.stringify(fieldMeta.valueOptions));
-          mslNode.setAttribute("is-multiple", 'true');
-          if (fieldMeta.isRequired) {
-            mslNode.setAttribute("is-required", 'true');
-          }
-          if (fieldMeta.defaultValue) {
-            mslNode.setAttribute("field-value", JSON.stringify(fieldMeta.defaultValue));
-          }
-          fieldsListEl.appendChild(mslNode);
-          break;
-         
-        case FieldTypes.DateSelect:
-        case FieldTypes.DateTimeSelect:
-        case FieldTypes.CheckboxList:
-        case FieldTypes.RadioList:        
-        default:
-          break;
-      }      
-    }
-  }
-
   dismiss(data?: any) {
     
-    (this.el.closest('ion-modal') as any).dismiss(data);
+    this.itemCreated.emit(data);
+    (this.el.closest('ion-modal') as any).dismiss();
   }
 
   async showToastMessage(messageToDisplay: string) {
@@ -220,8 +116,7 @@ export class ItemCreate {
   
       if (response.ok) {
   
-        this.itemCreated.emit(bodyString);
-        this.dismiss();
+        this.dismiss(bodyString);
       }
       else
       {
@@ -235,44 +130,28 @@ export class ItemCreate {
     }
   }
   
-  @Listen('ionInput')
-  handleFieldInput(event: any) {
+  handleCustomFieldValueChanged(event: any) {
 
-    if (event.detail.target) {
+    if (event.detail) {
 
-      if (event.target.id === "itemName") {
+      // See if we've already stored a value for the field
+      var fv = this.fieldValues.find((item) => {
+        return item.fieldId === event.detail.fieldId;
+      });
+  
+      if (fv) {
 
-        // Update Name field
-        this.name = event.detail.target.value;
+        // Update the existing field value
+        fv.value = event.detail.value;
       }
       else {
-        
-        // See if we've already stored a value for the field
-        var fv = this.fieldValues.find((item) => {
-          return item.fieldId === event.target.id;
+
+        // Store a new field value
+        this.fieldValues.push({
+          fieldId: event.detail.fieldId,
+          fieldName: event.detail.fieldName,
+          value: event.detail.value
         });
-
-        var fvValue = event.detail.target.value;
-
-        if (fv) {
-
-          // Update the existing field value
-          fv.value = fvValue;
-        }
-        else {
-
-          // Store a new field value
-          let fMeta = this.fieldMetadata.find((item) => {
-            return item.id === event.target.id;
-          });
-          let newFV: FieldValue = {
-            fieldId: event.target.id,
-            fieldName: fMeta.name,
-            value: fvValue
-          };
-
-          this.fieldValues.push(newFV);
-        }
       }
     }
   }
@@ -282,44 +161,10 @@ export class ItemCreate {
 
     if (event.detail) {
 
-      if (event.target.id != "itemName") {
+      if (event.target.id === "itemName") {
 
-        // See if we've already stored a value for the field
-        var fv = this.fieldValues.find((item) => {
-          return item.fieldId === event.target.id;
-        });
-
-        var fvValue = Array.isArray(event.detail.value)
-          ? JSON.stringify(event.detail.value)
-          : event.detail.value;
-
-        if (fv) {
-
-          // Update the existing field value
-          fv.value = fvValue;
-        }
-        else {
-
-          // Store a new field value
-          let fMeta = this.fieldMetadata.find((item) => {
-            return item.id === event.target.id;
-          });
-
-          if (fMeta) {
-
-            let newFV: FieldValue = {
-              fieldId: event.target.id,
-              fieldName: fMeta.name,
-              value: fvValue
-            };
-
-            this.fieldValues.push(newFV);
-          }
-          else {
-
-            console.log("Could not find expected field metadata: " + event.target.id);
-          }
-        }
+        // Update Name field
+        this.name = event.detail.value;
       }
     }
   }
@@ -352,14 +197,12 @@ export class ItemCreate {
           <ion-input disabled value={ this.itemType.name }></ion-input>
         </ion-item>
 
-        <ion-card>
-          <ion-card-header>
-            Fields
-          </ion-card-header>
-          <ion-card-content>
-            <ion-list id="itemCreateFieldsList"></ion-list>
-          </ion-card-content>
-        </ion-card>
+        <customfields-group list-id="itemCreateCustomFieldsList"
+                            populate-default-values={true}
+                            field-metadata-json={ JSON.stringify(this.fieldMetadata) }
+                            field-values-json={ JSON.stringify(this.fieldValues) }
+                            onCustomFieldValueChanged={ (ev) => this.handleCustomFieldValueChanged(ev) }>
+        </customfields-group>
         
       </ion-content>,
 

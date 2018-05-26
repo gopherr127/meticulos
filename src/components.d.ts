@@ -27,6 +27,7 @@ import 'ionicons';
 import '@ionic/core';
 
 import {
+  FieldMetadata,
   Item,
   WorkflowTransition,
 } from './interfaces/interfaces';
@@ -126,6 +127,47 @@ declare global {
     export interface DashboardPaneAttributes extends HTMLAttributes {
       'onPanelDeleted'?: (event: CustomEvent) => void;
       'panelId'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface CustomfieldsGroup {
+      'addFieldsFromMetadata': (fieldMetadata: FieldMetadata[]) => Promise<void>;
+      'fieldMetadataJson': string;
+      'fieldValuesJson': string;
+      'listId': string;
+      'populateDefaultValues': boolean;
+    }
+  }
+
+  interface HTMLCustomfieldsGroupElement extends StencilComponents.CustomfieldsGroup, HTMLStencilElement {}
+
+  var HTMLCustomfieldsGroupElement: {
+    prototype: HTMLCustomfieldsGroupElement;
+    new (): HTMLCustomfieldsGroupElement;
+  };
+  interface HTMLElementTagNameMap {
+    'customfields-group': HTMLCustomfieldsGroupElement;
+  }
+  interface ElementTagNameMap {
+    'customfields-group': HTMLCustomfieldsGroupElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'customfields-group': JSXElements.CustomfieldsGroupAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface CustomfieldsGroupAttributes extends HTMLAttributes {
+      'fieldMetadataJson'?: string;
+      'fieldValuesJson'?: string;
+      'listId'?: string;
+      'onCustomFieldValueChanged'?: (event: CustomEvent) => void;
+      'populateDefaultValues'?: boolean;
     }
   }
 }
@@ -269,7 +311,7 @@ declare global {
 
   namespace StencilComponents {
     interface LinkeditemsField {
-      'linkedItems': string;
+      'linkedItemsJson': string;
     }
   }
 
@@ -292,7 +334,7 @@ declare global {
   }
   namespace JSXElements {
     export interface LinkeditemsFieldAttributes extends HTMLAttributes {
-      'linkedItems'?: string;
+      'linkedItemsJson'?: string;
       'onLinkedItemAdded'?: (event: CustomEvent) => void;
       'onLinkedItemClicked'?: (event: CustomEvent) => void;
       'onLinkedItemRemoved'?: (event: CustomEvent) => void;
@@ -1128,6 +1170,7 @@ declare global {
   namespace JSXElements {
     export interface ScreenDisplayAttributes extends HTMLAttributes {
       'item'?: Item;
+      'onScreenDisplayDismissed'?: (event: CustomEvent) => void;
       'transition'?: WorkflowTransition;
     }
   }
