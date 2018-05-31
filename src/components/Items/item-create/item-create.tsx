@@ -159,12 +159,15 @@ export class ItemCreate {
     }
   }
 
-  async presentItemLocationOptions2(event?: any) {
+  async presentItemLocationOptions(event?: any) {
 
     const popover = await this.popoverCtrl.create({
       component: 'item-create-location-options-menu',
       ev: event
     });
+
+    // Have to set z-index to avoid bug where popover displays behind modal
+    popover.style.zIndex = '99999';
 
     await popover.present();
   }
@@ -188,15 +191,6 @@ export class ItemCreate {
         // Update Name field
         this.name = event.detail.value;
       }
-    }
-  }
-
-  @Listen('ionFocus')
-  async handleElementFocused(event: any) {
-
-    if (event.target.id === "itemCreateLocationOptionsMenu") {
-
-      await this.presentItemLocationOptions2(event);
     }
   }
 
@@ -230,7 +224,8 @@ export class ItemCreate {
         <ion-item style={{ display : this.createScreen.displayLocation ? 'block' : 'none'}}>
           <ion-label>Location</ion-label>
           <ion-input disabled value={ this.itemLocation ? this.itemLocation.name : '' }></ion-input>
-          <ion-button slot="end" fill="clear" id="itemCreateLocationOptionsMenu">
+          <ion-button slot="end" fill="clear" id="itemCreateLocationOptionsMenu" 
+                      onClick={ (ev) => this.presentItemLocationOptions(ev) }>
             <ion-icon slot="icon-only" name="more" color="tertiary"></ion-icon>
           </ion-button>
         </ion-item>
