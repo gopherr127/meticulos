@@ -572,6 +572,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ItemCreateLocationOptionsMenu {
+
+    }
+  }
+
+  interface HTMLItemCreateLocationOptionsMenuElement extends StencilComponents.ItemCreateLocationOptionsMenu, HTMLStencilElement {}
+
+  var HTMLItemCreateLocationOptionsMenuElement: {
+    prototype: HTMLItemCreateLocationOptionsMenuElement;
+    new (): HTMLItemCreateLocationOptionsMenuElement;
+  };
+  interface HTMLElementTagNameMap {
+    'item-create-location-options-menu': HTMLItemCreateLocationOptionsMenuElement;
+  }
+  interface ElementTagNameMap {
+    'item-create-location-options-menu': HTMLItemCreateLocationOptionsMenuElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'item-create-location-options-menu': JSXElements.ItemCreateLocationOptionsMenuAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemCreateLocationOptionsMenuAttributes extends HTMLAttributes {
+      'onGpsLocationSelected'?: (event: CustomEvent) => void;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ItemCreate {
       'itemTypeId': string;
       'parentId': string;
@@ -675,8 +708,7 @@ declare global {
 
   namespace StencilComponents {
     interface ItemLocationOptionsMenu {
-      'item': Item;
-      'returnUrl': string;
+
     }
   }
 
@@ -699,8 +731,7 @@ declare global {
   }
   namespace JSXElements {
     export interface ItemLocationOptionsMenuAttributes extends HTMLAttributes {
-      'item'?: Item;
-      'returnUrl'?: string;
+      'onGpsLocationSelected'?: (event: CustomEvent) => void;
     }
   }
 }
@@ -1034,7 +1065,7 @@ declare global {
   }
   namespace JSXElements {
     export interface LocationSearchAttributes extends HTMLAttributes {
-
+      'onLocationSelected'?: (event: CustomEvent) => void;
     }
   }
 }

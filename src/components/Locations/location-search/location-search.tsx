@@ -1,4 +1,4 @@
-import { Component, Element, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, State } from '@stencil/core';
 import { ENV } from '../../../environments/environment';
 import { ItemLocation } from '../../../interfaces/interfaces';
 
@@ -9,6 +9,7 @@ export class LocationSearch {
 
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
+  @Event() locationSelected: EventEmitter;
   @State() queryText = '';
   public locations: Array<ItemLocation> = [];
   
@@ -24,7 +25,10 @@ export class LocationSearch {
 
   dismiss(data?: any) {
     
-    (this.el.closest('ion-modal') as any).dismiss(data);
+    if (data) {
+      this.locationSelected.emit(data);
+    }
+    (this.el.closest('ion-modal') as any).dismiss();
   }
 
   async loadLocations() {

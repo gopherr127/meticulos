@@ -1,8 +1,8 @@
 import { Component, Element, Event, EventEmitter, Listen, Prop, State } from '@stencil/core';
-//import { ToastController } from '@ionic/core';
+import { PopoverController } from '@ionic/core';
 import { ENV } from '../../../environments/environment';
 import * as FormValidator from '../../../services/form-validation-service';
-import { ItemType, Screen, FieldMetadata, FieldValue } from '../../../interfaces/interfaces';
+import { ItemLocation, ItemType, Screen, FieldMetadata, FieldValue } from '../../../interfaces/interfaces';
 
 @Component({
   tag: 'item-create'
@@ -13,7 +13,7 @@ export class ItemCreate {
   @Element() el: any;
   @Event() itemCreated: EventEmitter;
   @Prop({ connect: 'ion-router' }) nav;
-  //@Prop({ connect: 'ion-toast-controller' }) toastCtrl: ToastController;
+  @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: PopoverController;
   @Prop() itemTypeId: string;
   @Prop() parentId: string;
   @State() selectedParentId: string;
@@ -21,6 +21,7 @@ export class ItemCreate {
   @State() itemType: ItemType;
   @State() createScreen: Screen;
   @State() name: string;
+  @State() itemLocation: ItemLocation;
   @State() fieldMetadata: Array<FieldMetadata> = [];
   @State() fieldValues: Array<FieldValue> = []
   
@@ -67,7 +68,9 @@ export class ItemCreate {
 
   dismiss(data?: any) {
     
-    this.itemCreated.emit(data);
+    if (data) {
+      this.itemCreated.emit(data);
+    }
     (this.el.closest('ion-modal') as any).dismiss();
   }
 
@@ -94,16 +97,16 @@ export class ItemCreate {
     
     if (validationResult.result) {
 
-      let bodyString = this.itemType.allowNestedItems
-        ? JSON.stringify({
-          name: this.name,
-          typeId: this.itemTypeId,
-          parentId: this.selectedParentId,
-          fieldValues: this.fieldValues})
-        : JSON.stringify({
-          name: this.name,
-          typeId: this.itemTypeId,
-          fieldValues: this.fieldValues});
+      let newItem: any = {};
+      newItem.name = this.name;
+      newItem.typeId = this.itemTypeId;
+      if (this.itemType.allowNestedItems) {
+        newItem.parentId = this.selectedParentId; 
+      }
+      if (this.itemLocation) {
+        newItem.location = this.itemLocation;
+      }
+      newItem.fieldValues = this.fieldValues;
 
       let response = await fetch(
         this.apiBaseUrl + "/items", {
@@ -111,12 +114,12 @@ export class ItemCreate {
           headers: {
             "Content-Type": "application/json"
           },
-          body: bodyString
+          body: JSON.stringify(newItem)
       });
   
       if (response.ok) {
   
-        this.dismiss(bodyString);
+        this.dismiss(newItem);
       }
       else
       {
@@ -156,6 +159,25 @@ export class ItemCreate {
     }
   }
 
+  async presentItemLocationOptions2(event?: any) {
+
+    const popover = await this.popoverCtrl.create({
+      component: 'item-create-location-options-menu',
+      ev: event
+    });
+
+    await popover.present();
+  }
+
+  @Listen('body:itemLocationOptionsMenuDismissed')
+  handleItemLocationOptionsMenuDismissed(event: CustomEvent) {
+
+    if (event && event.detail && event.detail.data) {
+
+      this.itemLocation = event.detail.data;
+    }
+  }
+
   @Listen('ionChange')
   handleFieldChange(event: any) {
 
@@ -166,6 +188,15 @@ export class ItemCreate {
         // Update Name field
         this.name = event.detail.value;
       }
+    }
+  }
+
+  @Listen('ionFocus')
+  async handleElementFocused(event: any) {
+
+    if (event.target.id === "itemCreateLocationOptionsMenu") {
+
+      await this.presentItemLocationOptions2(event);
     }
   }
 
@@ -189,12 +220,19 @@ export class ItemCreate {
 
         <ion-item></ion-item>
         <ion-item>
-          <ion-label position='fixed'>Name</ion-label>
+          <ion-label>Name</ion-label>
           <ion-input id="itemName" debounce={200} value={ this.name }></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label position='fixed'>Item Type</ion-label>
+          <ion-label>Item Type</ion-label>
           <ion-input disabled value={ this.itemType.name }></ion-input>
+        </ion-item>
+        <ion-item style={{ display : this.createScreen.displayLocation ? 'block' : 'none'}}>
+          <ion-label>Location</ion-label>
+          <ion-input disabled value={ this.itemLocation ? this.itemLocation.name : '' }></ion-input>
+          <ion-button slot="end" fill="clear" id="itemCreateLocationOptionsMenu">
+            <ion-icon slot="icon-only" name="more" color="tertiary"></ion-icon>
+          </ion-button>
         </ion-item>
 
         <customfields-group list-id="itemCreateCustomFieldsList"

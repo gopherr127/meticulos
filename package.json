@@ -1,7 +1,7 @@
 {
   "name": "meticulos",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0-alpha",
   "description": "Meticulos is a highly-configurable web app that allows tracking of both plan items and physical items.",
   "files": [
     "dist/"

@@ -2,9 +2,9 @@ import { Component, Element, Event, EventEmitter, Prop } from '@stencil/core';
 import * as GeolocationService from '../../../services/geolocation-service';
 
 @Component({
-  tag: 'item-location-options-menu'
+  tag: 'item-create-location-options-menu'
 })
-export class ItemLocationOptionsMenu {
+export class ItemCreateLocationOptionsMenu {
 
   @Element() el: any;
   @Event() gpsLocationSelected: EventEmitter;

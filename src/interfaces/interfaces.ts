@@ -116,7 +116,12 @@ export interface ItemType {
 export interface Screen {
   id: string,
   name: string,
-  fields: Array<FieldMetadata>
+  fields: Array<FieldMetadata>,
+  displayLocation: boolean,
+  displayLinkedItems: boolean,
+  displayChildItems: boolean,
+  displayImageCapture: boolean,
+  displayAttachments: boolean
 }
 
 export interface User {

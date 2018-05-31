@@ -14,3 +14,7 @@ Clone this repo and run:
 npm install
 npm start
 ```
+
+## Versioning
+
+Meticulos uses semantic versioning. More information can be found here: https://semver.org/

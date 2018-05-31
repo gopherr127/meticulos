@@ -26,8 +26,6 @@ export class ItemDetail {
   @State() fieldChangeGroups: Array<FieldChangeGroup> = [];
   @State() linkedItems: Array<Item> = [];
   @State() childItems: Array<Item> = [];
-  private modalContext: string;
-  private popoverContext: string;
   
   async componentWillLoad() {
 
@@ -182,7 +180,6 @@ export class ItemDetail {
 
   async presentScreensDisplay(transition: WorkflowTransition) {
 
-    this.modalContext = "screen-display";
     this.transitionInProgress = transition;
 
     const modal = await this.modalCtrl.create({
@@ -348,24 +345,40 @@ export class ItemDetail {
 
   }
 
-  async handleChildItemsClick() {
-
-  }
-
   async presentItemLocationOptions(event?: any) {
-
-    this.modalContext = "item-location-options-menu";
-    this.popoverContext = "item-location-options-menu";
 
     const popover = await this.popoverCtrl.create({
       component: 'item-location-options-menu',
-      componentProps: {
-        item: this.item
-      },
       ev: event
     });
 
     popover.present();
+  }
+
+  handleCustomFieldValueChanged(event: any) {
+
+    if (event.detail) {
+
+      // See if we've already stored a value for the field
+      var fv = this.item.fieldValues.find((item) => {
+        return item.fieldId === event.detail.fieldId;
+      });
+  
+      if (fv) {
+
+        // Update the existing field value
+        fv.value = event.detail.value;
+      }
+      else {
+
+        // Store a new field value
+        this.item.fieldValues.push({
+          fieldId: event.detail.fieldId,
+          fieldName: event.detail.fieldName,
+          value: event.detail.value
+        });
+      }
+    }
   }
 
   @Listen('body:screenDisplayDismissed') 
@@ -398,89 +411,47 @@ export class ItemDetail {
     }
   }
   
-  @Listen('body:ionModalDidDismiss')
-  async modalDidDismiss(event: CustomEvent) {
-
-    if (event && event.detail && event.detail.data) {
-
-      switch (this.modalContext) {
-
-        case "item-location-options-menu": {
-          
-          this.item.location = event.detail.data;
-          this.item.locationId = this.item.location.id;
-          this.itemLocationName = this.item.location.name;
-          break;
-        }
-      }
-      this.modalContext = "";
-    }
-  }
-
-  @Listen('body:ionPopoverDidDismiss')
-  async popoverDidDismiss(event: any) {
-    
-    if (event && event.detail && event.detail.data) {
-
-      switch (this.popoverContext) {
-
-        case "item-location-options-menu": {
-
-          if (!this.item.location) {
-            // Initializae the entire asset location
-            this.item.location = {
-              id: "000000000000000000000000",
-              name: "GPS Location",
-              parentId: "000000000000000000000000",
-              parent: null,
-              gps: { latitude: -1, longitude: -1 }
-            }
-          }
-          else {
-
-            this.item.location.id = "000000000000000000000000";
-            this.item.location.name = "GPS Location";
-            this.item.parentId = "000000000000000000000000";
-            this.item.location.parent = null;
-            // Set gps location
-            this.item.location.gps = {
-              latitude: event.detail.data.latitude,
-              longitude: event.detail.data.longitude
-            }
-          }
-          
-          this.item.locationId = this.item.location.id;
-          this.itemLocationName = this.item.location.name;
-        }
-      }
-
-      this.popoverContext = "";
-    }
-  }
-
-  handleCustomFieldValueChanged(event: any) {
+  @Listen('body:gpsLocationSelected')
+  handleGpsLocationSelected(event: any) {
 
     if (event.detail) {
 
-      // See if we've already stored a value for the field
-      var fv = this.item.fieldValues.find((item) => {
-        return item.fieldId === event.detail.fieldId;
-      });
-  
-      if (fv) {
-
-        // Update the existing field value
-        fv.value = event.detail.value;
+      if (!this.item.location) {
+        // Initialize the entire asset location
+        this.item.location = {
+          id: "000000000000000000000000",
+          name: "GPS Location",
+          parentId: "000000000000000000000000",
+          parent: null,
+          gps: { latitude: -1, longitude: -1 }
+        }
       }
       else {
 
-        // Store a new field value
-        this.item.fieldValues.push({
-          fieldId: event.detail.fieldId,
-          fieldName: event.detail.fieldName,
-          value: event.detail.value
-        });
+        this.item.location.id = "000000000000000000000000";
+        this.item.location.name = "GPS Location";
+        this.item.parentId = "000000000000000000000000";
+        this.item.location.parent = null;
+        // Set gps location
+        this.item.location.gps = {
+          latitude: event.detail.latitude,
+          longitude: event.detail.longitude
+        }
       }
+      
+      this.item.locationId = this.item.location.id;
+      this.itemLocationName = this.item.location.name;
+    }
+  }
+
+  @Listen('body:locationSelected')
+  handleLocationSelected(event: any) {
+    
+    if (event.detail) {
+
+      this.item.location = event.detail;
+      this.item.locationId = this.item.location.id;
+      this.itemLocationName = this.item.location.name;
     }
   }
 

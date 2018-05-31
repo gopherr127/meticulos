@@ -13,6 +13,11 @@ export class ScreenCreate {
   @State() name: string;
   @State() fields: Array<FieldMetadata> = [];
   @State() selectedFields: Array<FieldMetadata> = [];
+  @State() displayLocation: boolean;
+  @State() displayLinkedItems: boolean;
+  @State() displayChildItems: boolean;
+  @State() displayImageCapture: boolean;
+  @State() displayAttachments: boolean;
   
   async componentWillLoad() {
     
@@ -49,7 +54,12 @@ export class ScreenCreate {
         },
         body: JSON.stringify({
           name: this.name,
-          fields: this.selectedFields
+          fields: this.selectedFields,
+          displayLocation: this.displayLocation,
+          displayLinkedItems: this.displayLinkedItems,
+          displayChildItems: this.displayChildItems,
+          displayImageCapture: this.displayImageCapture,
+          displayAttachments: this.displayAttachments
         })
     });
 
@@ -108,6 +118,21 @@ export class ScreenCreate {
 
       let fieldSelect = document.getElementById('fieldSelect') as HTMLIonSelectElement;
       fieldSelect.value = null;
+    }
+    else if (event.target.id === "displayLocationCheckbox") {
+      this.displayLocation = event.detail.data;
+    }
+    else if (event.target.id === "displayLinkedItemsCheckbox") {
+      this.displayLinkedItems = event.detail.data;
+    }
+    else if (event.target.id === "displayChildItemsCheckbox") {
+      this.displayChildItems = event.detail.data;
+    }
+    else if (event.target.id === "displayImageCaptureCheckbox") {
+      this.displayImageCapture = event.detail.data;
+    }
+    else if (event.target.id === "displayAttachmentsCheckbox") {
+      this.displayAttachments = event.detail.data;
     }
   }
 
@@ -175,6 +200,43 @@ export class ScreenCreate {
                 }
               </ion-select>
             </ion-item>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+          <ion-card-header no-padding>
+            <ion-item>
+              <ion-label>Screen Options</ion-label>
+            </ion-item>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item>
+                <ion-label>Display Location</ion-label>
+                <ion-checkbox id="displayLocationCheckbox" 
+                              checked={ this.displayLocation }></ion-checkbox>
+              </ion-item>
+              <ion-item>
+                <ion-label>Display Linked Items</ion-label>
+                <ion-checkbox id="displayLinkedItemsCheckbox" 
+                              checked={ this.displayLinkedItems }></ion-checkbox>
+              </ion-item>
+              <ion-item>
+                <ion-label>Display Child Items</ion-label>
+                <ion-checkbox id="displayChildItemsCheckbox" 
+                              checked={ this.displayChildItems }></ion-checkbox>
+              </ion-item>
+              <ion-item>
+                <ion-label>Display Image Capture</ion-label>
+                <ion-checkbox id="displayImageCaptureCheckbox" 
+                              checked={ this.displayImageCapture }></ion-checkbox>
+              </ion-item>
+              <ion-item>
+                <ion-label>Display Atachments</ion-label>
+                <ion-checkbox id="displayAttachmentsCheckbox" 
+                              checked={ this.displayAttachments }></ion-checkbox>
+              </ion-item>
+            </ion-list>
           </ion-card-content>
         </ion-card>
 
