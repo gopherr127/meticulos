@@ -14,6 +14,7 @@ export class ItemsList {
   itemsList: HTMLIonListElement;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
   @Prop({ connect: 'ion-popover-controller' }) popoverCtrl: PopoverController;
+  @Prop({ connect: 'ion-loading-controller' }) loadingCtrl: HTMLIonLoadingControllerElement;
   @Prop() itemTypeId: string;
   @Prop() parentId: string;
   @Prop() displayNavMode: boolean;
@@ -116,6 +117,15 @@ export class ItemsList {
 
   async handleItemClick(item: Item) {
 
+    // const loading = await this.loadingCtrl.create({
+    //   content: 'Loading...'
+    // });
+
+    // loading.dismissOnPageChange = true;
+    // loading.enableBackdropDismiss = true;
+
+    // await loading.present();
+
     if (this.isInNavViewMode) {
 
       this.pushComponent('items-list', {
@@ -155,6 +165,8 @@ export class ItemsList {
       },
       ev: event
     });
+
+    popover.style.zIndex = '99999';
 
     popover.present();
   }

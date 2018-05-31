@@ -26,6 +26,7 @@ export class ItemDetail {
   @State() fieldChangeGroups: Array<FieldChangeGroup> = [];
   @State() linkedItems: Array<Item> = [];
   @State() childItems: Array<Item> = [];
+  @State() itemImageDataUrl: any;
   
   async componentWillLoad() {
 
@@ -174,6 +175,8 @@ export class ItemDetail {
       },
       ev: event
     });
+
+    popover.style.zIndex = '99999';
 
     popover.present();
   }
@@ -345,12 +348,22 @@ export class ItemDetail {
 
   }
 
+  async handleImageAttachmentsAddClick() {
+    const modal = await this.modalCtrl.create({
+      component: 'image-capturer'
+    });
+    
+    await modal.present(); // REQUIRED: NEED EVENT FOR WHEN IMAGE CAPTURER DISMISSES
+  }
+
   async presentItemLocationOptions(event?: any) {
 
     const popover = await this.popoverCtrl.create({
       component: 'item-location-options-menu',
       ev: event
     });
+
+    popover.style.zIndex = '99999';
 
     popover.present();
   }
@@ -468,19 +481,6 @@ export class ItemDetail {
     }
   }
 
-  @Listen('ionFocus')
-  async handleElementFocused(event: any) {
-
-    if (event.target.id === "optionsMenu") {
-
-      await this.presentOptionsMenu(event);
-    }
-    else if (event.target.id === "itemLocationOptionsMenu") {
-
-      await this.presentItemLocationOptions(event);
-    }
-  }
-
   render() {
     return[
       <ion-header>
@@ -497,7 +497,8 @@ export class ItemDetail {
         <ion-toolbar color="secondary">
           <ion-title>{ this.subtitle }</ion-title>
           <ion-buttons slot="end">
-            <ion-button id="optionsMenu">
+            <ion-button id="optionsMenu"
+                        onClick={ (ev) => this.presentOptionsMenu(ev) }>
               <ion-icon slot="icon-only" name="more"></ion-icon>
             </ion-button>
           </ion-buttons>
@@ -528,7 +529,8 @@ export class ItemDetail {
         <ion-item style={{ display : this.item && this.item.type && this.item.type.isForPhysicalItems ? 'block' : 'none'}}>
           <ion-label position='fixed'>Location</ion-label>
           <ion-input disabled value={ this.item ? this.itemLocationName : '' }></ion-input>
-          <ion-button slot="end" fill="clear" id="itemLocationOptionsMenu">
+          <ion-button slot="end" fill="clear" id="itemLocationOptionsMenu"
+                      onClick={ (ev) => this.presentItemLocationOptions(ev) }>
             <ion-icon slot="icon-only" name="more" color="tertiary"></ion-icon>
           </ion-button>
         </ion-item>
@@ -567,6 +569,23 @@ export class ItemDetail {
                                    onLinkedItemAdded={ (ev) => this.handleLinkedItemAdded(ev) }
                                    onLinkedItemRemoved={ (ev) => this.handleLinkedItemRemoved(ev) }>
                 </linkeditems-field>
+
+                <ion-card>
+                  <ion-card-header no-padding>
+                      <ion-item>
+                        <ion-label>
+                          Image Attachments
+                        </ion-label>
+                        <ion-button slot="end" color="secondary"
+                                    onClick={ () => this.handleImageAttachmentsAddClick() }>
+                          Add
+                        </ion-button>
+                      </ion-item>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <img id="snapshot" src={ this.itemImageDataUrl }/>
+                  </ion-card-content>
+                </ion-card>
                 
                 {this.item.type.allowNestedItems
                 ? <ion-card>

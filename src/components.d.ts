@@ -1955,7 +1955,7 @@ declare global {
 
   namespace StencilComponents {
     interface ImageCapturer {
-
+      'imageFileName': string;
     }
   }
 
@@ -1978,7 +1978,7 @@ declare global {
   }
   namespace JSXElements {
     export interface ImageCapturerAttributes extends HTMLAttributes {
-
+      'imageFileName'?: string;
     }
   }
 }

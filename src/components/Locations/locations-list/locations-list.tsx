@@ -91,6 +91,8 @@ export class LocationsList {
       ev: event
     });
 
+    popover.style.zIndex = '99999';
+
     popover.present();
   }
 

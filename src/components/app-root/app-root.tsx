@@ -53,7 +53,9 @@ export class AppRoot {
 
   async componentWillLoad() {
     
-    this.tryUpdateIsUserAuthenticated();
+    try {
+      this.tryUpdateIsUserAuthenticated();
+    } catch {}
     
     if (!this.isUserAuthenticated) {
 
