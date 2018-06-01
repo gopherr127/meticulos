@@ -707,6 +707,40 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ItemImageCarousel {
+      'itemImages': string;
+    }
+  }
+
+  interface HTMLItemImageCarouselElement extends StencilComponents.ItemImageCarousel, HTMLStencilElement {}
+
+  var HTMLItemImageCarouselElement: {
+    prototype: HTMLItemImageCarouselElement;
+    new (): HTMLItemImageCarouselElement;
+  };
+  interface HTMLElementTagNameMap {
+    'item-image-carousel': HTMLItemImageCarouselElement;
+  }
+  interface ElementTagNameMap {
+    'item-image-carousel': HTMLItemImageCarouselElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'item-image-carousel': JSXElements.ItemImageCarouselAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemImageCarouselAttributes extends HTMLAttributes {
+      'itemImages'?: string;
+      'onItemImageAdded'?: (event: CustomEvent) => void;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ItemLocationOptionsMenu {
 
     }
@@ -1979,6 +2013,7 @@ declare global {
   namespace JSXElements {
     export interface ImageCapturerAttributes extends HTMLAttributes {
       'imageFileName'?: string;
+      'onItemImageCaptured'?: (event: CustomEvent) => void;
     }
   }
 }

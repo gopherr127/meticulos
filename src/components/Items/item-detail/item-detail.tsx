@@ -26,7 +26,6 @@ export class ItemDetail {
   @State() fieldChangeGroups: Array<FieldChangeGroup> = [];
   @State() linkedItems: Array<Item> = [];
   @State() childItems: Array<Item> = [];
-  @State() itemImageDataUrl: any;
   
   async componentWillLoad() {
 
@@ -246,6 +245,18 @@ export class ItemDetail {
       
       if (validationResult.result) {
 
+        if (this.item.images) {
+          // Strip out image data to avoid unnecessarily large data transfer
+          this.item.images = this.item.images.map(img => {
+            return {
+              fileName: img.fileName,
+              url: img.url,
+              fileMetadata: img.fileMetadata,
+              imageData: ''
+            }
+          });
+        }
+
         let response = await fetch(
           this.apiBaseUrl + "/items/" + this.item.id, {
             method: "PUT",
@@ -346,14 +357,6 @@ export class ItemDetail {
 
     await modal.present();
 
-  }
-
-  async handleImageAttachmentsAddClick() {
-    const modal = await this.modalCtrl.create({
-      component: 'image-capturer'
-    });
-    
-    await modal.present(); // REQUIRED: NEED EVENT FOR WHEN IMAGE CAPTURER DISMISSES
   }
 
   async presentItemLocationOptions(event?: any) {
@@ -467,6 +470,26 @@ export class ItemDetail {
       this.itemLocationName = this.item.location.name;
     }
   }
+  
+  @Listen('body:itemImageAdded')
+  async handleImageCaptured(event: any) {
+
+    if (event.detail) {
+
+      if (!this.item.images) {
+        this.item.images = [];
+      }
+      // Add the item image to the item, sans image data
+      this.item.images = [...this.item.images, {
+        fileName: event.detail.fileName,
+        url: event.detail.url,
+        fileMetadata: event.detail.fileMetadata,
+        imageData: ''
+      }];
+
+      await this.handleSaveClick();
+    }
+  }
 
   @Listen('ionChange')
   handleFieldChange(event: any) {
@@ -570,22 +593,8 @@ export class ItemDetail {
                                    onLinkedItemRemoved={ (ev) => this.handleLinkedItemRemoved(ev) }>
                 </linkeditems-field>
 
-                <ion-card>
-                  <ion-card-header no-padding>
-                      <ion-item>
-                        <ion-label>
-                          Image Attachments
-                        </ion-label>
-                        <ion-button slot="end" color="secondary"
-                                    onClick={ () => this.handleImageAttachmentsAddClick() }>
-                          Add
-                        </ion-button>
-                      </ion-item>
-                  </ion-card-header>
-                  <ion-card-content>
-                    <img id="snapshot" src={ this.itemImageDataUrl }/>
-                  </ion-card-content>
-                </ion-card>
+                <item-image-carousel item-images={ this.item.images ? JSON.stringify(this.item.images) : null }>
+                </item-image-carousel>
                 
                 {this.item.type.allowNestedItems
                 ? <ion-card>

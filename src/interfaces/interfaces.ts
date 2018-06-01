@@ -89,7 +89,15 @@ export interface Item {
   linkedItems: Array<Item>,
   locationId: string,
   location: ItemLocation,
-  transitions: Array<WorkflowTransition>
+  transitions: Array<WorkflowTransition>,
+  images: Array<ItemImage>
+}
+
+export interface ItemImage {
+  fileName: string,
+  url: string,
+  imageData: string,
+  fileMetadata: string
 }
 
 export interface ItemLocation {

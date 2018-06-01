@@ -1,5 +1,6 @@
-import { Component, Element, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Prop, State } from '@stencil/core';
 import { ENV } from '../../environments/environment';
+import { ItemImage } from '../../interfaces/interfaces';
 
 @Component({
   tag: 'image-capturer'
@@ -8,6 +9,7 @@ export class ImageCapturer {
 
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
+  @Event() itemImageCaptured: EventEmitter;
   @Prop() imageFileName: string;
   @State() imageName: string;
   @State() videoEl: HTMLVideoElement;
@@ -25,7 +27,10 @@ export class ImageCapturer {
     this.videoEl = document.querySelector('video');
     let vid = this.videoEl;
     this.snapshotEl = document.getElementById('snapshot');
-    var constraints = { audio: false, video: true }; 
+    // Select the environment-facing camera, if available
+    var constraints = { audio: false, video: {
+      facingMode: { ideal: "environment"}
+    } }; 
 
     navigator.mediaDevices.getUserMedia(constraints)
       .then(function(mediaStream) {
@@ -61,35 +66,28 @@ export class ImageCapturer {
         context.drawImage(this.videoEl, 0, 0, width, height);
 
         // Turn the canvas image into a dataURL that can be used as a src for our photo.
-        var dataUrl = hidden_canvas.toDataURL('image/png');
-        dataUrl = dataUrl.replace('data:image/png;base64,', '');
+        var imageData = hidden_canvas.toDataURL('image/png');
+        var fileMetadata = 'data:image/png;base64,';
+        imageData = imageData.replace(fileMetadata, '');
+
+        let newImage: ItemImage = {
+          fileName: this.imageName,
+          url: '',
+          imageData: imageData,
+          fileMetadata: fileMetadata
+        };
+
         this.videoEl.pause();
-
-        let response = await fetch(
-          `${this.apiBaseUrl}/itemimages`, {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            fileName: this.imageName,
-            imageData: dataUrl
-          })
-        });
-
-        if (response.ok) {
-
-          this.dismiss(dataUrl);
-        }
-        else {
-          console.log(await response.text());
-        }
+        this.dismiss(newImage);
     }
   }
   
   dismiss(data?: any) {
 
-    (this.el.closest('ion-modal') as any).dismiss(data);
+    if (data) {
+      this.itemImageCaptured.emit(data);
+    }
+    (this.el.closest('ion-modal') as any).dismiss();
   }
 
   render() {
