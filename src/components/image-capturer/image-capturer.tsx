@@ -14,6 +14,14 @@ export class ImageCapturer {
   @State() imageName: string;
   @State() videoEl: HTMLVideoElement;
   @State() snapshotEl: any;
+  mediaConstraints: any = {
+    audio: false,
+    video: {
+      facingMode: {
+        ideal: "environment"
+      }
+    }
+  };
 
   componentWillLoad() {
     
@@ -27,12 +35,8 @@ export class ImageCapturer {
     this.videoEl = document.querySelector('video');
     let vid = this.videoEl;
     this.snapshotEl = document.getElementById('snapshot');
-    // Select the environment-facing camera, if available
-    var constraints = { audio: false, video: {
-      facingMode: { ideal: "environment"}
-    } }; 
-
-    navigator.mediaDevices.getUserMedia(constraints)
+    
+    navigator.mediaDevices.getUserMedia(this.mediaConstraints)
       .then(function(mediaStream) {
         
         vid.srcObject = mediaStream;
@@ -78,6 +82,16 @@ export class ImageCapturer {
         };
 
         this.videoEl.pause();
+
+        try {
+          // Stop the video input stream
+          var mediaStream = this.videoEl.srcObject as any;
+          var track = mediaStream.getTracks()[0];
+          if (track) {
+            track.stop();
+          }
+        } catch {}
+
         this.dismiss(newImage);
     }
   }
