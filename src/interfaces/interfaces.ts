@@ -94,6 +94,7 @@ export interface Item {
 }
 
 export interface ItemImage {
+  targetItemId: string,
   fileName: string,
   url: string,
   imageData: string,

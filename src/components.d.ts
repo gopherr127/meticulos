@@ -708,6 +708,7 @@ declare global {
 
   namespace StencilComponents {
     interface ItemImageCarousel {
+      'itemId': string;
       'itemImages': string;
     }
   }
@@ -731,6 +732,7 @@ declare global {
   }
   namespace JSXElements {
     export interface ItemImageCarouselAttributes extends HTMLAttributes {
+      'itemId'?: string;
       'itemImages'?: string;
       'onItemImageAdded'?: (event: CustomEvent) => void;
     }
@@ -1990,6 +1992,7 @@ declare global {
   namespace StencilComponents {
     interface ImageCapturer {
       'imageFileName': string;
+      'targetItemId': string;
     }
   }
 
@@ -2014,6 +2017,7 @@ declare global {
     export interface ImageCapturerAttributes extends HTMLAttributes {
       'imageFileName'?: string;
       'onItemImageCaptured'?: (event: CustomEvent) => void;
+      'targetItemId'?: string;
     }
   }
 }

@@ -246,9 +246,11 @@ export class ItemDetail {
       if (validationResult.result) {
 
         if (this.item.images) {
+          
           // Strip out image data to avoid unnecessarily large data transfer
           this.item.images = this.item.images.map(img => {
             return {
+              targetItemId: img.targetItemId,
               fileName: img.fileName,
               url: img.url,
               fileMetadata: img.fileMetadata,
@@ -474,20 +476,29 @@ export class ItemDetail {
   @Listen('body:itemImageAdded')
   async handleImageCaptured(event: any) {
 
-    if (event.detail) {
+    if (event.detail && event.detail.image.targetItemId === this.item.id) {
 
       if (!this.item.images) {
         this.item.images = [];
       }
-      // Add the item image to the item, sans image data
-      this.item.images = [...this.item.images, {
-        fileName: event.detail.fileName,
-        url: event.detail.url,
-        fileMetadata: event.detail.fileMetadata,
-        imageData: ''
-      }];
 
-      await this.handleSaveClick();
+      var img = this.item.images.find(i => {
+        return i.fileName === event.detail.image.fileName;
+      });
+
+      if (!img) {
+        
+        // Add the item image to the item, sans image data
+        this.item.images = [...this.item.images, {
+          targetItemId: event.detail.image.targetItemId,
+          fileName: event.detail.image.fileName,
+          url: event.detail.image.url,
+          fileMetadata: event.detail.image.fileMetadata,
+          imageData: ''
+        }];
+
+        await this.saveItem();
+      }
     }
   }
 
@@ -593,7 +604,8 @@ export class ItemDetail {
                                    onLinkedItemRemoved={ (ev) => this.handleLinkedItemRemoved(ev) }>
                 </linkeditems-field>
 
-                <item-image-carousel item-images={ this.item.images ? JSON.stringify(this.item.images) : null }>
+                <item-image-carousel item-id={ this.itemId } 
+                                     item-images={ this.item.images ? JSON.stringify(this.item.images) : null }>
                 </item-image-carousel>
                 
                 {this.item.type.allowNestedItems

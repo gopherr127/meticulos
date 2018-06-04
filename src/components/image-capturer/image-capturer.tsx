@@ -10,6 +10,7 @@ export class ImageCapturer {
   public apiBaseUrl: string = new ENV().apiBaseUrl();
   @Element() el: any;
   @Event() itemImageCaptured: EventEmitter;
+  @Prop() targetItemId: string;
   @Prop() imageFileName: string;
   @State() imageName: string;
   @State() videoEl: HTMLVideoElement;
@@ -27,7 +28,7 @@ export class ImageCapturer {
     
     this.imageName = this.imageFileName && this.imageFileName.indexOf('.png') > 0
       ? this.imageFileName
-      : `image_${new Date().valueOf()}.png`;
+      : `image_${this.generateGuid()}.png`;
   }
 
   componentDidLoad() {
@@ -50,9 +51,14 @@ export class ImageCapturer {
       });
   }
 
-  async takeSnapshot(event: any) {
+  generateGuid() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
+  }
 
-    event.preventDefault();
+  async takeSnapshot() {
 
     var hidden_canvas = document.querySelector('canvas'),
         context = hidden_canvas.getContext('2d');
@@ -75,6 +81,7 @@ export class ImageCapturer {
         imageData = imageData.replace(fileMetadata, '');
 
         let newImage: ItemImage = {
+          targetItemId: this.targetItemId,
           fileName: this.imageName,
           url: '',
           imageData: imageData,
@@ -99,6 +106,7 @@ export class ImageCapturer {
   dismiss(data?: any) {
 
     if (data) {
+
       this.itemImageCaptured.emit(data);
     }
     (this.el.closest('ion-modal') as any).dismiss();
@@ -123,7 +131,7 @@ export class ImageCapturer {
         </ion-card>
 
         <ion-fab horizontal="center" vertical="bottom" slot="fixed">
-          <ion-fab-button onClick={ (ev) => this.takeSnapshot(ev) }>
+          <ion-fab-button onClick={ () => this.takeSnapshot() }>
             <ion-icon name="camera"></ion-icon>
           </ion-fab-button>
         </ion-fab>

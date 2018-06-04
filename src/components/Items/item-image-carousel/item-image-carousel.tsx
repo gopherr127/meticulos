@@ -11,6 +11,7 @@ export class ItemImageCarousel {
   @Element() el: any;
   @Event() itemImageAdded: EventEmitter;
   @Prop({ connect: 'ion-modal-controller' }) modalCtrl: HTMLIonModalControllerElement;
+  @Prop() itemId: string;
   @Prop() itemImages: string;
   @State() images: Array<ItemImage> = [];
   @State() itemImagesLoaded: boolean = false;
@@ -29,14 +30,27 @@ export class ItemImageCarousel {
 
     this.imageElement = this.el.querySelector('#imageElement');
   }
-  
+
   async presentImageCapturer() {
-    
+
+    let imgName = `${this.itemId.substring(this.itemId.length - 4)}_${this.generateId()}.png`;
+
     const modal = await this.modalCtrl.create({
-      component: 'image-capturer'
+      component: 'image-capturer',
+      componentProps: {
+        targetItemId: this.itemId,
+        imageFileName: imgName
+      }
     });
     
     await modal.present();
+  }
+
+  generateId() {
+    var S4 = function() {
+      return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    }
+    return (S4()+S4()+S4()+S4()+S4()+S4());
   }
 
   @Listen('body:itemImageCaptured')
@@ -60,9 +74,18 @@ export class ItemImageCarousel {
         let newImage: ItemImage = event.detail;
         newImage.url = image.url;
 
-        // Add the item image to the item
-        this.images = [...this.images, newImage];
-        this.itemImageAdded.emit(newImage);
+        var img = this.images.find(i => {
+          return i.fileName === event.detail.fileName;
+        });
+
+        if (!img) {
+          
+          // Add the item image to the item
+          this.images = [...this.images, newImage];
+          this.itemImageAdded.emit({
+            image: newImage
+          });
+        }
       }
       else {
 
