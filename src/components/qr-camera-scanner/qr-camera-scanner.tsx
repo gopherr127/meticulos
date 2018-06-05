@@ -19,7 +19,6 @@ export class QrCameraScanner {
   componentDidLoad() {
 
     this.codeReader = new ZXing.BrowserQRCodeReader();
-    console.log(this.codeReader);
     
     this.codeReader.decodeFromInputVideoDevice(undefined, 'video')
       .then((result : any) => {
@@ -28,7 +27,7 @@ export class QrCameraScanner {
         this.qrCodeScanned.emit(result.text);
       })
       .catch((error) => {
-        console.log("Error occurred during QA scanning:");
+        console.log("Error occurred during QR scanning:");
         console.log(error);
       })
   }

@@ -707,6 +707,75 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface ItemIdentifierCapture {
+
+    }
+  }
+
+  interface HTMLItemIdentifierCaptureElement extends StencilComponents.ItemIdentifierCapture, HTMLStencilElement {}
+
+  var HTMLItemIdentifierCaptureElement: {
+    prototype: HTMLItemIdentifierCaptureElement;
+    new (): HTMLItemIdentifierCaptureElement;
+  };
+  interface HTMLElementTagNameMap {
+    'item-identifier-capture': HTMLItemIdentifierCaptureElement;
+  }
+  interface ElementTagNameMap {
+    'item-identifier-capture': HTMLItemIdentifierCaptureElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'item-identifier-capture': JSXElements.ItemIdentifierCaptureAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemIdentifierCaptureAttributes extends HTMLAttributes {
+
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface ItemIdentifiers {
+      'itemId': string;
+      'itemIdentifiers': string;
+    }
+  }
+
+  interface HTMLItemIdentifiersElement extends StencilComponents.ItemIdentifiers, HTMLStencilElement {}
+
+  var HTMLItemIdentifiersElement: {
+    prototype: HTMLItemIdentifiersElement;
+    new (): HTMLItemIdentifiersElement;
+  };
+  interface HTMLElementTagNameMap {
+    'item-identifiers': HTMLItemIdentifiersElement;
+  }
+  interface ElementTagNameMap {
+    'item-identifiers': HTMLItemIdentifiersElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'item-identifiers': JSXElements.ItemIdentifiersAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface ItemIdentifiersAttributes extends HTMLAttributes {
+      'itemId'?: string;
+      'itemIdentifiers'?: string;
+      'onItemIdentifierAdded'?: (event: CustomEvent) => void;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface ItemImageCarousel {
       'itemId': string;
       'itemImages': string;

@@ -487,7 +487,7 @@ export class ItemDetail {
       });
 
       if (!img) {
-        
+
         // Add the item image to the item, sans image data
         this.item.images = [...this.item.images, {
           targetItemId: event.detail.image.targetItemId,
@@ -604,8 +604,16 @@ export class ItemDetail {
                                    onLinkedItemRemoved={ (ev) => this.handleLinkedItemRemoved(ev) }>
                 </linkeditems-field>
 
+                <item-identifiers item-id={ this.itemId } 
+                                  item-identifiers={ this.item.itemIdentifiers 
+                                    ? JSON.stringify(this.item.itemIdentifiers) 
+                                    : null }>
+                </item-identifiers>
+                
                 <item-image-carousel item-id={ this.itemId } 
-                                     item-images={ this.item.images ? JSON.stringify(this.item.images) : null }>
+                                     item-images={ this.item.images 
+                                      ? JSON.stringify(this.item.images) 
+                                      : null }>
                 </item-image-carousel>
                 
                 {this.item.type.allowNestedItems

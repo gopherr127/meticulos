@@ -85,12 +85,18 @@ export interface Item {
   workflowNodeId: string,
   workflowNode: WorkflowNode,
   fieldValues: Array<FieldValue>,
+  itemIdentifiers: Array<ItemIdentifier>,
   linkedItemIds: Array<string>,
   linkedItems: Array<Item>,
   locationId: string,
   location: ItemLocation,
   transitions: Array<WorkflowTransition>,
   images: Array<ItemImage>
+}
+
+export interface ItemIdentifier {
+  identifier: string,
+  identifierTypeId: number
 }
 
 export interface ItemImage {
